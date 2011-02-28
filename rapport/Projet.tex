@@ -1,0 +1,164 @@
+%Préambule du document :
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage{color}
+\usepackage{graphicx} 
+\usepackage{url}
+\usepackage{hyperref}
+
+
+\definecolor{red1}{RGB}{153,0,0}
+
+\hypersetup{colorlinks,%
+            citecolor=black,%
+            filecolor=black,%
+            linkcolor=black,%
+            urlcolor=red1}
+
+
+%Page de Garde
+\makeatletter
+\def\clap#1{\hbox to 0pt{\hss #1\hss}}%
+\def\ligne#1{%
+\hbox to \hsize{%
+\vbox{\centering #1}}}%
+\def\haut#1#2#3{%
+\hbox to \hsize{%
+\rlap{\vtop{\raggedright #1}}%
+\hss
+\clap{\vtop{\centering #2}}%
+\hss
+\llap{\vtop{\raggedleft #3}}}}%
+\def\bas#1#2#3{%
+\hbox to \hsize{%
+\rlap{\vbox{\raggedright #1}}%
+\hss
+\clap{\vbox{\centering #2}}%
+\hss
+\llap{\vbox{\raggedleft #3}}}}%
+\def\maketitle{%
+\thispagestyle{empty}\vbox to \vsize{%
+\haut{}{\@blurb}{}
+\vfill
+\vspace{1cm}
+\begin{flushleft}
+\usefont{OT1}{ptm}{m}{n}
+\huge \@title
+\end{flushleft}
+\par
+\hrule height 4pt
+\par
+\begin{flushright}
+\usefont{OT1}{phv}{m}{n}
+\Large \@author
+\par
+\end{flushright}
+\vspace{1cm}
+\vfill
+\vfill
+\bas{}{\@location, le \@date}{}
+}%
+\cleardoublepage
+}
+\def\date#1{\def\@date{#1}}
+\def\author#1{\def\@author{#1}}
+\def\title#1{\def\@title{#1}}
+\def\location#1{\def\@location{#1}}
+\def\blurb#1{\def\@blurb{#1}}
+\date{\today}
+\author{}
+\title{}
+\location{Nancy}\blurb{}
+\makeatother
+\title{\textcolor[RGB]{153,0,0}{Systèmes de fichiers distribués : comparaison de GlusterFS, MooseFS et Ceph avec déploiement sur la grille de calcul Grid’5000.}}
+\author{Jean-François Garçia, Florent Lévigne,\\Maxime Douheret, Vincent Claudel}
+\location{Nancy}
+\blurb{%
+IUT Nancy-Charlemagne Université Nancy 2\\
+\textbf{\textcolor[RGB]{153,0,0}{Licence Pro Asrall}}\\[1em]
+Tuteur : Maître de Conférences : Lucas Nussbaum\\
+}% 
+
+
+%definition des pages
+\makeatletter
+\def\thickhrulefill{\leavevmode \leaders
+\hrule height 1ex \hfill \kern \z@}
+\def\@makechapterhead#1{%
+\vspace*{10\p@}%
+{\parindent \z@
+{\reset@font
+\usefont{OT1}{phv}{m}{n}
+\LARGE Partie \thechapter\par\nobreak}%
+\par\nobreak
+\vspace*{30\p@}
+\interlinepenalty\@M
+\usefont{OT1}{ptm}{b}{n}
+{\raggedright \Huge \bfseries #1}%
+\par\nobreak
+\vskip 20\p@
+\hrule height 2pt
+\par\nobreak
+\vskip 45\p@
+}}
+\def\@makeschapterhead#1{%
+\vspace*{10\p@}%
+{\parindent \z@
+{\raggedleft \reset@font
+\scshape \vphantom{\@chapapp{} \thechapter}
+\par\nobreak}%
+\par\nobreak
+\vspace*{30\p@}
+\interlinepenalty\@M
+\usefont{OT1}{ptm}{b}{n}
+{\raggedright \Huge \bfseries #1}%
+\par\nobreak
+\par\nobreak
+\vskip 45\p@
+}} 
+
+
+
+%Corps du document :
+\begin{document}
+     \maketitle
+    \tableofcontents    
+    \chapter{FS}
+    FS: file system, en francais c'est un systeme de fichier.
+Un systeme de fichier distribue est utilise par plusieurs
+machines en meme temps (les machines peuvent donc
+avoir acces a des fichiers distants, l'espace de noms est mis en commun).
+Ca permet de repartir la charge, d'avoir plus d'espace disponible,
+voire plus de securite des donnees (par replication).
+Sur wikipedia on peut trouver une liste des systemes de fichiers
+distribues assez complete et pedagogique.
+    \section{Une section}
+    Ceci est une première section, au sein du premier chapitre.
+    \section{Une seconde section}
+    Ceci est une seconde section, au sein du premier chapitre.
+    \chapter{MooseFS}
+    
+MooseFS, un système de fichiers distribués.
+
+MooseFS est un système de fichiers répartis à tolérance de panne. Il vous permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs.
+
+Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique sur un serveur. L’atout principal de MooseFS, au delà du fait qu’il s’agisse d’un logiciel libre, est sa simplicité de mise en œuvre.
+
+En effet le tutorial, disponible ici, explique bien comment mettre en place une architecture distribuées en quelques heures. Concernant les utilisations, elles sont multiples et surtout, après la phase de configuration l’évolution du système est très simple. L’ajout de serveurs, d’espace disque peuvent-être gérés très facilement.
+
+Le point le plus important étant de bien dimensionner le serveur Master (qui stocke les méta-données) afin de ne pas être limité par le suite. Donc pour ceux qui ne peuvent pas mettre en place des systèmes de stockage réseaux propriétaires assez coûteux, je vous conseille d’étudier cette possibilité. Elle vous permettra de partager des données sur plusieurs machines, de manière rapide, fiable, sécurisée et surtout peu coûteuse.
+
+\begin{figure}[p]
+    \includegraphics[width=12cm,height=120mm]{mastersrv.png}
+    \caption{MooseFs Read Process}
+    \label{identifiant test}
+\end{figure} 
+
+    \section{Une section}
+    Ceci est une première section, au sein du deuxième chapitre.
+    \section{Une seconde section}
+    Ceci est une seconde section, au sein du deuxième chapitre.
+\end{document}
+
+
