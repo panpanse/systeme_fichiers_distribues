@@ -122,43 +122,56 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 
 %Corps du document :
 \begin{document}
-     \maketitle
-    \tableofcontents    
-    \chapter{FS}
-    FS: file system, en francais c'est un systeme de fichier.
-Un systeme de fichier distribue est utilise par plusieurs
-machines en meme temps (les machines peuvent donc
-avoir acces a des fichiers distants, l'espace de noms est mis en commun).
-Ca permet de repartir la charge, d'avoir plus d'espace disponible,
-voire plus de securite des donnees (par replication).
-Sur wikipedia on peut trouver une liste des systemes de fichiers
-distribues assez complete et pedagogique.
-    \section{Une section}
-    Ceci est une première section, au sein du premier chapitre.
-    \section{Une seconde section}
-    Ceci est une seconde section, au sein du premier chapitre.
-    \chapter{MooseFS}
+	\maketitle
+	\tableofcontents    
+	\chapter{Introduction}
+		\section{Contexte}
+		Étudiants en licence professionnelle ASRALL (Administration de Systèmes, Réseaux, et Applications à base de Logiciels libres),
+		notre formation prévoie une période de x mois à mis temps pour la réalisation d'un projet tuteuré.
+		Le projet que nous avons choisis consiste à comparer diverses solutions de systèmes de fichiers distribués.
+
+		% données temporaires, penser à citer les sources si passages copiés collés
+		\section{Système de fichier distribué}
+		FS: file system, en francais c'est un systeme de fichier.
+		Un systeme de fichier distribue est utilise par plusieurs
+		machines en meme temps (les machines peuvent donc
+		avoir acces a des fichiers distants, l'espace de noms est mis en commun).
+		Ca permet de repartir la charge, d'avoir plus d'espace disponible,
+		voire plus de securite des donnees (par replication).
+		Sur wikipedia on peut trouver une liste des systemes de fichiers
+		distribues assez complete et pedagogique.
+
+		\section{Le Grid'5000}
+
+	\chapter{GlusterFs}
+		\section{Présentation}
+
+	\chapter{MooseFS}
+		% données temporaires, penser à citer les sources si passages copiés collés
+		\section{Présentation}
     
-MooseFS, un système de fichiers distribués.
-
-MooseFS est un système de fichiers répartis à tolérance de panne. Il vous permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs.
-
-Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique sur un serveur. L’atout principal de MooseFS, au delà du fait qu’il s’agisse d’un logiciel libre, est sa simplicité de mise en œuvre.
-
-En effet le tutorial, disponible ici, explique bien comment mettre en place une architecture distribuées en quelques heures. Concernant les utilisations, elles sont multiples et surtout, après la phase de configuration l’évolution du système est très simple. L’ajout de serveurs, d’espace disque peuvent-être gérés très facilement.
-
-Le point le plus important étant de bien dimensionner le serveur Master (qui stocke les méta-données) afin de ne pas être limité par le suite. Donc pour ceux qui ne peuvent pas mettre en place des systèmes de stockage réseaux propriétaires assez coûteux, je vous conseille d’étudier cette possibilité. Elle vous permettra de partager des données sur plusieurs machines, de manière rapide, fiable, sécurisée et surtout peu coûteuse.
+		MooseFS, un système de fichiers distribués.
+		
+		MooseFS est un système de fichiers répartis à tolérance de panne. Il vous permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs.
+		
+		Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique sur un serveur. L’atout principal de MooseFS, au delà du fait qu’il s’agisse d’un logiciel libre, est sa simplicité de mise en œuvre.
+		
+		En effet le tutorial, disponible ici, explique bien comment mettre en place une architecture distribuées en quelques heures. Concernant les utilisations, elles sont multiples et surtout, après la phase de configuration l’évolution du système est très simple. L’ajout de serveurs, d’espace disque peuvent-être gérés très facilement.
+		
+		Le point le plus important étant de bien dimensionner le serveur Master (qui stocke les méta-données) afin de ne pas être limité par le suite. Donc pour ceux qui ne peuvent pas mettre en place des systèmes de stockage réseaux propriétaires assez coûteux, je vous conseille d’étudier cette possibilité. Elle vous permettra de partager des données sur plusieurs machines, de manière rapide, fiable, sécurisée et surtout peu coûteuse.
 
 \begin{figure}[p]
-    \includegraphics[width=12cm,height=120mm]{mastersrv.png}
-    \caption{MooseFs Read Process}
-    \label{identifiant test}
+	\includegraphics[width=12cm,height=120mm]{mastersrv.png}
+	\caption{MooseFs Read Process}
+	\label{identifiant test}
 \end{figure} 
 
-    \section{Une section}
-    Ceci est une première section, au sein du deuxième chapitre.
-    \section{Une seconde section}
-    Ceci est une seconde section, au sein du deuxième chapitre.
+	\chapter{Ceph}
+		\section{Présentation}
+
+	\chapter{Comparaison}
+
+	\chapter{Conclusion}
 \end{document}
 
 
