@@ -71,7 +71,7 @@
 \title{}
 \location{Nancy}\blurb{}
 \makeatother
-\title{\textcolor[RGB]{153,0,0}{Systèmes de fichiers distribués : comparaison de GlusterFS, MooseFS et Ceph avec déploiement sur la grille de calcul Grid’5000.}}
+\title{\textcolor[RGB]{153,0,0}{Systèmes de fichiers distribué : comparaison de GlusterFS, MooseFS et Ceph avec déploiement sur la grille de calcul Grid’5000.}}
 \author{Jean-François Garçia, Florent Lévigne,\\Maxime Douheret, Vincent Claudel}
 \location{Nancy}
 \blurb{%
@@ -134,8 +134,9 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 
 		\section{Système de fichiers distribué}
 		% Très fortement inspiré de Wikipédia (citer sources en fin de rapport)
+		% système de fichier distribué basé sur un fs "normal" ?
 		Un système de fichiers (file system en anglais) est une façon de stocker des informations et de les organiser dans des fichiers,
-		sur des mémoires périphérique comme un disque dur, un CD-ROM, une clé USB, etc.
+		sur des périphérique comme un disque dur, un CD-ROM, une clé USB, etc.
 		Il existe de nombreux systèmes de fichiers (certains ayant des avantages sur d'autres),
 		dont entre autre l'ext (Extented FS), le NTFS (New Technology FileSystem), ZFS (Zettabyte FS), FAT (File Allocation Table).
 		
@@ -154,36 +155,90 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 
 	\chapter{NFS}
 		\section{Présentation}
+		% FS distribué le plus simple ? (à mettre en place, dans ses possibilités) ?
+
+		NFS (Network File System, système de fichiers en réseau en français) est un système de fichiers développé par Sun Microsystem,
+		permettant de partager des données par le réseau.
 
 	\chapter{GlusterFs}
 		\section{Présentation}
+		% x serveurs, un maitre, mais ayant besoin des mêmes paquets que les autres
+		% besoin d'un paquet pour les clients
 
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
+		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
 		\section{Présentation}
-    
-		MooseFS, un système de fichiers distribués.
-		
-		MooseFS est un système de fichiers répartis à tolérance de panne. Il vous permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs.
-		
-		Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique sur un serveur. L’atout principal de MooseFS, au delà du fait qu’il s’agisse d’un logiciel libre, est sa simplicité de mise en œuvre.
-		
-		En effet le tutorial, disponible ici, explique bien comment mettre en place une architecture distribuées en quelques heures. Concernant les utilisations, elles sont multiples et surtout, après la phase de configuration l’évolution du système est très simple. L’ajout de serveurs, d’espace disque peuvent-être gérés très facilement.
-		
-		Le point le plus important étant de bien dimensionner le serveur Master (qui stocke les méta-données) afin de ne pas être limité par le suite. Donc pour ceux qui ne peuvent pas mettre en place des systèmes de stockage réseaux propriétaires assez coûteux, je vous conseille d’étudier cette possibilité. Elle vous permettra de partager des données sur plusieurs machines, de manière rapide, fiable, sécurisée et surtout peu coûteuse.
 
-\begin{figure}[p]
-	\includegraphics[width=12cm,height=120mm]{mastersrv.png}
-	\caption{MooseFs Read Process}
-	\label{identifiant test}
-\end{figure} 
+		\subsection{Présentation générale}
+			% deux partie présentation ? Présentation générale, Présentation technique ?
+    
+			%MooseFS (Moose File System), un système de fichiers distribué. % enlever cette phrase ?
+			
+			MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne, développé par Gemius SA
+			Le code préalablement propriétaire a été libéré et mis à disposition publiquement le 5 mai 2008.
+			Il permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs.
+			
+			Cette répartition permet de gérer la disponibilité des données,
+			lors des montées en charge ou lors d’incident technique sur un serveur.
+			L'atout principal de MooseFS, au delà du fait qu'il s’agisse d’un logiciel libre, est sa simplicité de mise en œuvre.
+			% plus simple à mettre en place que les autres ?
+			
+			En effet le tutoriel de prise en main, disponible sur le site du projet,
+			explique de manière clair comment mettre en place une architecture distribuées en quelques heures.
+			Concernant les utilisations, elles sont multiples et surtout, après la phase de configuration,
+			l'évolution du système est très simple. L'ajout de serveurs, d’espace disque peuvent être gérés très facilement.
+
+		\subsection{Aspect technique}
+			
+			Les montage du système de fichiers par les clients se fait à l'aide de FUSE. % deux trois mots sur FUSE ?
+
+			MooseFS est constitué de trois types de serveurs :
+
+			\begin{enumerate}
+				\item Un serveur de métadonnées (MDS)
+
+				Ce serveur gère la répartition des différents fichiers
+				\item Un serveur métajournal (Metalogger server)
+
+				Ce serveur récupère régulièrement les métadonnées du MDS et les stocke en tant que sauvegarde.
+				\item Des serveurs Chunk (CSS) % pourquoi CSS ?
+
+				Ce sont ces serveurs qui stockent les données des utilisateurs.
+			\end{enumerate}
+			
+			Le point le plus important étant de bien dimensionner le serveur Master (qui stocke les méta-données)
+			afin de ne pas être limité par le suite.
+			Donc pour ceux qui ne peuvent pas mettre en place des systèmes de stockage réseaux propriétaires assez coûteux,
+			je vous conseille d’étudier cette possibilité. Elle vous permettra de partager des données sur plusieurs machines,
+			de manière rapide, fiable, sécurisée et surtout peu coûteuse.
+			% "je vous conseille" à modifier ? Puis le logiciel propriétaire de toute façon s'est mal :p
+
+	\section{Mise en place}
+		\subsection{Environnement logiciel}
+		% Deban Squeeze + MooseFS version x compilé depuis les sources (pas présent dans les dépôts),
+		% avec options différentes suivant les serveurs, clients (cf tuto site officiel)
+
+		
+
+% insertion d'une image :
+%\begin{figure}[p]
+%	\includegraphics[width=12cm,height=120mm]{mastersrv.png}
+%	\caption{MooseFs Read Process}
+%	\label{identifiant test}
+%\end{figure} 
 
 	\chapter{Ceph}
 		\section{Présentation}
 
 	\chapter{Comparaison}
+	% comparaison des performances
+	% aspects générales, site officiel (doc, tuto), avis personnels
 
 	\chapter{Conclusion}
+	% sur les FS
+	% sur nos objectifs de départ
+	% apport du projet tuteuré pour nous, bonne expérience avant départ en stage, ...
 \end{document}
 
 
