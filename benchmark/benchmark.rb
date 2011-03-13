@@ -6,7 +6,7 @@ if "#{ARGV[0]}" == ""
 	exit(1)
 end
 
-clientsOfBench = "#{ARGV[0]}"
+$clientsOfBench = "#{ARGV[0]}"
 
 # chemin du fichier contenant la liste des clients
 listOfClients = "/home/flevigne/glusterFs/listOfClients"
@@ -15,7 +15,7 @@ listOfClients = "/home/flevigne/glusterFs/listOfClients"
 whereToWrite = "/media/glusterfs"
 
 # chemin du fichier contenant les résultats
-outputRes = "./resOfBench"
+$outputRes = "./resOfBench"
 
 # le client doit avoir dans /home/flevigne :
 # - linux-2.6.37.tar.bz2 : noyau linux compressé
@@ -23,167 +23,72 @@ outputRes = "./resOfBench"
 
 # fichier contenant la liste des clients participant au benchmark
 `touch clientOfBench`
-`head -#{clientsOfBench} #{listOfClients} > clientOfBench`
+`head -#{$clientsOfBench} #{listOfClients} > clientOfBench`
 
-# si le fichier outputRes n'existe pas, on le crée.
-if !File.exist?(outputRes)
-	`touch #{outputRes}`
+# si le fichier $outputRes n'existe pas, on le crée.
+if !File.exist?($outputRes)
+	`touch #{$outputRes}`
 end
 
-`echo "Benchmark sur #{clientsOfBench} clients" >> #{outputRes}`
+`echo "\nBenchmark sur #{$clientsOfBench} clients" >> #{$outputRes}`
 
-numberOfClients = open("clientOfBench").read.count("\n").to_i
+$numberOfClients = open("clientOfBench").read.count("\n").to_i
 
-puts "Lancement du benchmarck sur #{numberOfClients} clients."
+puts "Lancement du benchmarck sur #{$numberOfClients} clients."
 
-###################################
-### ecriture de petits fichiers ###
-###################################
 
-puts "bench : ecriture de petits fichiers"
+# lance un travail
+# parametres :
+# - name : nom du travail (str)
+# - work : chemin du script de travail (str)
+# - whereToWrite : chemin ou écrire les données du benchmark (str)
+# - size : taille (en Mo) du/des fichier(s) a ecrire/lire (float)
+def startBench(name, work, whereToWrite, size)
+	puts "bench : #{name} en cours..."
 
-workFinished = 0
-startOfBench = Time.now
+	totalSize = size.to_i * $clientsOfBench.to_i
+	workFinished = 0
+	startOfBench = Time.now
 
-# execution du sript pour tous les clients
-File.open("clientOfBench", 'r') do |file|
-	while line = file.gets
-		fork do
-			machine = line.split.join("\n")
-			`scp writingSmallFiles.sh root@#{machine}:/root`
-			`ssh root@#{machine}  ./writingSmallFiles.sh #{whereToWrite}`
-			exit(0)
-		end
-	end 
+	# execution du sript pour tous les clients
+	File.open("clientOfBench", 'r') do |file|
+		while line = file.gets
+			fork do
+				machine = line.split.join("\n")
+				`scp #{work} root@#{machine}:/root`
+				`ssh root@#{machine} ./#{work} #{whereToWrite}`
+				exit(0)
+			end
+		end 
+	end
+
+	# on attend que tous les clients aient fini leur travail
+	1.upto($numberOfClients) do
+		pid = Process.wait
+		workFinished += 1
+		puts "Machine(s) ayant terminé leur travail : #{workFinished}"
+	end
+
+	endOfBench = Time.now
+	duration = endOfBench - startOfBench 
+
+	puts "Toute les machines ont terminé leur travail."
+
+	puts " --> Le benchmark \"#{name}\" a duré #{duration} secondes. (debit : #{totalSize / duration} Mo/s)"
+
+	`echo "#{name} : #{duration} sec : #{totalSize / duration} Mo/s" >> #{$outputRes}`
 end
 
-# on attend que tous les clients aient fini leur travail
-1.upto(numberOfClients) do
-	pid = Process.wait
-	workFinished += 1
-	puts "Machine(s) ayant terminé leur travail : #{workFinished}"
-end
 
-endOfBench = Time.now
-duration = endOfBench - startOfBench 
+# lancement du benchmark
+startBench("ecriture de petits fichiers", "writingSmallFiles.sh", whereToWrite, 479)
+startBench("ecriture de gros fichiers", "writingBigFiles.sh", whereToWrite, 3076)
+startBench("lecture de petits fichiers", "readingSmallFiles.sh", whereToWrite, 479)
+startBench("lecture de gros fichiers", "readingBigFile.sh", whereToWrite, 3076)
 
-puts "Toute les machines ont terminé leur travail."
-
-puts " --> Le benchmark \"ecriture petits fichiers\" a duré #{duration} secondes."
-
-`echo "Ecriture petits fichiers : #{duration}" >> #{outputRes}`
-
-###################################
-#### ecriture de gros fichiers ####
-###################################
-
-puts "bench : ecriture de gros fichiers"
-
-workFinished = 0
-startOfBench = Time.now
-
-# execution du sript pour tous les clients
-File.open("clientOfBench", 'r') do |file|
-	while line = file.gets
-		fork do
-			machine = line.split.join("\n")
-			`scp writingBigFiles.sh root@#{machine}:/root`
-			`ssh root@#{machine}  ./writingBigFiles.sh #{whereToWrite}`
-			exit(0)
-		end
-	end 
-end
-
-# on attend que tous les clients aient fini leur travail
-1.upto(numberOfClients) do
-	pid = Process.wait
-	workFinished += 1
-	puts "Machine(s) ayant terminé leur travail : #{workFinished}"
-end
-
-endOfBench = Time.now
-duration = endOfBench - startOfBench 
-
-puts "Toute les machines ont terminé leur travail."
-
-puts " --> Le benchmark \"ecriture de gros fichiers\" a duré #{duration} secondes."
-
-`echo "Ecriture gros fichiers : #{duration}" >> #{outputRes}`
-
-###################################
-### lecture de petits fichiers ###
-###################################
-
-puts "bench : lecture de petits fichiers"
-
-workFinished = 0
-startOfBench = Time.now
-
-# execution du sript pour tous les clients
-File.open("clientOfBench", 'r') do |file|
-	while line = file.gets
-		fork do
-			machine = line.split.join("\n")
-			`scp readingSmallFiles.sh root@#{machine}:/root`
-			`ssh root@#{machine}  ./readingSmallFiles.sh #{whereToWrite}`
-			exit(0)
-		end
-	end 
-end
-
-# on attend que tous les clients aient fini leur travail
-1.upto(numberOfClients) do
-	pid = Process.wait
-	workFinished += 1
-	puts "Machine(s) ayant terminé leur travail : #{workFinished}"
-end
-
-endOfBench = Time.now
-duration = endOfBench - startOfBench 
-
-puts "Toute les machines ont terminé leur travail."
-
-puts " --> Le benchmark \"lecture de petits fichiers\" a duré #{duration} secondes."
-
-`echo "Lecture petits fichiers : #{duration}" >> #{outputRes}`
-
-###################################
-### lecture de gros fichiers ###
-###################################
-
-puts "bench : lecture de gros fichiers"
-
-workFinished = 0
-startOfBench = Time.now
-
-# execution du sript pour tous les clients
-File.open("clientOfBench", 'r') do |file|
-	while line = file.gets
-		fork do
-			machine = line.split.join("\n")
-			`scp readingBigFile.sh root@#{machine}:/root`
-			`ssh root@#{machine} ./readingBigFile.sh #{whereToWrite}`
-			exit(0)
-		end
-	end 
-end
-
-# on attend que tous les clients aient fini leur travail
-1.upto(numberOfClients) do
-    pid = Process.wait
-	workFinished += 1
-	puts "Machine(s) ayant terminé leur travail : #{workFinished}"
-end
-
-endOfBench = Time.now
-duration = endOfBench - startOfBench 
-
-puts "Toute les machines ont terminé leur travail."
-
-puts " --> Le benchmark \"lecture de gros fichiers\" a duré #{duration} secondes."
-
-`echo "Lecture gros fichiers : #{duration}\n" >> #{outputRes}`
-
-# nettoyage du système de fichier distribue
+# nettoyage du système de fichier distribue (necessaire pour enchainer les benchmark)
+puts "Nettoyage de l'espace de travail..."
 oneClient = `head -1 clientOfBench`.strip
 `ssh root@#{oneClient} rm -r #{whereToWrite}/*`
+
+puts "\nBenchmark termine"

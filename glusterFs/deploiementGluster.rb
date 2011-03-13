@@ -2,12 +2,13 @@
 # encoding: utf-8
 
 # réservation des noeuds (a lancer manuellement)
-# oarsub -I -t deploy -l nodes=13,walltime=2 
+# oarsub -I -t deploy -l nodes=8,walltime=2 
+# oarsub -I -t deploy -l nodes=8,walltime=2 -p "cluster='graphene'"
 
 # TODO: spécifier un cluster lors du déploiement
 
 # doit concorder avec la commande oarsub
-numberOfClients = 10
+numberOfClients = 5
 numberOfServers = 3
 
 infiniband = 1 # 1 : activé, 0 : non activé (ne change rien pour l'instant)
