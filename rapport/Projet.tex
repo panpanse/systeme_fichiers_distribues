@@ -237,6 +237,27 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 	\chapter{Comparaison}
 	% comparaison des performances
 	% aspects générales, site officiel (doc, tuto), avis personnels
+		\section{Test de performances}
+			Afin de ne pas avoir de différence de matériel lors nos test, ceux-ci ont tous été réalisés sur un même cluster du Grid'5000 : Graphene.\\
+
+			Ce cluster est composé de 144 noeuds, avec pour caractéristique :
+			\begin{itemize}
+				\item 1 CPU Intel de quatre cœurs cadencé à 2.53 GHz
+				\item 16 Go de RAM
+				\item 278 Go d'espace disque\\
+			\end{itemize}
+
+			Nous avons réalisé un benchmark mesurant les performances de quatre type d'opérations sur système de fichier distribué :
+			\begin{description}
+				\item[Écriture de petits fichiers :] écriture des sources du noyau linux (décompressé).
+				\item[Écriture de gros fichiers :] écriture d'un fichier de 3 Go\footnote{Fichier créé avec la commande : dd if=/dev/zero of=/lieu/voulu bs=1G count=3}.
+				\item[Lecture de petits fichiers: ] lecture des fichiers du noyau linux.
+				Pour cela, nous avons compressé le dossier contenant le noyau (impliquant la lecture des fichiers),
+				en redirigeant la sortie vers /dev/nul (afin que les performances du disque ne rentrent pas en jeux).
+				\item[Lecture de gros fichiers :] lecture du fichier de 3 Go. Opération réalisé en faisant un "cat" du fichier,
+				et en redirigeant la sortie vers /dev/nul afin de ne pas "polluer" le terminal.
+			\end{description}
+
 
 	\chapter{Conclusion}
 	% sur les FS
