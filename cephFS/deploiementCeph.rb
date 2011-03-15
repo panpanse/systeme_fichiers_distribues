@@ -9,7 +9,7 @@
 
 # Creation Date : 11-03-2011
 
-# Last Modified : lun. 14 mars 2011 17:52:55 CET
+# Last Modified : lun. 14 mars 2011 13:51:09 CET
 
 # Created By : Helldar
 
@@ -99,8 +99,9 @@ end
 `scp ceph.conf root@#{serveur_1}:/etc/ceph`
 puts "Envoyé!"
 # génération du fichier keyring.bin
-`ssh root@#{serveur_1}:/etc/ceph/ cauthtool --create-keyring -n client.admin --gen-key keyring.bin`
-`ssh root@#{serveur_1}:/etc/ceph/ cauthtool -n client.admin --cap mds 'allow' --cap osd 'allow *' --cap mon 'allow rwx' keyring.bin`
+`ssh root@#{serveur_1} cauthtool --create-keyring -n client.admin --gen-key keyring.bin`
+`ssh root@#{serveur_1} cauthtool -n client.admin --cap mds 'allow' --cap osd 'allow *' --cap mon 'allow rwx' keyring.bin`
+`ssh root@#{serveur_1} mv keyring.bin /etc/ceph/`
 puts "Keyring généré!"
 # montage
 `ssh root@#{serveur_1} mount -o remount,user_xattr /tmp`
