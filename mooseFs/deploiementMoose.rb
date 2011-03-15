@@ -63,20 +63,26 @@ numberOfChunk = open("listOfServers").read.count("\n").to_i # numberOfChunk inut
 puts "Nombre de Chunk : #{numberOfChunk}"
 #############
 
-# numberOfChunk inutile (je pense)
-
 chunkConfiguration = 1
 File.open("listOfServers", 'r') do |file|
 	while line = file.gets
 		machine = line.strip
-		`scp chunkServer.sh root@#{machine}:/root`
+		`scp chunkServer.rb root@#{machine}:/root`
 		#`ssh root@#{machine} ./chunkServer.sh #{masterServerIp} #{numberOfChunk}`
-		`ssh root@#{machine} ./chunkServer.sh #{masterServerIp} #{numberOfChunk} #{chunkConfiguration}`
+		`ssh root@#{machine} ./chunkServer.rb #{masterServerIp} #{numberOfChunk} #{chunkConfiguration}`
 		chunkConfiguration += 1
 	end
 end
 
+puts "\nConfigurations des clients..."
 # configuration des clients
+File.open("listOfClients", 'r') do |file|
+	while line = file.gets
+		machine = line.strip
+		`scp client.sh root@#{machine}:/root`
+		`ssh root@#{machine} ./client.sh #{masterServerIp}`
+	end
+end
 
 # resume
 puts "\nmaster server :"

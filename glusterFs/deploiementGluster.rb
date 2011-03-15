@@ -5,8 +5,6 @@
 # oarsub -I -t deploy -l nodes=8,walltime=2 
 # oarsub -I -t deploy -l nodes=8,walltime=2 -p "cluster='graphene'"
 
-# TODO: spécifier un cluster lors du déploiement
-
 # doit concorder avec la commande oarsub
 numberOfClients = 5
 numberOfServers = 3
@@ -38,7 +36,7 @@ File.open("listOfNodes", 'r') do |node|
 end
 
 # déploiement des machines
-puts "Machines en cour de déploiement..."
+puts "Machines en cours de déploiement..."
 #`kadeploy3 -k -a ../images/mysqueezegluster-x64-base.env -f listOfNodes` # image perso
 `kadeploy3 -k -e squeeze-collective -u flevigne -f listOfNodes` # image collective
 

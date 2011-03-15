@@ -4,6 +4,9 @@
 # volgen : commande de generation des fichiers de conf
 volgen = "glusterfs-volgen --name mystore"
 
+# pour utiliser l'infini bande : (ne marche pas, ne pas utiliser pour le moment)
+# volgen = "glusterfs-volgen --name mystore -t ib-verbs"
+
 # construction de la commande volgen
 File.open("listOfServers", 'r') do |file|
 	while line = file.gets
