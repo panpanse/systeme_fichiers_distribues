@@ -7,6 +7,20 @@
 \usepackage{url}
 \usepackage{hyperref}
 
+% pour code source
+\usepackage{listings}
+\lstset{
+	basicstyle=\footnotesize,
+	numberstyle=\footnotesize,
+	frame=single,
+	tabsize=2,
+	breaklines=true,
+	numbers=left,
+	rulecolor=,
+	keywordstyle=\color[rgb]{0,0,1},
+	commentstyle=\color[rgb]{0.133,0.545,0.133},
+	stringstyle=\color[rgb]{0.627,0.126,0.941},
+}
 
 \definecolor{red1}{RGB}{153,0,0}
 
@@ -247,7 +261,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 				\item 278 Go d'espace disque\\
 			\end{itemize}
 
-			Nous avons réalisé un benchmark mesurant les performances de quatre type d'opérations sur système de fichier distribué :
+			Nous avons réalisé un benchmark mesurant les performances (débit) de quatre type d'opérations sur le système de fichier distribué :
 			\begin{description}
 				\item[Écriture de petits fichiers :] écriture des sources du noyau linux (décompressé).
 				\item[Écriture de gros fichiers :] écriture d'un fichier de 3 Go\footnote{Fichier créé avec la commande : dd if=/dev/zero of=/lieu/voulu bs=1G count=3}.
@@ -265,12 +279,38 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 	% apport du projet tuteuré pour nous, bonne expérience avant départ en stage, ...
 
 	\appendix
+		\chapter{Répartition des taches}
+			\section{Florent Lévigne}
+				\begin{itemize}
+					\item Étude sur la mise en place de GlusterFS
+					\item Réalisation d'un script de déploiement de GlusterFS
+					\item Étude sur la mise en place de MooseFS
+					\item Réalisation d'un script de déploiement de MooseFS
+					\item Réalisation d'un script de benchmark pour système de fichiers distribué
+				\end{itemize}
+
 		\chapter{Scripts}
 			\section{GlusterFs}
+				Fichier deploimentGluster.rb :
+				\lstinputlisting[language=Ruby]{../glusterFs/deploiementGluster.rb}
+				% autre fichier (améliorer le script)
 			\section{MooseFs}
 			\section{Ceph}
 			\section{NFS}
 			\section{Benchmark}
+				Fichier benchmark.rb :
+				\lstinputlisting[language=Ruby]{../benchmark/benchmark.rb}
 
+				Fichier writingSmallFiles.sh :
+				\lstinputlisting[language=Bash]{../benchmark/writingSmallFiles.sh}
+
+				Fichier writingBigFiles.sh :
+				\lstinputlisting[language=Bash]{../benchmark/writingBigFiles.sh}
+
+				Fichier readingSmallFiles.sh :
+				\lstinputlisting[language=Bash]{../benchmark/readingSmallFiles.sh}
+
+				Fichier readingBigFile.sh :
+				\lstinputlisting[language=Bash]{../benchmark/readingBigFile.sh}
 \end{document}
 
