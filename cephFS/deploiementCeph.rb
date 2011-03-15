@@ -9,7 +9,7 @@
 
 # Creation Date : 11-03-2011
 
-# Last Modified : lun. 14 mars 2011 13:51:09 CET
+# Last Modified : mar. 15 mars 2011 11:35:43 CET
 
 # Created By : Helldar
 
@@ -17,8 +17,14 @@
 
 # doit concorder avec la commande oarsub
 
-numberOfServers = ARGV[0].to_i
-numberOfClients = ARGV[1].to_i
+if ARGV[0] != nil && ARGV[1] != nil
+	numberOfServers = ARGV[0].to_i
+	numberOfClients = ARGV[1].to_i
+	puts "Nb serveur : #{numberOfServers}\nNb client : #{numberOfClients}\n"
+else
+	puts "Veuillez relancer le script avec les bons paramètres!\n Le nombre de serveurs puis de clients...\n"
+	exit
+end
 
 # création d'un fichier contenant la liste des noeuds réservés
 `touch listOfNodes`
