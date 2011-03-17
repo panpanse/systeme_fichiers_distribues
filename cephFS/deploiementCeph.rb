@@ -9,7 +9,7 @@
 
 # Creation Date : 11-03-2011
 
-# Last Modified : mar. 15 mars 2011 11:35:43 CET
+# Last Modified : jeu. 17 mars 2011 14:54:51 CET
 
 # Created By : Helldar
 
@@ -17,12 +17,11 @@
 
 # doit concorder avec la commande oarsub
 
-if ARGV[0] != nil && ARGV[1] != nil
-	numberOfServers = ARGV[0].to_i
-	numberOfClients = ARGV[1].to_i
-	puts "Nb serveur : #{numberOfServers}\nNb client : #{numberOfClients}\n"
+if ARGV[0] != nil
+	numberOfServers = ARGV[0].to_i	
+	puts "Nb serveur : #{numberOfServers}\n"
 else
-	puts "Veuillez relancer le script avec les bons paramètres!\n Le nombre de serveurs puis de clients...\n"
+	puts "Veuillez relancer le script avec les bons paramètres!\n"
 	exit
 end
 
@@ -119,7 +118,7 @@ puts "Montage fait!"
 `ssh root@#{serveur_1} /etc/init.d/ceph -a start`
 puts "Serveur ceph démarré!"
 # configuration des clients
-0.upto(numberOfClients - 1) { |i| clients = `sed -n #{i + 1}p listOfClients | cut -d "." -f1`.strip
+0.upto(`wc -l listOfClients` - 1) { |i| clients = `sed -n #{i + 1}p listOfClients | cut -d "." -f1`.strip
 	`ssh root@#{clients} mkdir /ceph`
 	`ssh root@#{clients} cfuse -m #{ip_serveur} /ceph` }
 puts "Clients montés!"
