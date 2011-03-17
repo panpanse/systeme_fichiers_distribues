@@ -1,6 +1,5 @@
 %Préambule du document :
 \documentclass[12pt]{report}
-\usepackage[top=2cm,bottom=2cm,left=2cm,right=2cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[francais]{babel}
 \usepackage{color}
@@ -289,14 +288,6 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 					\item Réalisation d'un script de déploiement de MooseFS
 					\item Réalisation d'un script de benchmark pour système de fichiers distribué
 				\end{itemize}
-			\section{Jean-François Garcia}
-				\begin{itemize}
-					\item Étude sur la mise en place de GlusterFS
-					\item Étude sur la mise en place de NFS
-					\item Réalisation d'un script de déploiement de NFS
-					\item Étude sur la mise en place de CephFS
-					\item Réalisation d'un script de déploiement de CephFS
-				\end{itemize}
 
 		\chapter{Scripts}
 			\section{GlusterFs}
@@ -305,11 +296,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 				% autre fichier (améliorer le script)
 			\section{MooseFs}
 			\section{Ceph}
-			  Fichier deploimentCeph.rb :
-				\lstinputlisting[language=Ruby]{../cephFS/deploiementCeph.rb}
 			\section{NFS}
-			  Fichier deploimentNFS.rb :
-				\lstinputlisting[language=Ruby]{../NFS/deploiementNFS.rb}
 			\section{Benchmark}
 				Fichier benchmark.rb :
 				\lstinputlisting[language=Ruby]{../benchmark/benchmark.rb}
