@@ -1,21 +1,28 @@
 #!/usr/bin/ruby -w
 # encoding: utf-8
 
-if "#{ARGV[0]}" == ""
-	puts "Doit prendre en paramètre le nombre de clients participant au bench."
+
+if ARGV[0] == nil || ARGV[1] == nil || ARGV[2] == nil
+	puts "Usage correcte :"
+	puts "param1 : nombe de clients participant au bench"
+	puts "param2 : fichier de sortie"
+	puts "param3 : url de la liste des clients"
+	puts "param4 : lieu d'ecriture du bench"
 	exit(1)
 end
 
 $clientsOfBench = "#{ARGV[0]}"
 
 # chemin du fichier contenant la liste des clients
-listOfClients = "/home/flevigne/glusterFs/listOfClients"
+#listOfClients = "/home/flevigne/glusterFs/listOfClients"
+listOfClients = "#{ARGV[2]}"
 
 # chemin ou écrire les données du benchmark
-whereToWrite = "/media/glusterfs"
+#whereToWrite = "/media/glusterfs"
+whereToWrite = "#{ARGV[3]}"
 
 # chemin du fichier contenant les résultats
-$outputRes = "./resOfBench"
+$outputRes = "#{ARGV[1]}"
 
 # le client doit avoir dans /home/flevigne :
 # - linux-2.6.37.tar.bz2 : noyau linux compressé

@@ -9,7 +9,7 @@
 
 # Creation Date : 11-03-2011
 
-# Last Modified : lun. 14 mars 2011 17:52:55 CET
+# Last Modified : jeu. 17 mars 2011 14:54:51 CET
 
 # Created By : Helldar
 
@@ -17,8 +17,13 @@
 
 # doit concorder avec la commande oarsub
 
-numberOfServers = ARGV[0].to_i
-numberOfClients = ARGV[1].to_i
+if ARGV[0] != nil
+	numberOfServers = ARGV[0].to_i	
+	puts "Nb serveur : #{numberOfServers}\n"
+else
+	puts "Veuillez relancer le script avec les bons paramètres!\nUsage : <nombre de serveur>"
+	exit
+end
 
 # création d'un fichier contenant la liste des noeuds réservés
 `touch listOfNodes`
@@ -45,8 +50,8 @@ File.open("listOfNodes", 'r') do |node|
 end
 
 # déploiement des machines
-#puts "Machines en cour de déploiement..."
-#`kadeploy3 -k -e squeeze-collective -u flevigne -f listOfNodes` # image collective
+puts "Machines en cour de déploiement..."
+`kadeploy3 -k -e squeeze-collective -u flevigne -f listOfNodes` # image collective
 
 # configuration du serveur
 serveur_1 = `head -1 listOfServers | cut -d "." -f1`.strip
@@ -68,19 +73,21 @@ File.open("ceph.conf", 'w') do |file|
 [mds]
              debug mds = 1
              keyring = /etc/ceph/keyring.$name"
-			 if numberOfServers > 3
-				1.upto(3) { |i| file << "
+  if numberOfServers > 3
+    1.upto(3) { |i|
+      file << "
 [mds#{i - 1}]"
-				host = `sed -n #{i + 1}p listOfServers | cut -d '.' -f1`.strip
-			 	file << "
-			 #{host}" }
-			 else
-				file << "[mds0]"
-				host = `sed -n 2p listOfServers | cut -d '.' -f1`.strip
-			 	file << "
+      host = `sed -n #{i + 1}p listOfServers | cut -d '.' -f1`.strip
+      file << "
+			 #{host}"
+    }
+  else
+    file << "[mds0]"
+    host = `sed -n 2p listOfServers | cut -d '.' -f1`.strip
+    file << "
 			 #{host}" 
-			 end
-			 file << "
+  end
+  file << "
 [osd]
 			 sudo = true
 			 osd data = /tmp/partage/osd$id
@@ -89,30 +96,42 @@ File.open("ceph.conf", 'w') do |file|
 			 debug filstore = 1
 			 osd journal = /tmp/partage/osd$id/journal
 			 osd journal size = 1000"
-			 1.upto(numberOfServers - 1) { |i| file << "
+  1.upto(numberOfServers - 1) { |i|
+    file << "
 [osd#{i - 1}]"
-			 host = `sed -n #{i + 1}p listOfServers | cut -d '.' -f1`.strip
-			 file << "
-			 #{host}" }
+    host = `sed -n #{i + 1}p listOfServers | cut -d '.' -f1`.strip
+    file << "
+			 #{host}"
+  }
 end
+
 # copie du fichier ceph.conf vers le serveur
 `scp ceph.conf root@#{serveur_1}:/etc/ceph`
 puts "Envoyé!"
+
 # génération du fichier keyring.bin
-`ssh root@#{serveur_1}:/etc/ceph/ cauthtool --create-keyring -n client.admin --gen-key keyring.bin`
-`ssh root@#{serveur_1}:/etc/ceph/ cauthtool -n client.admin --cap mds 'allow' --cap osd 'allow *' --cap mon 'allow rwx' keyring.bin`
+`ssh root@#{serveur_1} cauthtool --create-keyring -n client.admin --gen-key keyring.bin`
+`ssh root@#{serveur_1} cauthtool -n client.admin --cap mds 'allow' --cap osd 'allow *' --cap mon 'allow rwx' keyring.bin`
+`ssh root@#{serveur_1} mv keyring.bin /etc/ceph/`
 puts "Keyring généré!"
+
 # montage
 `ssh root@#{serveur_1} mount -o remount,user_xattr /tmp`
-1.upto(numberOfServers - 1) { |i| serveurs = `sed -n #{i + 1}p listOfServers | cut -d "." -f1`.strip
-	`ssh root@#{serveurs} mount -o remount,user_xattr /tmp` }
+1.upto(numberOfServers - 1) { |i|
+  serveurs = `sed -n #{i + 1}p listOfServers | cut -d "." -f1`.strip
+  `ssh root@#{serveurs} mount -o remount,user_xattr /tmp`
+}
 puts "Montage fait!"
+
 # démarrage du serveur
 `ssh root@#{serveur_1} mkcephfs -c /etc/ceph/ceph.conf --allhosts -v -k /etc/ceph/keyring.bin`
 `ssh root@#{serveur_1} /etc/init.d/ceph -a start`
 puts "Serveur ceph démarré!"
+
 # configuration des clients
-0.upto(numberOfClients - 1) { |i| clients = `sed -n #{i + 1}p listOfClients | cut -d "." -f1`.strip
+0.upto(`wc -l listOfClients` - 1) { |i|
+  clients = `sed -n #{i + 1}p listOfClients | cut -d "." -f1`.strip
 	`ssh root@#{clients} mkdir /ceph`
-	`ssh root@#{clients} cfuse -m #{ip_serveur} /ceph` }
+	`ssh root@#{clients} cfuse -m #{ip_serveur} /ceph`
+}
 puts "Clients montés!"

@@ -1,5 +1,6 @@
 %Préambule du document :
 \documentclass[12pt]{report}
+\usepackage[top=2cm,bottom=2cm,left=2cm,right=2cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[francais]{babel}
 \usepackage{color}
@@ -7,6 +8,20 @@
 \usepackage{url}
 \usepackage{hyperref}
 
+% pour code source
+\usepackage{listings}
+\lstset{
+	basicstyle=\footnotesize,
+	numberstyle=\footnotesize,
+	frame=single,
+	tabsize=2,
+	breaklines=true,
+	numbers=left,
+	rulecolor=,
+	keywordstyle=\color[rgb]{0,0,1},
+	commentstyle=\color[rgb]{0.133,0.545,0.133},
+	stringstyle=\color[rgb]{0.627,0.126,0.941},
+}
 
 \definecolor{red1}{RGB}{153,0,0}
 
@@ -72,7 +87,7 @@
 \location{Nancy}\blurb{}
 \makeatother
 \title{\textcolor[RGB]{153,0,0}{Systèmes de fichiers distribué : comparaison de GlusterFS, MooseFS et Ceph avec déploiement sur la grille de calcul Grid’5000.}}
-\author{Jean-François Garçia, Florent Lévigne,\\Maxime Douheret, Vincent Claudel}
+\author{Jean-François Garçia, Florent Lévigne,\\Maxime Douheret, Vincent Claudel.}
 \location{Nancy}
 \blurb{%
 IUT Nancy-Charlemagne Université Nancy 2\\
@@ -158,7 +173,9 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		% FS distribué le plus simple ? (à mettre en place, dans ses possibilités) ?
 
 		NFS (Network File System, système de fichiers en réseau en français) est un système de fichiers développé par Sun Microsystem,
-		permettant de partager des données par le réseau.
+		permettant de partager des données par le réseau. NFS est aujourd’hui la méthode standard de partage de disques entre machines Unix. 
+		C’est une solution simple et pratique, quoique peu sécurisée.
+
 
 	\chapter{GlusterFs}
 		\section{Présentation}
@@ -217,7 +234,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		\section{Mise en place}
 			\subsection{Environnement logiciel}
 
-				Le système utilisé est une Debian Squeeze. MosseFs ne faisant pas partie des dépôts de la distribution,
+				Le système utilisé est une Debian Squeeze. MooseFs ne faisant pas partie des dépôts de la distribution,
 				nous avons compilé le paquet à partir des sources dans leurs dernières version (1.6.20).
 				% Deban Squeeze + MooseFS version x compilé depuis les sources (pas présent dans les dépôts),
 				% avec options différentes suivant les serveurs, clients (cf tuto site officiel)
@@ -247,7 +264,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 				\item 278 Go d'espace disque\\
 			\end{itemize}
 
-			Nous avons réalisé un benchmark mesurant les performances de quatre type d'opérations sur système de fichier distribué :
+			Nous avons réalisé un benchmark mesurant les performances (débit) de quatre type d'opérations sur le système de fichier distribué :
 			\begin{description}
 				\item[Écriture de petits fichiers :] écriture des sources du noyau linux (décompressé).
 				\item[Écriture de gros fichiers :] écriture d'un fichier de 3 Go\footnote{Fichier créé avec la commande : dd if=/dev/zero of=/lieu/voulu bs=1G count=3}.
@@ -265,12 +282,50 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 	% apport du projet tuteuré pour nous, bonne expérience avant départ en stage, ...
 
 	\appendix
+		\chapter{Répartition des taches}
+			\section{Florent Lévigne}
+				\begin{itemize}
+					\item Étude sur la mise en place de GlusterFS
+					\item Réalisation d'un script de déploiement de GlusterFS
+					\item Étude sur la mise en place de MooseFS
+					\item Réalisation d'un script de déploiement de MooseFS
+					\item Réalisation d'un script de benchmark pour système de fichiers distribué
+				\end{itemize}
+			\section{Jean-François Garcia}
+				\begin{itemize}
+					\item Étude sur la mise en place de GlusterFS
+					\item Étude sur la mise en place de NFS
+					\item Réalisation d'un script de déploiement de NFS
+					\item Étude sur la mise en place de CephFS
+					\item Réalisation d'un script de déploiement de CephFS
+				\end{itemize}
+
 		\chapter{Scripts}
 			\section{GlusterFs}
+				Fichier deploimentGluster.rb :
+				\lstinputlisting[language=Ruby]{../glusterFs/deploiementGluster.rb}
+				% autre fichier (améliorer le script)
 			\section{MooseFs}
 			\section{Ceph}
+			  Fichier deploimentCeph.rb :
+				\lstinputlisting[language=Ruby]{../cephFS/deploiementCeph.rb}
 			\section{NFS}
+			  Fichier deploimentNFS.rb :
+				\lstinputlisting[language=Ruby]{../NFS/deploiementNFS.rb}
 			\section{Benchmark}
+				Fichier benchmark.rb :
+				\lstinputlisting[language=Ruby]{../benchmark/benchmark.rb}
 
+				Fichier writingSmallFiles.sh :
+				\lstinputlisting[language=Bash]{../benchmark/writingSmallFiles.sh}
+
+				Fichier writingBigFiles.sh :
+				\lstinputlisting[language=Bash]{../benchmark/writingBigFiles.sh}
+
+				Fichier readingSmallFiles.sh :
+				\lstinputlisting[language=Bash]{../benchmark/readingSmallFiles.sh}
+
+				Fichier readingBigFile.sh :
+				\lstinputlisting[language=Bash]{../benchmark/readingBigFile.sh}
 \end{document}
 
