@@ -5,9 +5,15 @@
 # oarsub -I -t deploy -l nodes=8,walltime=2 
 # oarsub -I -t deploy -l nodes=8,walltime=2 -p "cluster='graphene'"
 
+if ARGV[0] == nil
+	puts "doit prendre en parametre le nombre de serveurs"
+	exit(1)
+end
+
+
 # doit concorder avec la commande oarsub
-numberOfClients = 5
-numberOfServers = 3
+numberOfClients = 5 # inutile : prend les machines dispo restantes comme clients
+numberOfServers = "#{ARGV[0]}".to_i
 
 infiniband = 1 # 1 : activé, 0 : non activé (ne change rien pour l'instant)
 
@@ -37,7 +43,6 @@ end
 
 # déploiement des machines
 puts "Machines en cours de déploiement..."
-#`kadeploy3 -k -a ../images/mysqueezegluster-x64-base.env -f listOfNodes` # image perso
 `kadeploy3 -k -e squeeze-collective -u flevigne -f listOfNodes` # image collective
 
 

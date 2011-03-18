@@ -21,20 +21,16 @@ Dir.chdir("/etc")
 `cp mfshdd.cfg.dist mfshdd.cfg`
 
 # conf fichier /etc/mfshdd.cfg
-`mkdir /mnt/mfschunks#{numOfChunk}`
-#`mkdir /tmp/mfschunks#{numOfChunk}`
+`mkdir /tmp/mfschunks#{numOfChunk}`
 
-#`chown -R mfs:mfs /tmp/mfschunks#{numOfChunk}`
-`chown -R mfs:mfs /mnt/mfschunks#{numOfChunk}`
+`chown -R mfs:mfs /tmp/mfschunks#{numOfChunk}`
 
-numberOfChunk.times do |i|
-	numChunk = i + 1
-	#`echo "/tmp/mfschunks#{numChunk}" >> /etc/mfshdd.cfg`
-	`echo "/mnt/mfschunks#{numChunk}" >> /etc/mfshdd.cfg`
-end
+#numberOfChunk.times do |i|
+#	numChunk = i + 1
+#	`echo "/tmp/mfschunks#{numChunk}" >> /etc/mfshdd.cfg`
+#end
+
+`echo "/tmp/mfschunks#{numOfChunk}" >> /etc/mfshdd.cfg`
 
 # ajout du serveur maitre dans /etc/hosts
 `echo "#{serverMasterIp} mfsmaster" >> /etc/hosts`
-
-# demarrage du serveur
-`/usr/sbin/mfschunkserver start`

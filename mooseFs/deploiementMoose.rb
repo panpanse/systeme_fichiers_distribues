@@ -4,9 +4,15 @@
 # oarsub -I -t deploy -l nodes=9,walltime=2 
 # oarsub -I -t deploy -l nodes=9,walltime=2 -p "cluster='graphene'"
 
+if ARGV[0] == nil
+	puts "doit prendre en parametre le nombre de serveurs (3 min)"
+	exit(1)
+end
+
 # doit concorder avec la commande oarsub
-numberOfClients = 5
-numberOfServers = 4 # 3 serveurs minimum
+numberOfClients = 5 # inutile : prend les machines restantes en clients
+numberOfServers = "#{ARGV[0]}".to_i # 3 serveurs minimum
+
 
 # MooseFS et infinibande ?
 
@@ -59,10 +65,9 @@ puts "\nConfiguration du serveur de metadonnees..."
 puts "\nConfigurations des serveurs chunk..."
 numberOfChunk = open("listOfServers").read.count("\n").to_i # numberOfChunk inutile ?
 
-### debug ###
 puts "Nombre de Chunk : #{numberOfChunk}"
-#############
 
+# configuration des chunks
 chunkConfiguration = 1
 File.open("listOfServers", 'r') do |file|
 	while line = file.gets
@@ -71,6 +76,15 @@ File.open("listOfServers", 'r') do |file|
 		#`ssh root@#{machine} ./chunkServer.sh #{masterServerIp} #{numberOfChunk}`
 		`ssh root@#{machine} ./chunkServer.rb #{masterServerIp} #{numberOfChunk} #{chunkConfiguration}`
 		chunkConfiguration += 1
+	end
+end
+
+# demarrage des chunks
+puts "\nDemarrage des serveurs chunks"
+File.open("listOfServers", 'r') do |file|
+	while line = file.gets
+		machine = line.strip
+		`ssh root@#{machine} /usr/sbin/mfschunkserver start`
 	end
 end
 
