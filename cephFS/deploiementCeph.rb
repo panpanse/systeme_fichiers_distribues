@@ -55,7 +55,7 @@ puts "Machines en cour de déploiement..."
 
 # configuration du serveur
 serveur_1 = `head -1 listOfServers | cut -d "." -f1`.strip
-ip_serveur = `ssh root@#{serveur_1}  hostname -i`.strip
+ip_serveur = `ssh root@#{serveur_1}  ifconfig eth0 |grep inet\  | cut -d ":" -f2 |cut -d ' ' -f1`.strip
 
 # génération du fichier de ceph.conf
 
