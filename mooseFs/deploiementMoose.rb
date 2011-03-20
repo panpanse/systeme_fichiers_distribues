@@ -18,6 +18,7 @@ numberOfServers = "#{ARGV[0]}".to_i # 3 serveurs minimum
 
 # création d'un fichier contenant la liste des noeuds réservés
 `touch listOfNodes`
+`cat $OAR_File_NODES`
 File.open("listOfNodes", 'w') do |file|
 	file << `cat $OAR_FILE_NODES | sort -u`
 end
@@ -42,7 +43,7 @@ end
 
 # déploiement des machines
 puts "Machines en cours de déploiement..."
-`kadeploy3 -k -e squeeze-collective -u flevigne -f listOfNodes` # image collective
+`kadeploy3 -e squeeze-collective -u flevigne -f listOfNodes` # image collective
 
 masterServer = `head -1 listOfServers`.strip # 1ere ligne du fichier
 `sed -i 1d listOfServers` # supression de la 1ere ligne

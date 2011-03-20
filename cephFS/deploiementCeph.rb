@@ -55,7 +55,7 @@ puts "Machines en cour de déploiement..."
 
 # configuration du serveur
 serveur_1 = `head -1 listOfServers | cut -d "." -f1`.strip
-ip_serveur = `ssh root@#{serveur_1}  hostname -i`.strip
+ip_serveur = `ssh root@#{serveur_1}  ifconfig eth0 |grep inet\  | cut -d ":" -f2 |cut -d ' ' -f1`.strip
 
 # génération du fichier de ceph.conf
 
@@ -78,6 +78,7 @@ File.open("ceph.conf", 'w') do |file|
       file << "
 [mds#{i - 1}]"
       host = `sed -n #{i + 1}p listOfServers | cut -d '.' -f1`.strip
+      puts "host #{i} : #{host}\n"
       file << "
 			 #{host}"
     }
@@ -96,10 +97,10 @@ File.open("ceph.conf", 'w') do |file|
 			 debug filstore = 1
 			 osd journal = /tmp/partage/osd$id/journal
 			 osd journal size = 1000"
-  1.upto(numberOfServers - 1) { |i|
+  1.upto(numberOfServers) { |i|
     file << "
 [osd#{i - 1}]"
-    host = `sed -n #{i + 1}p listOfServers | cut -d '.' -f1`.strip
+    host = `sed -n #{i}p listOfServers | cut -d '.' -f1`.strip
     file << "
 			 #{host}"
   }
@@ -129,8 +130,8 @@ puts "Montage fait!"
 puts "Serveur ceph démarré!"
 
 # configuration des clients
-0.upto(`wc -l listOfClients` - 1) { |i|
-  clients = `sed -n #{i + 1}p listOfClients | cut -d "." -f1`.strip
+1.upto(`wc -l listOfClients`.to_i) { |i|
+  clients = `sed -n #{i}p listOfClients | cut -d "." -f1`.strip
 	`ssh root@#{clients} mkdir /ceph`
 	`ssh root@#{clients} cfuse -m #{ip_serveur} /ceph`
 }
