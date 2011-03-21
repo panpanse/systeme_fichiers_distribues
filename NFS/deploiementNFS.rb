@@ -9,7 +9,7 @@
 
 # Creation Date : 17-03-2011
 
-# Last Modified : jeu. 17 mars 2011 16:29:07 CET
+# Last Modified : lun. 21 mars 2011 12:33:55 CET
 
 # Created By : Helldar
 
@@ -35,4 +35,4 @@ line = `wc -l listOfNodes | cut -d ' ' -f1`.strip.to_i
 puts "Il y a #{line} nodes" 
 1.upto(line) { |i| clients = `sed -n #{i}p listOfNodes | cut -d "." -f1`.strip
 	`ssh root@#{clients} mkdir /tmp/partage`
-	`ssh root@#{clients} mount #{serveur}:/tmp -t nfs /tmp/partage` }
+	`ssh root@#{clients} mount -t nfs4 #{serveur}:/ /tmp/partage` }
