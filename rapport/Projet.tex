@@ -175,8 +175,18 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 
 		NFS (Network File System, système de fichiers en réseau en français) est un système de fichiers développé par Sun Microsystem,
 		permettant de partager des données par le réseau. NFS est aujourd’hui la méthode standard de partage de disques entre machines Unix. 
-		C’est une solution simple et pratique, quoique peu sécurisée.
+		C’est une solution simple et pratique, quoique peu sécurisée.\\
+		
+		NFS utilise généralement le protocole non connecté UDP (en opposition à TCP qui est un pro-
+    tocole connecté). Toutefois, certains clients et serveurs NFS (depuis la version 3) peuvent aussi
+    utiliser TCP, ce qui permet, entre autre, de fiabiliser les échanges.\\
 
+    On retrouve pour NFS différentes versions :\\
+    NFSv1 et v2 définies dans la RFC 1094 prévues pour fonctionner sur UDP.\\
+    NFSv3 définie dans la RFC 1813 prenant en charge le TCP.\\
+    NFSv4 définie dans la RFC 3010 puis réviser dans la RFC 3530. L'ensemble du protocole est repensé, et les codes sont réécrits.
+    Cette version intègre une meilleur gestion de la sécurité, de la montée en charge, et un systèmes de maintenances simplifiés.
+    NFSv4 supporte les protocoles de transports TCP et RDMA.\\
 
 	\chapter{GlusterFs}
 		\section{Présentation}
