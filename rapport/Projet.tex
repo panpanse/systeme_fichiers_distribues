@@ -326,8 +326,10 @@ D'autres qualités sont à son actif: \\
 Le respect de la norme Posix.\\
 L'utilisation de Fuse en espace client.\\
 La mise à disposition d'une poubelle automatique à durée de rétention modifiable à souhait.\\
-Une commande unique, à chaud pour le choix du nombre de répliquas, par fichier ou par répertoire.\\
-Simplicité de l'extension de l'espace de stockage à chaud quelque soit la configuration, comprenant la ré-indexation des données.  \\
+Une commande unique « mfssetgoal », à chaud pour le choix du nombre de répliquas, par fichier ou par répertoire.\\
+Disponibilité des données ou tolérance aux pannes en cas de réplication positionné à plus de 1 pour les données rendra transparent la perte d'un chunkserver au détriment d'un coût en matière de place.\\ 
+Simplicité de l'extension de l'espace de stockage à chaud quelque soit la configuration, comprenant la ré-indexation et la répartition des données vers ces nouveaux espaces sans vous deviez intervenir (cela peut prendre plusieurs heures).  \\
+Le système est réparti: les fichiers supérieurs à 64Mo sont découpés en paquets de 64Mio et distribués sur les différents serveurs de données dit « chunkserver ».\\
 			\subsection{Aspect technique}
 				
 Les montage du système de fichiers par les clients se fait à l'aide de FUSE. MooseFS est constitué de trois types de serveurs :
