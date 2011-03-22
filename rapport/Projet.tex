@@ -187,7 +187,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 			\end{center}
 		\end{figure}
 
-		Chaque site possède un ou plusieurs clusters\footnote{TODO: def d'un cluster}. Par exemple, le site de Nancy possède deux clusters :
+		Chaque site possède un ou plusieurs clusters\footnote{Grappe de serveurs}. Par exemple, le site de Nancy possède deux clusters :
 		
 		\begin{description}
 			\item[graphene :] 144 nœuds contenants :\\
@@ -201,6 +201,14 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 			16GB RAM\\
 			278GB DISK
 		\end{description}
+
+		\begin{figure}[H]
+			\begin{center}
+				\includegraphics[width=0.6\linewidth]{images/cluster_nancy.jpg}
+				\caption{Un cluster de Nancy}
+			\end{center}
+		\end{figure}
+		
 
 
 	\chapter{NFS}
@@ -273,6 +281,13 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 	 \end{lstlisting}
 	\chapter{GlusterFs, véritable serveur d'archivage.}
 		\section{Présentation}
+
+		\begin{figure}[H]
+			\begin{center}
+				\includegraphics[width=0.6\linewidth]{images/glusterfs.png}
+			\end{center}
+		\end{figure}
+
 GlusterFS est un système de fichiers distribués libre (gpl v.3), à la fois très simple à mettre en œuvre et dont les capacités de stockage peuvent monter jusqu'à plusieurs petabytes (1,000 milliards octets).\\
 
 GlusterFS est composé de deux éléments logiciels: un serveur et un client.\\
@@ -297,6 +312,11 @@ Le fonctionnement de Glusterfs est très modulaire et peut être configuré pour
 
 			\subsection{Présentation générale}
 				% deux partie présentation ? Présentation générale, Présentation technique ?
+				\begin{figure}[H]
+					\begin{center}
+						\includegraphics[width=0.15\linewidth]{images/moosefs.png}
+					\end{center}
+				\end{figure}
 		
 				%MooseFS (Moose File System), un système de fichiers distribué. % enlever cette phrase ?
 				
