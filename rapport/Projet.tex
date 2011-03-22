@@ -8,6 +8,7 @@
 \usepackage{url}
 \usepackage{hyperref}
 \usepackage[T1]{fontenc}
+\usepackage{float}
 
 % pour code source
 \usepackage{listings}
@@ -168,6 +169,35 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 			(par réplication)
 
 		\section{Le Grid'5000}
+		Le Grid'5000 est une infrastructure distribuée de neuf sites sur la France, dédié à la recherche,
+		sur des systèmes distribuées à grande échelle.
+
+		Les ingénieurs assurant le développement et le support de l'infrastructure jour après jour viennent pour la plupart	de l'INRIA\footnote{Institut National de Recherche en Informatique et en Automatique}.
+
+		Le Grid'5000 est répartit sur onze sites, dont neuf en France.
+
+		\begin{figure}[H]
+			\begin{center}
+				\includegraphics[width=0.4\linewidth]{images/Site_map.png}
+				\caption{Les sites français du Grid'5000}
+			\end{center}
+		\end{figure}
+
+		Chaque site possède un ou plusieurs clusters\footnote{TODO: def d'un cluster}. Par exemple, le site de Nancy possède deux clusters :
+		
+		\begin{description}
+			\item[graphene :] 144 nœuds contenants :\\
+			1 CPU Intel@2.53GHz\\
+			4 cores/CPU\\
+			16GB RAM\\
+			278GB DISK
+			\item[griffon :] 92 nœuds contenants :\\
+			2 CPUs Intel@2.5GHz\\
+			4 cores/CPU\\
+			16GB RAM\\
+			278GB DISK
+		\end{description}
+
 
 	\chapter{NFS}
 		\section{Présentation}
