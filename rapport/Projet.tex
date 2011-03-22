@@ -8,11 +8,16 @@
 \usepackage{url}
 \usepackage{hyperref}
 \usepackage[T1]{fontenc}
+\usepackage{float}
+
+\usepackage{listingsutf8} % ne change rien, a virer ?
 
 % pour code source
 \usepackage{listings}
 \lstset{
 	basicstyle=\footnotesize,
+	%extendedchars=\true
+	%inputencoding=utf8/latin1
 	numberstyle=\footnotesize,
 	frame=single,
 	tabsize=2,
@@ -168,6 +173,43 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 			(par réplication)
 
 		\section{Le Grid'5000}
+		Le Grid'5000 est une infrastructure distribuée de neuf sites sur la France, dédié à la recherche,
+		sur des systèmes distribuées à grande échelle.
+
+		Les ingénieurs assurant le développement et le support de l'infrastructure jour après jour viennent pour la plupart	de l'INRIA\footnote{Institut National de Recherche en Informatique et en Automatique}.
+
+		Le Grid'5000 est répartit sur onze sites, dont neuf en France.
+
+		\begin{figure}[H]
+			\begin{center}
+				\includegraphics[width=0.4\linewidth]{images/Site_map.png}
+				\caption{Les sites français du Grid'5000}
+			\end{center}
+		\end{figure}
+
+		Chaque site possède un ou plusieurs clusters\footnote{Grappe de serveurs}. Par exemple, le site de Nancy possède deux clusters :
+		
+		\begin{description}
+			\item[graphene :] 144 nœuds contenants :\\
+			1 CPU Intel@2.53GHz\\
+			4 cores/CPU\\
+			16GB RAM\\
+			278GB DISK
+			\item[griffon :] 92 nœuds contenants :\\
+			2 CPUs Intel@2.5GHz\\
+			4 cores/CPU\\
+			16GB RAM\\
+			278GB DISK
+		\end{description}
+
+		\begin{figure}[H]
+			\begin{center}
+				\includegraphics[width=0.6\linewidth]{images/cluster_nancy.jpg}
+				\caption{Un cluster de Nancy}
+			\end{center}
+		\end{figure}
+		
+
 
 	\chapter{NFS}
 		\section{Présentation}
@@ -176,6 +218,8 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		NFS (Network File System, système de fichiers en réseau en français) est un système de fichiers développé par Sun Microsystem,
 		permettant de partager des données par le réseau. NFS est aujourd’hui la méthode standard de partage de disques entre machines Unix. 
 		C’est une solution simple et pratique, quoique peu sécurisée.\\
+		
+		\section{Aspect technique}
 		
 		NFS utilise généralement le protocole non connecté UDP (en opposition à TCP qui est un pro-
     tocole connecté). Toutefois, certains clients et serveurs NFS (depuis la version 3) peuvent aussi
@@ -186,10 +230,78 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
     NFSv3 définie dans la RFC 1813 prenant en charge le TCP.\\
     NFSv4 définie dans la RFC 3010 puis réviser dans la RFC 3530. L'ensemble du protocole est repensé, et les codes sont réécrits.
     Cette version intègre une meilleur gestion de la sécurité, de la montée en charge, et un systèmes de maintenances simplifiés.
-    NFSv4 supporte les protocoles de transports TCP et RDMA.\\
-
-	\chapter{GlusterFs}
+    NFSv4 supporte les protocoles de transports TCP (par défaut) et RDMA, ce qui augmente la fiabilité. Nous utiliserons donc cette version
+    NFS dans l'ensemble de nos test.\\
+    
+    \section{Mise en place}
+    
+    Dans cette configuration nous partageons un répertoire /tmp sur un serveur à plusieurs clients. Utilisant une image de Debian Squeeze,
+    les paquets nfs-common et nfs-kernel-server sont directement disponible dans les dépôts. Il faut ensuite ajouter la ligne suivante dans
+    le fichier /etc/exports :
+    \begin{lstlisting}
+	    /tmp *.nancy.grid5000.fr(rw,fsid=0,insecure,subtree_check)
+	  \end{lstlisting}
+	  Dans cette ligne le répertoire est partagé pour le domaine nancy.grid5000.fr. Cette manipulation n'est pas dutout sécurisé ! Puisque toutes
+	  les machines déployées sur la plateforme de Nancy peuvent accéder au répertoire.\\
+	  \textbf{rw }: autorise l'accès en lecture et écriture;\\
+	  \textbf{fsid=0} : cette option est propre à NFSv4. Elle indique le point de partage racine. Ce qui permet de monter des partages en fonction d'une  
+	  racine virtuelle.\\
+	  \textbf{insecure} : l'option insecure permet l'accès aux clients dont l'implémentation NFS n'utilisent pas un port réservé.\\
+	  \textbf{subtree\_check} : permet de limiter l'accès exclusivement au répertoire partager.\\
+	  
+	  Après la modification de ce fichier, il suffit de redémarrer le service, puis de monter les clients sur le répertoire partager à l'aide de la 
+	  commande suivante :\\
+	  \begin{lstlisting}
+	    mount serveur:/ -t nfs4 /tmp/partage
+	  \end{lstlisting}
+	  Afin d'utiliser la version 4 de NFS, il est nécessaire de le spécifier dans le type lors du montage.\\
+	  \chapter{Fuse}
+    FUSE est un logiciel libre signifiant << Filesystem in Userspace >>. Il s'agit d'un module, disponible pour les kernels 2.4 et 2.6, grâce auquel 
+    il est possible d'implémenter toutes les fonctionnalités d'un système de fichier dans un espace utilisateur. Ces fonctionnalités incluent :\\
+   • une API de librairie simple ;\\
+   • une installation simple (pas besoin de patcher ou recompiler le noyau) ;\\
+   • une implémentation sécurisée ;\\
+   • utilisable dans l'espace utilisateur.\\\\
+    Pour pouvoir monter un système de fichier, il faut être administrateur à moins que les informations de montage est été renseignées le fichier 
+    /etc/fstab.\\
+    FUSE permet à un utilisateur de monter lui-même un système de fichier. Pour profiter de FUSE, il faut des programmes qui exploitent sa bibliothèque
+    et  ces programmes sont nombreux.\\
+    http://fuse.sourceforge.net\\\\
+    L'installation de FUSE est réalisé avec la commande suivante:\\
+    \begin{lstlisting}
+	  apt-get install fuse-utils libfuse2
+	  \end{lstlisting}
+    Avant de pouvoir utiliser ce paquet, il faut charger le module « fuse » en mémoire :\\
+    \begin{lstlisting}
+	  modprobe fuse
+	  \end{lstlisting}
+    Pour charger le module automatiquement à chaque démarrage de l’ordinateur, il faut ajouter « fuse » dans le fichier « /etc/modules »\\
+    \begin{lstlisting}
+	 nano /etc/modules
+	 \end{lstlisting}
+	\chapter{GlusterFs, véritable serveur d'archivage.}
 		\section{Présentation}
+
+		\begin{figure}[H]
+			\begin{center}
+				\includegraphics[width=0.6\linewidth]{images/glusterfs.png}
+			\end{center}
+		\end{figure}
+
+GlusterFS est un système de fichiers distribués libre (gpl v.3), à la fois très simple à mettre en œuvre et dont les capacités de stockage peuvent monter jusqu'à plusieurs petabytes (1,000 milliards octets).\\
+
+GlusterFS est composé de deux éléments logiciels: un serveur et un client.\\
+GlusterFS supporte plusieurs protocoles de communication tels TCP/IP, InfiniBand RDMA.\\
+
+Les serveurs de stockage gèrent la réplication des données stockées dans le volume distribué, permettant une reprise rapide du service en cas d'indisponibilitéé de l'un des n\oe uds. \\
+Les clients reposent sur Fuse pour monter localement l'espace de stockage fusionné, donc facilement administrable.\\
+Le nombre de serveur et le nombre de clients ne sont pas limité.\\\\
+Le fonctionnement de Glusterfs est très modulaire et peut être configuré pour assurer:\\
+   • fusionner l'espace de tous les nœuds,\\
+   • une redondance des données,\\
+   • découper les gros fichiers en tronçons plus petits qui seront répartis sur différents serveurs de stockage (stripping),\\
+   • fonctionner malgré la perte d'un ou plusieurs nœuds de stockage qui seront automatiquement réintégrée dans le cluster et resynchronisés dès qu'ils seront de nouveau actifs \dots \\
+
 		% x serveurs, un maitre, mais ayant besoin des mêmes paquets que les autres
 		% besoin d'un paquet pour les clients
 
@@ -200,28 +312,27 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 
 			\subsection{Présentation générale}
 				% deux partie présentation ? Présentation générale, Présentation technique ?
+				\begin{figure}[H]
+					\begin{center}
+						\includegraphics[width=0.15\linewidth]{images/moosefs.png}
+					\end{center}
+				\end{figure}
 		
 				%MooseFS (Moose File System), un système de fichiers distribué. % enlever cette phrase ?
 				
-				MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne, développé par Gemius SA
-				Le code préalablement propriétaire a été libéré et mis à disposition publiquement le 5 mai 2008.
-				Il permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs.
-				
-				Cette répartition permet de gérer la disponibilité des données,
-				lors des montées en charge ou lors d’incident technique sur un serveur.
-				L'atout principal de MooseFS, au delà du fait qu'il s’agisse d’un logiciel libre, est sa simplicité de mise en œuvre.
+MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne, développé par Gemius SA. Le code préalablement propriétaire a été libéré et mis à disposition publiquement le 5 mai 2008 sous licence GPLv3. Il permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs. Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique sur un serveur. L'atout principal de MooseFS, au-delà du fait qu'il s’agisse d’un logiciel libre, est sa simplicité d'administration et sa de mise en œuvre.\\\\
 				% plus simple à mettre en place que les autres ?
-				
-				En effet le tutoriel de prise en main, disponible sur le site du projet,
-				explique de manière clair comment mettre en place une architecture distribuées en quelques heures.
-				Concernant les utilisations, elles sont multiples et surtout, après la phase de configuration,
-				l'évolution du système est très simple. L'ajout de serveurs, d’espace disque peuvent être gérés très facilement.
-
+D'autres qualités sont à son actif: \\
+Le respect de la norme Posix.\\
+L'utilisation de Fuse en espace client.\\
+La mise à disposition d'une poubelle automatique à durée de rétention modifiable à souhait.\\
+Une commande unique « mfssetgoal », à chaud pour le choix du nombre de répliquas, par fichier ou par répertoire.\\
+Disponibilité des données ou tolérance aux pannes en cas de réplication positionné à plus de 1 pour les données rendra transparent la perte d'un chunkserver au détriment d'un coût en matière de place.\\ 
+Simplicité de l'extension de l'espace de stockage à chaud quelque soit la configuration, comprenant la ré-indexation et la répartition des données vers ces nouveaux espaces sans vous deviez intervenir (cela peut prendre plusieurs heures).  \\
+Le système est réparti: les fichiers supérieurs à 64Mo sont découpés en paquets de 64Mio et distribués sur les différents serveurs de données dit « chunkserver ».\\
 			\subsection{Aspect technique}
 				
-				Les montage du système de fichiers par les clients se fait à l'aide de FUSE. % deux trois mots sur FUSE ?
-
-				MooseFS est constitué de trois types de serveurs :
+Les montage du système de fichiers par les clients se fait à l'aide de FUSE. MooseFS est constitué de trois types de serveurs :
 
 				\begin{enumerate}
 					\item Un serveur de métadonnées (MDS)
@@ -236,18 +347,71 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 				\end{enumerate}
 				
 				Le point le plus important étant de bien dimensionner le serveur Master (qui stocke les méta-données)
-				afin de ne pas être limité par le suite.
-				Donc pour ceux qui ne peuvent pas mettre en place des systèmes de stockage réseaux propriétaires assez coûteux,
-				je vous conseille d’étudier cette possibilité. Elle vous permettra de partager des données sur plusieurs machines,
-				de manière rapide, fiable, sécurisée et surtout peu coûteuse.
-				% "je vous conseille" à modifier ? Puis le logiciel propriétaire de toute façon s'est mal :p
+				afin de ne pas être limité par le suite.\\
+
+				MooseFS permet de partager des données sur plusieurs machines de manière rapide, fiable et sécurisée.
 
 		\section{Mise en place}
 			\subsection{Environnement logiciel}
 
-				Le système utilisé est une Debian Squeeze. MooseFs ne faisant pas partie des dépôts de la distribution,
-				nous avons compilé le paquet à partir des sources dans leurs dernières version (1.6.20).
-				% Deban Squeeze + MooseFS version x compilé depuis les sources (pas présent dans les dépôts),
+Le système utilisé est une Debian Squeeze. MooseFs ne faisant pas partie des dépôts de la distribution, nous avons compilé le paquet à partir des sources dans la derniéres version disponible (1.6.20) sur le site officiel.\\
+\href{http://pro.hit.gemius.pl/hitredir/id=0sWa0S8ft4sTAHF1bGAAEZPcP3ziyq7f9SdhoQf7oeT.c7/url=moosefs.org/tl\_files/mfscode/mfs-1.6.20-2.tar.gz}{http://www.moosefs.org/download.html}}
+Méthodologie installation pour la mise en oeuvre dès différents serveurs ou services sur des machines dédiées :\\\\
+Commencons par l'installation d'un Master serveur\\
+Récupérer l'archive sur le site de moosefs et décompresser la dans le répertoire /usr/src/, tar zxvf mfs-1.6.20-2.tar.gz\\
+Pour des questions d'isolement nous créons un utilisateur et un groupe pour faire tourner le futur service.\\
+\begin{lstlisting}
+	  groupadd mfs;useradd mfs -s /sbin/nologin
+	  \end{lstlisting}
+Positionnez vous dans le répertoire de l'archive, cd /usr/src/mfs-1.6.20-2\\
+Nous compilons avec la prise en compte de notre nouveau utilisateur et nous désactivons les services non nécessaire à notre master.
+Désactivation du service mfschunck (stockage de données) et mfsmount (montage côté client)
+\begin{lstlisting}
+./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var/lib --with-default-user=mfs --with-default-group=mfs --disable-mfschunkserver --disable-mfsmount
+	  \end{lstlisting}
+\begin{lstlisting}
+	   make;make install
+	  \end{lstlisting}
+Nous recopions les fichiers examples du répertoire /etc pour la configuration du service au nombre de trois:
+\begin{lstlisting}
+cd /etc
+cp mfsmaster.cfg.dist mfsmaster.cfg
+cp mfsmetalogger.cfg.dist mfsmetalogger.cfg
+cp mfsexports.cfg.dist mfsexports.cfg
+	  \end{lstlisting}
+Si vous ne modifiez pas ces fichiers, les directives par défaut seront alors applique.
+Pour information toutes les directives sont très bien documenté dans le man (exp: man mfsmaster.cfg).\\
+Nous ne toucherons au fichier mfsmaster.cfg, celui-ci défini les principaux arrangements du serveur.
+Nous adaptons la configuration du fichier mfsexports.cfg qui permet de fixer la plage d'ip ou les ordinateurs qui pourrons monter le système de fichiers et de convenir des privilèges.
+La première ligne non commenté nous interessent, nous remplacons l'astérisque (*) en spécifions la plage IP et son masque que nous allons employer pour notre maquette.
+Cela aura pour effet de donner accès à toutes les machines de cette plage d'ip de pouvoir disposé de la totalité de la structure en mode lecture écriture.\\
+Exemple de la ligne modifié :
+\begin{lstlisting}
+	  192.168.2.0/24 / rw,alldirs,maproot=0
+	  \end{lstlisting}
+Les binaires de méta-données et les fichiers de changelog sont maintenus dans un dossier spécifié lors de la compilation /var/lib, mais lors de l'installation le fichier de metadata est initialisé vide.
+Nous allons changer cela: 
+\begin{lstlisting}
+cd /var/lib/mfs
+cp metadata.mfs.empty metadata.mfs
+	  \end{lstlisting}
+Avant le démarrage du service nous devons pensez à la résolution de nom du serveur. Renseigné votre serveur dns, nous ici nous renseignerons notre fichier hosts.
+A titre d'exemple:
+  \begin{lstlisting}
+192.168.1.1 mfsmaster
+	  \end{lstlisting}
+A ce stade nous pouvons démarrer le master serveur, le service démarrera avec le compte mfs
+  \begin{lstlisting}
+usr/sbin/mfsmaster start
+	  \end{lstlisting}
+En cas de mise en production pensez à modifier votre configue pour un démarrage automique du service lors des lancements de votre serveur.
+
+Pour conclure cette section, un mode graphique en cgi est disponible pour suivre l'état de fonctionnement du système, disponible sous votre navigateur à l'adresse http://IP\_Master\_Server:9425
+  \begin{lstlisting}
+/usr/sbin/mfscgiserv
+	  \end{lstlisting}
+Remarque: le contenu sera vide tant que les serveurs de données ne seront démarré.
+		% Deban Squeeze + MooseFS version x compilé depuis les sources (pas présent dans les dépôts),
 				% avec options différentes suivant les serveurs, clients (cf tuto site officiel)
 
 		
