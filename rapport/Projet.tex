@@ -183,6 +183,34 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 			(par réplication)
 
 		\section{Le Grid'5000}
+		Le Grid'5000 est une infrastructure distribuée de neuf sites sur la France, dédié à la recherche,
+		sur des systèmes distribuées à grande échelle.
+
+		Les ingénieurs assurant le développement et le support de l'infrastructure jour après jour viennent pour la plupart	de l'INRIA\footnote{Institut National de Recherche en Informatique et en Automatique}.
+
+		Le Grid'5000 est répartit sur onze sites, dont neuf en France.
+
+		\begin{figure}[H]
+			\begin{center}
+				\includegraphics[width=0.4\linewidth]{images/Site_map.png}
+				\caption{Les sites français du Grid'5000}
+			\end{center}
+		\end{figure}
+
+		Chaque site possède un ou plusieurs clusters\footnote{TODO: def d'un cluster}. Par exemple, le site de Nancy possède deux clusters :
+		
+		\begin{description}
+			\item[graphene :] 144 nœuds contenants :\\
+			1 CPU Intel@2.53GHz\\
+			4 cores/CPU\\
+			16GB RAM\\
+			278GB DISK
+			\item[griffon :] 92 nœuds contenants :\\
+			2 CPUs Intel@2.5GHz\\
+			4 cores/CPU\\
+			16GB RAM\\
+			278GB DISK
+		\end{description}
 
 	\chapter{NFS}
 		\section{Présentation}
@@ -202,6 +230,42 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
     NFSv4 définie dans la RFC 3010 puis réviser dans la RFC 3530. L'ensemble du protocole est repensé, et les codes sont réécrits.
     Cette version intègre une meilleur gestion de la sécurité, de la montée en charge, et un systèmes de maintenances simplifiés.
     NFSv4 supporte les protocoles de transports TCP et RDMA.\\
+\section{Aspect technique}
+		
+		NFS utilise généralement le protocole non connecté UDP (en opposition à TCP qui est un pro-
+    tocole connecté). Toutefois, certains clients et serveurs NFS (depuis la version 3) peuvent aussi
+    utiliser TCP, ce qui permet, entre autre, de fiabiliser les échanges.\\
+
+    On retrouve pour NFS différentes versions :\\
+    NFSv1 et v2 définies dans la RFC 1094 prévues pour fonctionner sur UDP.\\
+    NFSv3 définie dans la RFC 1813 prenant en charge le TCP.\\
+    NFSv4 définie dans la RFC 3010 puis réviser dans la RFC 3530. L'ensemble du protocole est repensé, et les codes sont réécrits.
+    Cette version intègre une meilleur gestion de la sécurité, de la montée en charge, et un systèmes de maintenances simplifiés.
+    NFSv4 supporte les protocoles de transports TCP (par défaut) et RDMA, ce qui augmente la fiabilité. Nous utiliserons donc cette version
+    NFS dans l'ensemble de nos test.\\
+    
+    \section{Mise en place}
+    
+    Dans cette configuration nous partageons un répertoire /tmp sur un serveur à plusieurs clients. Utilisant une image de Debian Squeeze,
+    les paquets nfs-common et nfs-kernel-server sont directement disponible dans les dépôts. Il faut ensuite ajouter la ligne suivante dans
+    le fichier /etc/exports :
+    \begin{lstlisting}
+	    /tmp *.nancy.grid5000.fr(rw,fsid=0,insecure,subtree_check)
+	  \end{lstlisting}
+	  Dans cette ligne le répertoire est partagé pour le domaine nancy.grid5000.fr. Cette manipulation n'est pas dutout sécurisé ! Puisque toutes
+	  les machines déployées sur la plateforme de Nancy peuvent accéder au répertoire.\\
+	  \textbf{rw }: autorise l'accès en lecture et écriture;\\
+	  \textbf{fsid=0} : cette option est propre à NFSv4. Elle indique le point de partage racine. Ce qui permet de monter des partages en fonction d'une  
+	  racine virtuelle.\\
+	  \textbf{insecure} : l'option insecure permet l'accès aux clients dont l'implémentation NFS n'utilisent pas un port réservé.\\
+	  \textbf{subtree\_check} : permet de limiter l'accès exclusivement au répertoire partager.\\
+	  
+	  Après la modification de ce fichier, il suffit de redémarrer le service, puis de monter les clients sur le répertoire partager à l'aide de la 
+	  commande suivante :\\
+	  \begin{lstlisting}
+	    mount serveur:/ -t nfs4 /tmp/partage
+	  \end{lstlisting}
+	  Afin d'utiliser la version 4 de NFS, il est nécessaire de le spécifier dans le type lors du montage.\\
 		\chapter{Fuse}
 FUSE est un logiciel libre signifiant << Filesystem in Userspace >>. Il s'agit d'un module, disponible pour les kernels 2.4 et 2.6, grâce auquel il est possible d'implémenter toutes les fonctionnalités d'un système de fichier dans un espace utilisateur. Ces fonctionnalités incluent :\\
    • une API de librairie simple ;\\
