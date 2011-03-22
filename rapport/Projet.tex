@@ -10,10 +10,14 @@
 \usepackage[T1]{fontenc}
 \usepackage{float}
 
+\usepackage{listingsutf8} % ne change rien, a virer ?
+
 % pour code source
 \usepackage{listings}
 \lstset{
 	basicstyle=\footnotesize,
+	%extendedchars=\true
+	%inputencoding=utf8/latin1
 	numberstyle=\footnotesize,
 	frame=single,
 	tabsize=2,
@@ -266,11 +270,9 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 				\end{enumerate}
 				
 				Le point le plus important étant de bien dimensionner le serveur Master (qui stocke les méta-données)
-				afin de ne pas être limité par le suite.
-				Donc pour ceux qui ne peuvent pas mettre en place des systèmes de stockage réseaux propriétaires assez coûteux,
-				je vous conseille d’étudier cette possibilité. Elle vous permettra de partager des données sur plusieurs machines,
-				de manière rapide, fiable, sécurisée et surtout peu coûteuse.
-				% "je vous conseille" à modifier ? Puis le logiciel propriétaire de toute façon s'est mal :p
+				afin de ne pas être limité par le suite.\\
+
+				MooseFS permet de partager des données sur plusieurs machines de manière rapide, fiable et sécurisée.
 
 		\section{Mise en place}
 			\subsection{Environnement logiciel}
