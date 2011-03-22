@@ -334,7 +334,43 @@ Les montage du système de fichiers par les clients se fait à l'aide de FUSE. M
 		\section{Mise en place}
 			\subsection{Environnement logiciel}
 
-Le système utilisé est une Debian Squeeze. MooseFs ne faisant pas partie des dépôts de la distribution, nous avons compilé le paquet à partir des sources dans leurs dernières version (1.6.20).
+Le système utilisé est une Debian Squeeze. MooseFs ne faisant pas partie des dépôts de la distribution, nous avons compilé le paquet à partir des sources dans la derniéres version disponible (1.6.20) sur le site officiel.\\
+\href{http://pro.hit.gemius.pl/hitredir/id=0sWa0S8ft4sTAHF1bGAAEZPcP3ziyq7f9SdhoQf7oeT.c7/url=moosefs.org/tl_files/mfscode/mfs-1.6.20-2.tar.gz}{http://www.moosefs.org/download.html}}
+Méthodologie installation pour la mise en oeuvre dès différents serveurs ou services sur des machines dédiées :\\\\
+Commencons par l'installation d'un Master serveur\\
+Récupérer l'archive sur le site de moosefs et décompresser la dans le répertoire /usr/src/, tar zxvf mfs-1.6.20-2.tar.gz\\
+Pour des questions d'isolement nous créons un utilisateur et un groupe pour faire tourner le futur service.\\
+\begin{lstlisting}
+	  groupadd mfs;useradd mfs -s /sbin/nologin
+	  \end{lstlisting}
+Positionnez vous dans le répertoire de l'archive, cd /usr/src/mfs-1.6.20-2\\
+Nous compilons avec la prise en compte de notre nouveau utilisateur et nous désactivons les services non nécessaire à notre master.
+Désactivation du service mfschunck (stockage de données) et mfsmount (montage côté client)
+\begin{lstlisting}
+./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var/lib --with-default-user=mfs --with-default-group=mfs --disable-mfschunkserver --disable-mfsmount
+	  \end{lstlisting}
+\begin{lstlisting}
+	   make;make install
+	  \end{lstlisting}
+Nous recopions les fichiers examples du répertoire /etc pour la configuration du service au nombre de trois:
+\begin{lstlisting}
+cd /etc
+cp mfsmaster.cfg.dist mfsmaster.cfg
+cp mfsmetalogger.cfg.dist mfsmetalogger.cfg
+cp mfsexports.cfg.dist mfsexports.cfg
+	  \end{lstlisting}
+Si vous ne modifiez pas ces fichiers, les directives par défaut seront alors applique.
+Pour information toutes les directives sont très bien documenté dans le man (exp: man mfsmaster.cfg).\\
+Nous ne toucherons au fichier mfsmaster.cfg, celui-ci défini les principaux arrangements du serveur.
+Nous adaptons la configuration du fichier mfsexports.cfg qui permet de fixer la plage d'ip ou les ordinateurs qui pourrons monter le système de fichiers et de convenir des privilèges.
+La première ligne non commenté nous interessent, nous remplacons l'astérisque (*) en spécifions la plage IP et son masque que nous allons employer pour notre maquette.
+Cela aura pour effet de donner accès à toutes les machines de cette plage d'ip de pouvoir disposé de la totalité de la structure en mode lecture écriture.\\
+Exemple de la ligne modifié :
+\begin{lstlisting}
+	  192.168.2.0/24 / rw,alldirs,maproot=0
+	  \end{lstlisting}
+
+ 
 				% Deban Squeeze + MooseFS version x compilé depuis les sources (pas présent dans les dépôts),
 				% avec options différentes suivant les serveurs, clients (cf tuto site officiel)
 
