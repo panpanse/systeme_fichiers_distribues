@@ -177,6 +177,8 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		permettant de partager des données par le réseau. NFS est aujourd’hui la méthode standard de partage de disques entre machines Unix. 
 		C’est une solution simple et pratique, quoique peu sécurisée.\\
 		
+		\section{Aspect technique}
+		
 		NFS utilise généralement le protocole non connecté UDP (en opposition à TCP qui est un pro-
     tocole connecté). Toutefois, certains clients et serveurs NFS (depuis la version 3) peuvent aussi
     utiliser TCP, ce qui permet, entre autre, de fiabiliser les échanges.\\
@@ -186,8 +188,31 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
     NFSv3 définie dans la RFC 1813 prenant en charge le TCP.\\
     NFSv4 définie dans la RFC 3010 puis réviser dans la RFC 3530. L'ensemble du protocole est repensé, et les codes sont réécrits.
     Cette version intègre une meilleur gestion de la sécurité, de la montée en charge, et un systèmes de maintenances simplifiés.
-    NFSv4 supporte les protocoles de transports TCP et RDMA.\\
-
+    NFSv4 supporte les protocoles de transports TCP (par défaut) et RDMA, ce qui augmente la fiabilité. Nous utiliserons donc cette version
+    NFS dans l'ensemble de nos test.\\
+    
+    \section{Mise en place}
+    
+    Dans cette configuration nous partageons un répertoire /tmp sur un serveur à plusieurs clients. Utilisant une image de Debian Squeeze,
+    les paquets nfs-common et nfs-kernel-server sont directement disponible dans les dépôts. Il faut ensuite ajouter la ligne suivante dans
+    le fichier /etc/exports :
+    \begin{lstlisting}
+	    /tmp *.nancy.grid5000.fr(rw,fsid=0,insecure,subtree_check)
+	  \end{lstlisting}
+	  Dans cette ligne le répertoire est partagé pour le domaine nancy.grid5000.fr. Cette manipulation n'est pas dutout sécurisé ! Puisque toutes
+	  les machines déployées sur la plateforme de Nancy peuvent accéder au répertoire.\\
+	  \textbf{rw }: autorise l'accès en lecture et écriture;\\
+	  \textbf{fsid=0} : cette option est propre à NFSv4. Elle indique le point de partage racine. Ce qui permet de monter des partages en fonction d'une  
+	  racine virtuelle.\\
+	  \textbf{insecure} : l'option insecure permet l'accès aux clients dont l'implémentation NFS n'utilisent pas un port réservé.\\
+	  \textbf{subtree\_check} : permet de limiter l'accès exclusivement au répertoire partager.\\
+	  
+	  Après la modification de ce fichier, il suffit de redémarrer le service, puis de monter les clients sur le répertoire partager à l'aide de la 
+	  commande suivante :\\
+	  \begin{lstlisting}
+	    mount serveur:/ -t nfs4 /tmp/partage
+	  \end{lstlisting}
+	  Afin d'utiliser la version 4 de NFS, il est nécessaire de le spécifier dans le type lors du montage.\\
 	\chapter{GlusterFs}
 		\section{Présentation}
 		% x serveurs, un maitre, mais ayant besoin des mêmes paquets que les autres
