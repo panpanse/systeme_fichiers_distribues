@@ -271,8 +271,22 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
     \begin{lstlisting}
 	 nano /etc/modules
 	 \end{lstlisting}
-	\chapter{GlusterFs}
+	\chapter{GlusterFs, véritable serveur d'archivage.}
 		\section{Présentation}
+GlusterFS est un système de fichiers distribués libre (gpl v.3), à la fois très simple à mettre en œuvre et dont les capacités de stockage peuvent monter jusqu'à plusieurs petabytes (1,000 milliards octets).\\
+
+GlusterFS est composé de deux éléments logiciels: un serveur et un client.\\
+GlusterFS supporte plusieurs protocoles de communication tels TCP/IP, InfiniBand RDMA.\\
+
+Les serveurs de stockage gèrent la réplication des données stockées dans le volume distribué, permettant une reprise rapide du service en cas d'indisponibilitéé de l'un des n\oe uds. \\
+Les clients reposent sur Fuse pour monter localement l'espace de stockage fusionné, donc facilement administrable.\\
+Le nombre de serveur et le nombre de clients ne sont pas limité.\\\\
+Le fonctionnement de Glusterfs est très modulaire et peut être configuré pour assurer:\\
+   • fusionner l'espace de tous les nœuds,\\
+   • une redondance des données,\\
+   • découper les gros fichiers en tronçons plus petits qui seront répartis sur différents serveurs de stockage (stripping),\\
+   • fonctionner malgré la perte d'un ou plusieurs nœuds de stockage qui seront automatiquement réintégrée dans le cluster et resynchronisés dès qu'ils seront de nouveau actifs \dots \\
+
 		% x serveurs, un maitre, mais ayant besoin des mêmes paquets que les autres
 		% besoin d'un paquet pour les clients
 
@@ -286,25 +300,17 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		
 				%MooseFS (Moose File System), un système de fichiers distribué. % enlever cette phrase ?
 				
-				MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne, développé par Gemius SA
-				Le code préalablement propriétaire a été libéré et mis à disposition publiquement le 5 mai 2008.
-				Il permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs.
-				
-				Cette répartition permet de gérer la disponibilité des données,
-				lors des montées en charge ou lors d’incident technique sur un serveur.
-				L'atout principal de MooseFS, au delà du fait qu'il s’agisse d’un logiciel libre, est sa simplicité de mise en œuvre.
+MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne, développé par Gemius SA. Le code préalablement propriétaire a été libéré et mis à disposition publiquement le 5 mai 2008 sous licence GPLv3. Il permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs. Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique sur un serveur. L'atout principal de MooseFS, au-delà du fait qu'il s’agisse d’un logiciel libre, est sa simplicité d'administration et sa de mise en œuvre.\\\\
 				% plus simple à mettre en place que les autres ?
-				
-				En effet le tutoriel de prise en main, disponible sur le site du projet,
-				explique de manière clair comment mettre en place une architecture distribuées en quelques heures.
-				Concernant les utilisations, elles sont multiples et surtout, après la phase de configuration,
-				l'évolution du système est très simple. L'ajout de serveurs, d’espace disque peuvent être gérés très facilement.
-
+D'autres qualités sont à son actif: \\
+Le respect de la norme Posix.\\
+L'utilisation de Fuse en espace client.\\
+La mise à disposition d'une poubelle automatique à durée de rétention modifiable à souhait.\\
+Une commande unique, à chaud pour le choix du nombre de répliquas, par fichier ou par répertoire.\\
+Simplicité de l'extension de l'espace de stockage à chaud quelque soit la configuration, comprenant la ré-indexation des données.  \\
 			\subsection{Aspect technique}
 				
-				Les montage du système de fichiers par les clients se fait à l'aide de FUSE. % deux trois mots sur FUSE ?
-
-				MooseFS est constitué de trois types de serveurs :
+				Les montage du système de fichiers par les clients se fait à l'aide de FUSE. MooseFS est constitué de trois types de serveurs :
 
 				\begin{enumerate}
 					\item Un serveur de métadonnées (MDS)
@@ -326,8 +332,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		\section{Mise en place}
 			\subsection{Environnement logiciel}
 
-				Le système utilisé est une Debian Squeeze. MooseFs ne faisant pas partie des dépôts de la distribution,
-				nous avons compilé le paquet à partir des sources dans leurs dernières version (1.6.20).
+Le système utilisé est une Debian Squeeze. MooseFs ne faisant pas partie des dépôts de la distribution, nous avons compilé le paquet à partir des sources dans leurs dernières version (1.6.20).
 				% Deban Squeeze + MooseFS version x compilé depuis les sources (pas présent dans les dépôts),
 				% avec options différentes suivant les serveurs, clients (cf tuto site officiel)
 
