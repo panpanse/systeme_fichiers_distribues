@@ -8,35 +8,45 @@
 \usepackage{url}
 \usepackage{hyperref}
 \usepackage[T1]{fontenc}
-\usepackage{float}
-
-\usepackage{listingsutf8} % ne change rien, a virer ?
-
+\usepackage{fancyvrb }
 % pour code source
 \usepackage{listings}
 \lstset{
-	basicstyle=\footnotesize,
-	%extendedchars=\true
-	%inputencoding=utf8/latin1
-	numberstyle=\footnotesize,
-	frame=single,
-	tabsize=2,
-	breaklines=true,
-	numbers=left,
-	rulecolor=,
-	keywordstyle=\color[rgb]{0,0,1},
-	commentstyle=\color[rgb]{0.133,0.545,0.133},
-	stringstyle=\color[rgb]{0.627,0.126,0.941},
+language=php ,               	
+basicstyle=\ttfamily,			% the size of the fonts that are used for the code
+numbers=left,              % WHERE to put the line-numbers numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it's 1each line will be numbered 
+numbersep=5pt,                  % how far the line-numbers are FROM the code
+backgroundcolor=\color{rltgrey},% choose the background color.
+showspaces=false,               % show spaces adding particular underscores 
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,	                % adds a frame around the code
+tabsize=1,	                	% sets default tabsize to 2 spaces
+captionpos=r,                   % sets the caption-position to bottom
+breaklines=true,                % sets automatic line breaking
+breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+title=\lstname,                 % show the filename of files included with \lstinputlisting;also try caption instead of title
+escapeinside={\%*}{*)},         % if you want to add a comment within your code
+morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINCT,GROUP,IN,LIKE,NUMBER,ROLLBACK,SUBSTR,sum,VARCHAR2}        
 }
 
 \definecolor{red1}{RGB}{153,0,0}
-
+\definecolor{rltgrey}{rgb}{0.9,0.9,0.9}
+\definecolor{rltblue}{rgb}{0.5,0.7,0.9}
 \hypersetup{colorlinks,%
             citecolor=black,%
             filecolor=black,%
             linkcolor=black,%
             urlcolor=red1}
+% pour le code
+\newenvironment{mylisting}
+{\begin{list}{}{\setlength{\leftmargin}{1em}}\item\scriptsize\bfseries}
+{\end{list}}
 
+\newenvironment{mytinylisting}
+{\begin{list}{}{\setlength{\leftmargin}{1em}}\item\tiny\bfseries}
+{\end{list}}
 
 %Page de Garde
 \makeatletter
@@ -145,7 +155,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 \begin{document}
 	\maketitle
 	\tableofcontents
-
+\lstset{language=java,}
 	\chapter{Introduction}
 		\section{Contexte}
 			Étudiants en licence professionnelle ASRALL (Administration de Systèmes, Réseaux, et Applications à base de Logiciels libres),
@@ -173,35 +183,6 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 			(par réplication)
 
 		\section{Le Grid'5000}
-		Le Grid'5000 est une infrastructure distribuée de neuf sites sur la France, dédié à la recherche,
-		sur des systèmes distribuées à grande échelle.
-
-		Les ingénieurs assurant le développement et le support de l'infrastructure jour après jour viennent pour la plupart	de l'INRIA\footnote{Institut National de Recherche en Informatique et en Automatique}.
-
-		Le Grid'5000 est répartit sur onze sites, dont neuf en France.
-
-		\begin{figure}[H]
-			\begin{center}
-				\includegraphics[width=0.4\linewidth]{images/Site_map.png}
-				\caption{Les sites français du Grid'5000}
-			\end{center}
-		\end{figure}
-
-		Chaque site possède un ou plusieurs clusters\footnote{TODO: def d'un cluster}. Par exemple, le site de Nancy possède deux clusters :
-		
-		\begin{description}
-			\item[graphene :] 144 nœuds contenants :\\
-			1 CPU Intel@2.53GHz\\
-			4 cores/CPU\\
-			16GB RAM\\
-			278GB DISK
-			\item[griffon :] 92 nœuds contenants :\\
-			2 CPUs Intel@2.5GHz\\
-			4 cores/CPU\\
-			16GB RAM\\
-			278GB DISK
-		\end{description}
-
 
 	\chapter{NFS}
 		\section{Présentation}
@@ -210,8 +191,6 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		NFS (Network File System, système de fichiers en réseau en français) est un système de fichiers développé par Sun Microsystem,
 		permettant de partager des données par le réseau. NFS est aujourd’hui la méthode standard de partage de disques entre machines Unix. 
 		C’est une solution simple et pratique, quoique peu sécurisée.\\
-		
-		\section{Aspect technique}
 		
 		NFS utilise généralement le protocole non connecté UDP (en opposition à TCP qui est un pro-
     tocole connecté). Toutefois, certains clients et serveurs NFS (depuis la version 3) peuvent aussi
@@ -222,46 +201,53 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
     NFSv3 définie dans la RFC 1813 prenant en charge le TCP.\\
     NFSv4 définie dans la RFC 3010 puis réviser dans la RFC 3530. L'ensemble du protocole est repensé, et les codes sont réécrits.
     Cette version intègre une meilleur gestion de la sécurité, de la montée en charge, et un systèmes de maintenances simplifiés.
-    NFSv4 supporte les protocoles de transports TCP (par défaut) et RDMA, ce qui augmente la fiabilité. Nous utiliserons donc cette version
-    NFS dans l'ensemble de nos test.\\
-    
-    \section{Mise en place}
-    
-    Dans cette configuration nous partageons un répertoire /tmp sur un serveur à plusieurs clients. Utilisant une image de Debian Squeeze,
-    les paquets nfs-common et nfs-kernel-server sont directement disponible dans les dépôts. Il faut ensuite ajouter la ligne suivante dans
-    le fichier /etc/exports :
-    \begin{lstlisting}
-	    /tmp *.nancy.grid5000.fr(rw,fsid=0,insecure,subtree_check)
-	  \end{lstlisting}
-	  Dans cette ligne le répertoire est partagé pour le domaine nancy.grid5000.fr. Cette manipulation n'est pas dutout sécurisé ! Puisque toutes
-	  les machines déployées sur la plateforme de Nancy peuvent accéder au répertoire.\\
-	  \textbf{rw }: autorise l'accès en lecture et écriture;\\
-	  \textbf{fsid=0} : cette option est propre à NFSv4. Elle indique le point de partage racine. Ce qui permet de monter des partages en fonction d'une  
-	  racine virtuelle.\\
-	  \textbf{insecure} : l'option insecure permet l'accès aux clients dont l'implémentation NFS n'utilisent pas un port réservé.\\
-	  \textbf{subtree\_check} : permet de limiter l'accès exclusivement au répertoire partager.\\
-	  
-	  Après la modification de ce fichier, il suffit de redémarrer le service, puis de monter les clients sur le répertoire partager à l'aide de la 
-	  commande suivante :\\
-	  \begin{lstlisting}
-	    mount serveur:/ -t nfs4 /tmp/partage
-	  \end{lstlisting}
-	  Afin d'utiliser la version 4 de NFS, il est nécessaire de le spécifier dans le type lors du montage.\\
-	\chapter{GlusterFs}
+    NFSv4 supporte les protocoles de transports TCP et RDMA.\\
+		\chapter{Fuse}
+FUSE est un logiciel libre signifiant << Filesystem in Userspace >>. Il s'agit d'un module, disponible pour les kernels 2.4 et 2.6, grâce auquel il est possible d'implémenter toutes les fonctionnalités d'un système de fichier dans un espace utilisateur. Ces fonctionnalités incluent :\\
+   • une API de librairie simple ;\\
+   • une installation simple (pas besoin de patcher ou recompiler le noyau) ;\\
+   • une implémentation sécurisée ;\\
+   • utilisable dans l'espace utilisateur.\\\\
+Pour pouvoir monter un système de fichier, il faut être administrateur à moins que les informations de montage est été renseignées le fichier /etc/fstab.\\
+FUSE permet à un utilisateur de monter lui-même un système de fichier. Pour profiter de FUSE, il faut des programmes qui exploitent sa bibliothèque et ces programmes sont nombreux.\\
+http://fuse.sourceforge.net\\\\
+L'installation de FUSE est réalisé avec la commande suivante:\\
+\begin{lstlisting}
+	 apt-get install fuse-utils libfuse2
+	 \end{lstlisting}
+Avant de pouvoir utiliser ce paquet, il faut charger le module « fuse » en mémoire :\\
+\begin{lstlisting}
+	 modprobe fuse
+	 \end{lstlisting}
+Pour charger le module automatiquement à chaque démarrage de l’ordinateur, il faut ajouter « fuse » dans le fichier « /etc/modules »\\
+\begin{lstlisting}
+	 nano /etc/modules
+	 \end{lstlisting}
+	\chapter{GlusterFs, véritable serveur d'archivage.}
 		\section{Présentation}
+GlusterFS est un système de fichiers distribués libre (gpl v.3), à la fois très simple à mettre en œuvre et dont les capacités de stockage peuvent monter jusqu'à plusieurs petabytes (1,000 milliards octets).\\
+
+GlusterFS est composé de deux éléments logiciels: un serveur et un client.\\
+GlusterFS supporte plusieurs protocoles de communication tels TCP/IP, InfiniBand RDMA.\\
+
+Les serveurs de stockage gèrent la réplication des données stockées dans le volume distribué, permettant une reprise rapide du service en cas d'indisponibilitéé de l'un des n\oe uds. \\
+Les clients reposent sur Fuse pour monter localement l'espace de stockage fusionné, donc facilement administrable.\\
+Le nombre de serveur et le nombre de clients ne sont pas limité.\\\\
+Le fonctionnement de Glusterfs est très modulaire et peut être configuré pour assurer:\\
+   • fusionner l'espace de tous les nœuds,\\
+   • une redondance des données,\\
+   • découper les gros fichiers en tronçons plus petits qui seront répartis sur différents serveurs de stockage (stripping),\\
+   • fonctionner malgré la perte d'un ou plusieurs nœuds de stockage qui seront automatiquement réintégrée dans le cluster et resynchronisés dès qu'ils seront de nouveau actifs \dots \\
+
 		% x serveurs, un maitre, mais ayant besoin des mêmes paquets que les autres
 		% besoin d'un paquet pour les clients
-
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
 		\section{Présentation}
-
 			\subsection{Présentation générale}
-				% deux partie présentation ? Présentation générale, Présentation technique ?
-		
-				%MooseFS (Moose File System), un système de fichiers distribué. % enlever cette phrase ?
-				
+% deux partie présentation ? Présentation générale, Présentation technique ?
+%MooseFS (Moose File System), un système de fichiers distribué. % enlever cette phrase ?		
 				MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne, développé par Gemius SA
 				Le code préalablement propriétaire a été libéré et mis à disposition publiquement le 5 mai 2008.
 				Il permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs.
@@ -295,9 +281,11 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 				\end{enumerate}
 				
 				Le point le plus important étant de bien dimensionner le serveur Master (qui stocke les méta-données)
-				afin de ne pas être limité par le suite.\\
-
-				MooseFS permet de partager des données sur plusieurs machines de manière rapide, fiable et sécurisée.
+				afin de ne pas être limité par le suite.
+				Donc pour ceux qui ne peuvent pas mettre en place des systèmes de stockage réseaux propriétaires assez coûteux,
+				je vous conseille d’étudier cette possibilité. Elle vous permettra de partager des données sur plusieurs machines,
+				de manière rapide, fiable, sécurisée et surtout peu coûteuse.
+				% "je vous conseille" à modifier ? Puis le logiciel propriétaire de toute façon s'est mal :p
 
 		\section{Mise en place}
 			\subsection{Environnement logiciel}
