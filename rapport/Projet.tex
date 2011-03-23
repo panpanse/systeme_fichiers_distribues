@@ -320,7 +320,11 @@ Le fonctionnement de Glusterfs est très modulaire et peut être configuré pour
 		
 				%MooseFS (Moose File System), un système de fichiers distribué. % enlever cette phrase ?
 				
-MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne, développé par Gemius SA. Le code préalablement propriétaire a été libéré et mis à disposition publiquement le 5 mai 2008 sous licence GPLv3. Il permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs. Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique sur un serveur. L'atout principal de MooseFS, au-delà du fait qu'il s’agisse d’un logiciel libre, est sa simplicité d'administration et sa de mise en œuvre.\\\\
+MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne, c’est à dire résistant aux pannes d’un ou plusieurs noeuds de stockage. Développé par Gemius SA. Le code préalablement propriétaire a été libéré et mis à disposition publiquement le 5 mai 2008 sous licence GPLv3. Disponible pour Linux, FreeBSD, OpenSolaris et MacOS X.\\
+Les développeurs sont réactifs et suivent de très près la liste de diffusion et les remontés de bugs de leurs utilisateurs.\\
+Il permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs. 
+Les fichiers sont découpés en morceaux (appelés chunks) puis répartis sur les différents chunkservers (noeuds de stockage) : selon le paramétrage voulu pour ces fichiers, ou pour le répertoire dans lequel ils se trouvent, chaque chunk sera répliqué sur x noeuds (différents).\\
+Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique sur un serveur. L'atout principal de MooseFS, au-delà du fait qu'il s’agisse d’un logiciel libre, est sa simplicité d'administration et sa de mise en œuvre.\\\\
 				% plus simple à mettre en place que les autres ?
 D'autres qualités sont à son actif: \\
 Le respect de la norme Posix.\\
