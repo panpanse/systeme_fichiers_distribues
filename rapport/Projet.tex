@@ -526,6 +526,76 @@ exemple : df -h | grep mfs\\
                       2.0G   69M 1.9G 4% /mnt/mfschunks2
 mfs#mfsmaster:9421    3.2G     0 3.2G 0% /mnt/mfs
 	  \end{lstlisting}
+\textbf{Commandes Usuelles}\\\\
+Montage de la Poubelle :\\
+\begin{lstlisting}
+mkdir -p /mnt/mfsmeta
+chown -R mfs:mfs /mnt/mfsmeta
+mfsmount -m /mnt/mfsmeta
+	  \end{lstlisting}
+Définir le nombre de copie que l'on désir par répertoire avec mfssetgoal –r :
+\begin{lstlisting}
+ mfssetgoal -r 1 /mnt/mfs/folder1
+/mnt/mfs/folder1:
+ inodes with goal changed:        0
+ inodes with goal not changed:    1
+ inodes with permission denied:   0
+
+Remarquer la valeur 2 qui suit l'option -r qui 
+permet de fixer le nombre de copie a 2
+
+mfssetgoal -r 2 /mnt/mfs/folder2
+/mnt/mfs/folder2:
+ inodes with goal changed:        0
+ inodes with goal not changed:    1
+ inodes with permission denied:   0
+	  \end{lstlisting}
+Vérifier la redonnance avec la fonction mfsgetgoal:
+\begin{lstlisting}
+mfsgetgoal /mnt/mfs/folder1
+/mnt/mfs/folder1: 1
+
+mfssetgoal /mnt/mfs/folder2
+/mnt/mfs/folder2: 2
+	  \end{lstlisting}
+Le nombre réel de copies d'un dossier peut être vérifié avec les commandes mfscheckfile et de mfsfileinfo :
+\begin{lstlisting}
+mfscheckfile /mnt/mfs/folder1
+
+/mnt/mfs/folder1:
+3 copies: 1 chunks
+
+
+mfsfileinfo /mnt/mfs/folder1
+
+/mnt/mfs/folder1:
+chunk 0: 00000000000520DF_00000001 / (id:336095 ver:1)
+copy 1: 192.168.0.12:9622
+copy 2: 192.168.0.52:9622
+copy 3: 192.168.0.54:9622
+\end{lstlisting}
+Testons le positionnement:
+\begin{lstlisting}
+cp /usr/src/mfs-1.6.20-2.tar.gz /mnt/mfs/folder1
+cp /usr/src/mfs-1.6.20-2.tar.gz /mnt/mfs/folder2
+	  \end{lstlisting}
+La commande mfscheckfile est employée pour la vérification du nombre de copie :
+\begin{lstlisting}
+mfscheckfile /mnt/mfs/folder1/mfs-1.6.20-2.tar.gz
+/mnt/mfs/folder1/mfs-1.6.20-2.tar.gz:
+1 copies: 1 chunks
+
+mfscheckfile /mnt/mfs/folder2/mfs-1.6.20-2.tar.gz
+/mnt/mfs/folder2/mfs-1.6.20-2.tar.gz:
+2 copies: 1 chunks
+	  \end{lstlisting}
+\textbf{Arrêt de MooseFS}\\
+\begin{lstlisting}
+umount /mnt/mfs)
+/usr/sbin/mfschunkserver stop
+/usr/sbin/mfsmetalogger stop
+/usr/sbin/mfsmaster stop
+	  \end{lstlisting}
 % insertion d'une image :
 %\begin{figure}[p]
 %	\includegraphics[width=12cm,height=120mm]{mastersrv.png}
