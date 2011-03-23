@@ -326,7 +326,7 @@ Il permet de déployer assez facilement un espace de stockage réseau, répartit
 Les fichiers sont découpés en morceaux (appelés chunks) puis répartis sur les différents chunkservers (noeuds de stockage) : selon le paramétrage voulu pour ces fichiers, ou pour le répertoire dans lequel ils se trouvent, chaque chunk sera répliqué sur x noeuds (différents).\\
 Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique sur un serveur. L'atout principal de MooseFS, au-delà du fait qu'il s’agisse d’un logiciel libre, est sa simplicité d'administration et sa de mise en œuvre.\\\\
 				% plus simple à mettre en place que les autres ?
-D'autres qualités sont à son actif: \\
+D'autres qualités sont à son actif: \\\\
 Le respect de la norme Posix.\\
 L'utilisation de Fuse en espace client.\\
 La mise à disposition d'une poubelle automatique à durée de rétention modifiable à souhait.\\
@@ -361,8 +361,8 @@ Les montage du système de fichiers par les clients se fait à l'aide de FUSE. M
 Le système utilisé est une Debian Squeeze. MooseFs ne faisant pas partie des dépôts de la distribution, nous avons compilé le paquet à partir des sources dans la derniéres version disponible (1.6.20) sur le site officiel.\\
 \href{http://pro.hit.gemius.pl/hitredir/id=0sWa0S8ft4sTAHF1bGAAEZPcP3ziyq7f9SdhoQf7oeT.c7/url=moosefs.org/tl\_files/mfscode/mfs-1.6.20-2.tar.gz}{http://www.moosefs.org/download.html}} \\
 Méthodologie installation pour la mise en oeuvre dès différents serveurs ou services sur des machines dédiées :\\\\
-Commencons par l'installation d'un Master serveur\\
-Récupérer l'archive sur le site de moosefs et décompresser la dans le répertoire /usr/src/, tar zxvf mfs-1.6.20-2.tar.gz\\
+Commencons par \textbf{l'installation d'un Master serveur}\\\\
+Récupérer l'archive sur le site de moosefs et décompresser la dans le répertoire /usr/src/,\\ tar zxvf mfs-1.6.20-2.tar.gz\\
 Pour des questions d'isolement nous créons un utilisateur et un groupe pour faire tourner le futur service.\\
 \begin{lstlisting}
 	  groupadd mfs;useradd mfs -s /sbin/nologin
@@ -416,7 +416,7 @@ Pour conclure cette section, un mode graphique en cgi est disponible pour suivre
 	  \end{lstlisting}
 Remarque: le contenu sera vide tant que les serveurs de données ne seront démarré.\\\\
 				% avec options différentes suivant les serveurs, clients (cf tuto site officiel)
-Installation du Serveur de Backup Metalogger.\\\\
+\textbf{Installation du Serveur de Backup Metalogger.}\\\\
 Le principe de ce serveur est la récuperation tous les événements du système de fichier et peut permettre, si le maître est vraiment mal en point (perte de ses metadada, ou de son historique), de lui faire rejouer les logs pour que le volume reste cohérent.\\
 Cette solution repose sur le protocole Carp << Common Address Redundancy Protocol >>, permet d'admettre à un groupe d'hôtes sur le même segment réseau (ici mfsmaster et mfsmetalogger) de partager même adresse IP (un maître et un esclave). 
 La méthodologie d'installation est similaire au master serveur.\\
@@ -440,9 +440,58 @@ Le démarrage automatique n'est pas configuré. Commande de lancement :
   \begin{lstlisting}
 /usr/sbin/mfsmetalogger start
 	  \end{lstlisting}
-
-
-
+\textbf{Installation d'un Serveur de Données Chunk servers.}\\\\
+Procédure d'installation toujours similaire:\\
+Désactivation du service mfsmaster\\
+  \begin{lstlisting}
+groupadd mfs
+useradd -g mfs mfs
+cd /usr/src
+tar -zxvf mfs-1.6.20-2.tar.gz
+cd mfs-1.6.20-2
+./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var/lib --with-default-user=mfs --with-default-group=mfs --disable-mfsmaster
+make;make install
+	  \end{lstlisting}
+Préparation des fichiers de configurations:\\
+  \begin{lstlisting}
+cd /etc/
+cp mfschunkserver.cfg.dist mfschunkserver.cfg
+cp mfshdd.cfg.dist mfshdd.cfg
+	  \end{lstlisting}
+Les directives du fichier mfshdd.cfg signalent les emplacements des unités de disque dur que l'on souhaite employer.\\\\
+Exemple de mise en oeuvre pour deux emplacements:\\
+Ajouter les deux lignes dans le fichier mfshdd.cfg.\\
+/mnt/mfschunks1\\
+/mnt/mfschunks2\\
+Positionons les droits d'écriture nécessaire pour la création des dossiers de .lock :\\
+  \begin{lstlisting}
+mkdir /mnt/mfschunks1
+mkdir /mnt/mfschunks2
+chown -R mfs:mfs /mnt/mfschunks1
+chown -R mfs:mfs /mnt/mfschunks2
+	  \end{lstlisting}
+Si vous ne souhaitez pas utiliser la totalité de l'espace libre de vos disques, je vous propose une autre méthode permettant de contrôler le volume disque.\\
+Création et formatage d'un volume de deux gigas et d'un formatage en ext3.\\
+  \begin{lstlisting}
+dd if=/dev/zero of=disk1 bs=1024 count=1 seek=$((2*1024*1024-1))
+dd if=/dev/zero of=disk2 bs=1024 count=1 seek=$((2*1024*1024-1))
+mkfs -t ext3 disk1
+mkfs -t ext3 disk2
+	  \end{lstlisting}
+On monte nos nouveaux disques, sans oublié les droits d'écriture.\\
+  \begin{lstlisting}
+mkdir /mnt/hd1
+mkdir /mnt/hd2
+mount -t ext3 -o loop disk1 hd1
+mount -t ext3 -o loop disk2 hd2
+chown -R mfs:mfs /mnt/hd1
+chown -R mfs:mfs /mnt/hd2
+	  \end{lstlisting}
+On informe le fichier /etc/hosts de la présence du master serveur : 192.168.1.1 mfsmaster\\
+Il est prêt à être démarrer:
+  \begin{lstlisting}
+/usr/sbin/mfschunkserver start
+	  \end{lstlisting} 
 % insertion d'une image :
 %\begin{figure}[p]
 %	\includegraphics[width=12cm,height=120mm]{mastersrv.png}
