@@ -533,6 +533,26 @@ mkdir -p /mnt/mfsmeta
 chown -R mfs:mfs /mnt/mfsmeta
 mfsmount -m /mnt/mfsmeta
 	  \end{lstlisting}
+Le temps est indiqué en secondes (valeurs utiles : 1 heure égal à 3600 secondes, 24h = 86400 secondes, 1 semaine = 604800 secondes).\\
+Si vous définisez la valeur à 0 cela signifira une suppréssion immédiate du dossier et sa récupération ne sera plus possible. \\
+Positionner la rétention désiré pour la corbeille mfssettrashtime (option r permet la récurcivité sur les répertoire) et vérifier la rétention appliqué mfsgettrashtime:
+\begin{lstlisting}
+mfsgettrashtime -r /mnt/mfs-test/test2
+/mnt/mfs-test/test2:
+files with trashtime 0 : 36
+directories with trashtime 604800 : 1
+
+mfssettrashtime -r 1209600 /mnt/mfs-test/test2
+/mnt/mfs-test/test2:
+inodes with trashtime changed: 37
+inodes with trashtime not changed: 0
+inodes with permission denied: 0
+
+mfsgettrashtime -r /mnt/mfs-test/test2
+/mnt/mfs-test/test2:
+files with trashtime 1209600 : 36
+directories with trashtime 1209600 : 1
+	  \end{lstlisting}
 Définir le nombre de copie que l'on désir par répertoire avec mfssetgoal –r :
 \begin{lstlisting}
  mfssetgoal -r 1 /mnt/mfs/folder1
@@ -588,6 +608,17 @@ mfscheckfile /mnt/mfs/folder1/mfs-1.6.20-2.tar.gz
 mfscheckfile /mnt/mfs/folder2/mfs-1.6.20-2.tar.gz
 /mnt/mfs/folder2/mfs-1.6.20-2.tar.gz:
 2 copies: 1 chunks
+	  \end{lstlisting}
+Résumé du contenu de l'arbre entier du file systeme peut être appelé avec la commande mfsdirinfo :
+\begin{lstlisting}
+mfsdirinfo /mnt/mfs/folder1/:
+inodes: 15
+directories: 4
+files: 8
+chunks: 6
+length: 270604
+size: 620544
+realsize: 1170432
 	  \end{lstlisting}
 \textbf{Arrêt de MooseFS}\\
 \begin{lstlisting}
