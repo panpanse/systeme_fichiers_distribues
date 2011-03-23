@@ -40,6 +40,7 @@ end
 `echo "\nBenchmark sur #{$clientsOfBench} clients" >> #{$outputRes}`
 
 $numberOfClients = open("clientOfBench").read.count("\n").to_i
+puts "nombre de clients : #{$numberOfClients}"
 
 puts "Lancement du benchmarck sur #{$numberOfClients} clients."
 
