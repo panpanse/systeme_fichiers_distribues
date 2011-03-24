@@ -300,10 +300,34 @@ Le fonctionnement de Glusterfs est très modulaire et peut être configuré pour
    • une redondance des données,\\
    • découper les gros fichiers en tronçons plus petits qui seront répartis sur différents serveurs de stockage (stripping),\\
    • fonctionner malgré la perte d'un ou plusieurs nœuds de stockage qui seront automatiquement réintégrée dans le cluster et resynchronisés dès qu'ils seront de nouveau actifs \dots \\
-
-		% x serveurs, un maitre, mais ayant besoin des mêmes paquets que les autres
-		% besoin d'un paquet pour les clients
-
+\textbf{Installation de GlusterFS}\\\\
+Pour vous présenter la méthodologie d'installation des deux parties Serveur et Client, je vais réaliser la plus simple architecture, à savoir deux serveurs qui abriterons le volume distribué et le montage de celle-ci par une machine cliente.\\
+La distribution choisie est une debian Squeeze pour l'ensemble de la maquette, et le choix des paquets Glusterfs-server et glusterfs-client en version 3.1.2 officiellement stable.\\\\
+Actuellement, l'ajout des dépots Sid est obligatoire pour pouvoir accès à cette version de Gluster.\\
+\textbf{Installation de GlusterFS Serveur}\\\\
+Actualisez le contenu du catalogue de paquets, installez le module serveur sur les deux machines.
+\begin{lstlisting}
+apt-get update;apt-get install glusterfs-server
+	  \end{lstlisting}
+Choix du paquet différent pour le client.
+\begin{lstlisting}
+apt-get update;apt-get install glusterfs-client
+	  \end{lstlisting}
+Nous passons à la configuration du volume distribué. Nous créons un volume qui sera la concaténation des deux volumes offerts par nos deux serveurs.\\
+Le montage du volume sera réalisé dans /sharespace\\
+La génération des fichiers de configuration s'éffecturons à partir de notre première serveur grâce à la commande glusterfs-volgen.\\
+J'oubli de vous fournir les ip que nous allons utiliser pour une meilleur compréhension.\\
+Ip serveurs : 172.16.65.91 et 172.16.65.92\\
+Ip cliente :  172.16.65.90\\  
+\begin{lstlisting}
+glusterfs-volgen --name mystore 172.16.65.92:/sharespace 172.16.65.91:/sharespace
+	  \end{lstlisting}
+Retour serveur
+\begin{lstlisting}
+Generating server volfiles.. for server '172.16.65.92'
+Generating server volfiles.. for server '172.16.65.91'
+Generating client volfiles.. for transport 'tcp'
+	  \end{lstlisting}
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
