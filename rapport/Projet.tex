@@ -215,8 +215,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		\section{Présentation}
 		% FS distribué le plus simple ? (à mettre en place, dans ses possibilités) ?
 
-		NFS (Network File System, système de fichiers en réseau en français) est un système de fichiers développé par Sun Microsystem,
-		permettant de partager des données par le réseau. NFS est aujourd’hui la méthode standard de partage de disques entre machines Unix. 
+NFS (Network File System, système de fichiers en réseau en français) est un système de fichiers développé par Sun Microsystem, permettant de partager des données par le réseau. NFS est aujourd’hui la méthode standard de partage de disques entre machines Unix. 
 		C’est une solution simple et pratique, quoique peu sécurisée.\\
 		
 		\section{Aspect technique}
@@ -230,22 +229,31 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
     NFSv3 définie dans la RFC 1813 prenant en charge le TCP.\\
     NFSv4 définie dans la RFC 3010 puis réviser dans la RFC 3530. L'ensemble du protocole est repensé, et les codes sont réécrits.
     Cette version intègre une meilleur gestion de la sécurité, de la montée en charge, et un systèmes de maintenances simplifiés.
-    NFSv4 supporte les protocoles de transports TCP (par défaut) et RDMA, ce qui augmente la fiabilité. Nous utiliserons donc cette version
-    NFS dans l'ensemble de nos test.\\
+    NFSv4 supporte les protocoles de transports TCP (par défaut) et RDMA, ce qui augmente la fiabilité. Nous utiliserons donc cette version NFS dans l'ensemble de nos test.\\\\
+Au delà des évolutions entre les versions 3 et 4 du protocole, c'est la cohérence du système de nommage qui distingue la version 4 du système de fichiers réseau. Il s'agit de garantir qu'un objet (fichier ou répertoire) est représenté de la même manière sur un serveur et sur ses clients.
     
     \section{Mise en place}
-    
-    Dans cette configuration nous partageons un répertoire /tmp sur un serveur à plusieurs clients. Utilisant une image de Debian Squeeze,
-    les paquets nfs-common et nfs-kernel-server sont directement disponible dans les dépôts. Il faut ensuite ajouter la ligne suivante dans
-    le fichier /etc/exports :
+Le rôle du serveur NFS est de mettre à disposition sur le réseau une partie de son arborescence locale de système de fichiers. On parle d'«exportation».\\
+Il existe plusieurs implémentations libres de serveur NFS. On se limite ici à l'utilisation du logiciel lié au noyau Linux.\\
+Dans cette configuration nous traitons de l'installation d'un serveur NFS en version 4 dont le but est d'exporter le contenu un répertoire /tmp vers les clients.
+Utilisant une image de Debian Squeeze, On recherche dans la liste des paquets disponibles, ceux dont le nom débute par 'nfs'.
+\begin{lstlisting}
+# aptitude search ?name"(^nfs)"
+v   nfs-client         -
+i   nfs-common         - NFS support files common to client and server
+i   nfs-kernel-server - support for NFS kernel server
+v   nfs-server         -
+p   nfs4-acl-tools     - Commandline and GUI ACL utilities for the NFSv4 client
+p   nfswatch           - Program to monitor NFS traffic for the console
+	  \end{lstlisting}
+Dans la liste ci-dessus, on identifie les paquets nfs-common et nfs-kernel-server qui correspond bien aux fonctions souhaité pour le client et le serveur NFS.
+En exploitant la documentation \href{https://wiki.linux-nfs.org/wiki/index.php/Nfsv4_configuration_fr}{Nfsv4 configuration} et l'exemple donné dans le fichier de configuration, on applique la configuration suivante dans le fichier /etc/exports :
     \begin{lstlisting}
 	    /tmp *.nancy.grid5000.fr(rw,fsid=0,insecure,subtree_check)
 	  \end{lstlisting}
-	  Dans cette ligne le répertoire est partagé pour le domaine nancy.grid5000.fr. Cette manipulation n'est pas dutout sécurisé ! Puisque toutes
-	  les machines déployées sur la plateforme de Nancy peuvent accéder au répertoire.\\
-	  \textbf{rw }: autorise l'accès en lecture et écriture;\\
-	  \textbf{fsid=0} : cette option est propre à NFSv4. Elle indique le point de partage racine. Ce qui permet de monter des partages en fonction d'une  
-	  racine virtuelle.\\
+Pour les besoins de ces travaux pratiques, les fonctions de sécurité Kerberos ne sont pas utilisées. On utilise l'appartenance au domaine nancy.grid5000.fr comme critère de contrôle d'accès ; ce qui correspond à un niveau de sécurité faible.Puisque toutes les machines déployées sur la plateforme de Nancy peuvent accéder au répertoire.\\
+	  \textbf{rw }: autorise les requêtes en lecture et écriture;\\
+	  \textbf{fsid=0} : (fsid=root ou fsid=0) cette option est propre à NFSv4. Elle permet de définir le point de partage racine. Ce qui permet de monter des partages en fonction d'une racine virtuelle.\\
 	  \textbf{insecure} : l'option insecure permet l'accès aux clients dont l'implémentation NFS n'utilisent pas un port réservé.\\
 	  \textbf{subtree\_check} : permet de limiter l'accès exclusivement au répertoire partager.\\
 	  
@@ -255,6 +263,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 	    mount serveur:/ -t nfs4 /tmp/partage
 	  \end{lstlisting}
 	  Afin d'utiliser la version 4 de NFS, il est nécessaire de le spécifier dans le type lors du montage.\\
+
 	  \chapter{Fuse}
     FUSE est un logiciel libre signifiant << Filesystem in Userspace >>. Il s'agit d'un module, disponible pour les kernels 2.4 et 2.6, grâce auquel 
     il est possible d'implémenter toutes les fonctionnalités d'un système de fichier dans un espace utilisateur. Ces fonctionnalités incluent :\\
