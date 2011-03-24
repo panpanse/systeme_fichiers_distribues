@@ -12,8 +12,7 @@ fi
 
 nb_serveur=$1
 
-
-# gluster 5 serveurs
+# gluster n serveurs
 cd ~/glusterFS
 echo "./deploiementGluster.rb $nb_serveur"
 ./deploiementGluster.rb $nb_serveur
@@ -27,5 +26,3 @@ cd ~/benchmark
 ./benchmark.rb 20 "~/resOfBench/gluster$nb_serveur" ~/glusterFS/listOfClients /media/glusterfs
 # benchmark sur 50 clients 
 ./benchmark.rb 50 "~/resOfBench/gluster$nb_serveur" ~/glusterFS/listOfClients /media/glusterfs
-
-

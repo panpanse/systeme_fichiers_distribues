@@ -6,5 +6,7 @@ nameOfMachine=`uname -n`
 
 cd "$whereToWrite/$nameOfMachine"
 
-# lecture du gros fichier
-cat bigFile > /dev/nul
+# lecture des gros fichiers
+cat bigFile1 > /dev/nul
+cat bigFile2 > /dev/nul
+cat bigFile3 > /dev/nul

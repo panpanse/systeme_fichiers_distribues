@@ -1,0 +1,25 @@
+Sophia :
+
+Benchmark sur 1 clients
+ecriture de petits fichiers : 197.263934 sec : 2.42821883497467 Mo/s
+ecriture de gros fichiers : 0.142709 sec : 21554.3518628818 Mo/s
+lecture de petits fichiers : 15.187557 sec : 31.5389762817022 Mo/s
+lecture de gros fichiers : 0.145826 sec : 21093.6321369303 Mo/s
+
+Benchmark sur 5 clients
+ecriture de petits fichiers : 429.193946 sec : 5.58022782548755 Mo/s
+ecriture de gros fichiers : 6.063454 sec : 2536.50806949306 Mo/s
+lecture de petits fichiers : 14.751547 sec : 162.355853253899 Mo/s
+lecture de gros fichiers : 6.053859 sec : 2540.52828121699 Mo/s
+
+Benchmark sur 20 clients
+ecriture de petits fichiers : 632.807113 sec : 15.1388943063287 Mo/s
+ecriture de gros fichiers : 6.21342 sec : 9901.14944748625 Mo/s
+lecture de petits fichiers : 14.346696 sec : 667.749564080817 Mo/s
+lecture de gros fichiers : 6.19618 sec : 9928.69800425423 Mo/s
+
+Benchmark sur 50 clients
+ecriture de petits fichiers : 1648.296854 sec : 14.5301496765461 Mo/s
+ecriture de gros fichiers : 6.680923 sec : 23020.7712317594 Mo/s
+lecture de petits fichiers : 16.123579 sec : 1485.40221746053 Mo/s
+lecture de gros fichiers : 6.654517 sec : 23112.1206843412 Mo/s
