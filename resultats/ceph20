@@ -1,0 +1,24 @@
+Benchmark sur 1 clients
+ecriture de petits fichiers : 0.0 sec : Infinity Mo/s
+ecriture de gros fichiers : 0.0 sec : Infinity Mo/s
+lecture de petits fichiers : 0.004 sec : 119750.0 Mo/s
+lecture de gros fichiers : 0.0 sec : Infinity Mo/s
+
+Benchmark sur 5 clients
+ecriture de petits fichiers : 0.0 sec : Infinity Mo/s
+ecriture de gros fichiers : 0.0 sec : Infinity Mo/s
+lecture de petits fichiers : 0.0 sec : Infinity Mo/s
+lecture de gros fichiers : 0.0 sec : Infinity Mo/s
+
+Benchmark sur 20 clients
+ecriture de petits fichiers : 0.0 sec : Infinity Mo/s
+ecriture de gros fichiers : 0.0 sec : Infinity Mo/s
+lecture de petits fichiers : 0.0 sec : Infinity Mo/s
+lecture de gros fichiers : 0.0 sec : Infinity Mo/s
+
+Benchmark sur 50 clients
+ecriture de petits fichiers : 0.0 sec : Infinity Mo/s
+ecriture de gros fichiers : 0.0 sec : Infinity Mo/s
+lecture de petits fichiers : 0.0 sec : Infinity Mo/s
+lecture de gros fichiers : 0.0 sec : Infinity Mo/s
+

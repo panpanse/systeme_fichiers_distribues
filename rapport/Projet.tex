@@ -314,7 +314,10 @@ Choix du paquet différent pour le client.
 apt-get update;apt-get install glusterfs-client
 	  \end{lstlisting}
 Nous passons à la configuration du volume distribué. Nous créons un volume qui sera la concaténation des deux volumes offerts par nos deux serveurs.\\
-Le montage du volume sera réalisé dans /sharespace\\
+Le montage du volume sera réalisé dans /sharespace, créons ce répertoire maintenant\\
+\begin{lstlisting}
+mkdir sharespace
+	  \end{lstlisting}
 La génération des fichiers de configuration s'éffecturons à partir de notre première serveur grâce à la commande glusterfs-volgen.\\
 J'oubli de vous fournir les ip que nous allons utiliser pour une meilleur compréhension.\\
 Ip serveurs : 172.16.65.91 et 172.16.65.92\\
@@ -329,10 +332,17 @@ Generating server volfiles.. for server '172.16.65.91'
 Generating client volfiles.. for transport 'tcp'
 	  \end{lstlisting}
 Vous pouvez constater que la méthode de transport par défaut est le protocol TCP.\\
-En cas d'infrastructure équipé de l'InfiniBand (bus à haut débit), nous aurions pu le définir à cette étape par le biais de l'option t ib-verbs. Nous aurions eu :\\
+En cas d'infrastructure équipé de l'InfiniBand (bus à haut débit), nous aurions pu le définir à cette étape par le biais de l'option t ib-verbs, sans oublier d'installer les librairies nécessaires. Nous aurions eu :\\
 \begin{lstlisting}
+apt-get install libibverbs1 librdmacm1
 glusterfs-volgen --name mystore -t ib-verbs 172.16.65.92:/sharespace 172.16.65.91:/sharespace
 	  \end{lstlisting}
+La commande glusterfs-volgen vous a généré les fichiers de configuration pour les serveurs et le client. Chaque fichier porte le ip de la machine conserné dans son nom, nous allons les exporter dans leur répertoire d'exploitation et les renommer pour les rendre exécutable.
+\begin{lstlisting}
+cp 172.16.65.91-mystore-export.vol /etc/glusterfs/glusterfsd.vol
+pour le second serveur
+scp 172.16.65.92-mystore-export.vol serveur2:/etc/glusterfs/glusterfsd.vol
+	  \end{lstlisting}  
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur

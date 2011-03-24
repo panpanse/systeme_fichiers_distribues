@@ -1,0 +1,452 @@
+./deploiementGluster.rb 50
+nombre de clients : 0
+Lancement du benchmarck sur 0 clients.
+bench : ecriture de petits fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de petits fichiers" a duré 0.000169 secondes. (debit : 2834319.52662722 Mo/s)
+bench : ecriture de gros fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de gros fichiers" a duré 0.000155 secondes. (debit : 19845161.2903226 Mo/s)
+bench : lecture de petits fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de petits fichiers" a duré 0.000168 secondes. (debit : 2851190.47619048 Mo/s)
+bench : lecture de gros fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de gros fichiers" a duré 0.000153 secondes. (debit : 20104575.1633987 Mo/s)
+Nettoyage de l'espace de travail...
+
+Benchmark termine
+nombre de clients : 0
+Lancement du benchmarck sur 0 clients.
+bench : ecriture de petits fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de petits fichiers" a duré 0.000115 secondes. (debit : 20826086.9565217 Mo/s)
+bench : ecriture de gros fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de gros fichiers" a duré 0.000137 secondes. (debit : 112262773.722628 Mo/s)
+bench : lecture de petits fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de petits fichiers" a duré 0.000146 secondes. (debit : 16404109.5890411 Mo/s)
+bench : lecture de gros fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de gros fichiers" a duré 0.000141 secondes. (debit : 109078014.184397 Mo/s)
+Nettoyage de l'espace de travail...
+
+Benchmark termine
+nombre de clients : 0
+Lancement du benchmarck sur 0 clients.
+bench : ecriture de petits fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de petits fichiers" a duré 0.000149 secondes. (debit : 64295302.0134228 Mo/s)
+bench : ecriture de gros fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de gros fichiers" a duré 0.000129 secondes. (debit : 476899224.806202 Mo/s)
+bench : lecture de petits fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de petits fichiers" a duré 0.00014 secondes. (debit : 68428571.4285714 Mo/s)
+bench : lecture de gros fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de gros fichiers" a duré 0.000151 secondes. (debit : 407417218.543046 Mo/s)
+Nettoyage de l'espace de travail...
+
+Benchmark termine
+nombre de clients : 0
+Lancement du benchmarck sur 0 clients.
+bench : ecriture de petits fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de petits fichiers" a duré 0.000155 secondes. (debit : 154516129.032258 Mo/s)
+bench : ecriture de gros fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de gros fichiers" a duré 0.000157 secondes. (debit : 979617834.394904 Mo/s)
+bench : lecture de petits fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de petits fichiers" a duré 0.000105 secondes. (debit : 228095238.095238 Mo/s)
+bench : lecture de gros fichiers en cours...
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de gros fichiers" a duré 0.000137 secondes. (debit : 1122627737.22628 Mo/s)
+Nettoyage de l'espace de travail...
+
+Benchmark termine
+Nb serveur : 50
+Machines en cour de déploiement...
+host 1 : graphene-140
+host 2 : graphene-141
+host 3 : graphene-142
+Envoyé!
+Keyring généré!
+Montage fait!
+Serveur ceph démarré!
+Clients montés!
+nombre de clients : 1
+Lancement du benchmarck sur 1 clients.
+bench : ecriture de petits fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de petits fichiers" a duré 12.423893 secondes. (debit : 38.5547428652195 Mo/s)
+bench : ecriture de gros fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de gros fichiers" a duré 12.109825 secondes. (debit : 254.008625227862 Mo/s)
+bench : lecture de petits fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de petits fichiers" a duré 11.185247 secondes. (debit : 42.8242666433741 Mo/s)
+bench : lecture de gros fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de gros fichiers" a duré 10.709456 secondes. (debit : 287.222805714875 Mo/s)
+Nettoyage de l'espace de travail...
+
+Benchmark termine
+nombre de clients : 5
+Lancement du benchmarck sur 5 clients.
+bench : ecriture de petits fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Machine(s) ayant terminé leur travail : 2
+Machine(s) ayant terminé leur travail : 3
+Machine(s) ayant terminé leur travail : 4
+Machine(s) ayant terminé leur travail : 5
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de petits fichiers" a duré 11.433165 secondes. (debit : 209.478302814662 Mo/s)
+bench : ecriture de gros fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Machine(s) ayant terminé leur travail : 2
+Machine(s) ayant terminé leur travail : 3
+Machine(s) ayant terminé leur travail : 4
+Machine(s) ayant terminé leur travail : 5
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de gros fichiers" a duré 10.026419 secondes. (debit : 1533.94746419434 Mo/s)
+bench : lecture de petits fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Machine(s) ayant terminé leur travail : 2
+Machine(s) ayant terminé leur travail : 3
+Machine(s) ayant terminé leur travail : 4
+Machine(s) ayant terminé leur travail : 5
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de petits fichiers" a duré 11.96614 secondes. (debit : 200.148084511797 Mo/s)
+bench : lecture de gros fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Machine(s) ayant terminé leur travail : 2
+Machine(s) ayant terminé leur travail : 3
+Machine(s) ayant terminé leur travail : 4
+Machine(s) ayant terminé leur travail : 5
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de gros fichiers" a duré 10.522868 secondes. (debit : 1461.57872549575 Mo/s)
+Nettoyage de l'espace de travail...
+
+Benchmark termine
+nombre de clients : 20
+Lancement du benchmarck sur 20 clients.
+bench : ecriture de petits fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Machine(s) ayant terminé leur travail : 2
+Machine(s) ayant terminé leur travail : 3
+Machine(s) ayant terminé leur travail : 4
+Machine(s) ayant terminé leur travail : 5
+Machine(s) ayant terminé leur travail : 6
+Machine(s) ayant terminé leur travail : 7
+Machine(s) ayant terminé leur travail : 8
+Machine(s) ayant terminé leur travail : 9
+Machine(s) ayant terminé leur travail : 10
+Machine(s) ayant terminé leur travail : 11
+Machine(s) ayant terminé leur travail : 12
+Machine(s) ayant terminé leur travail : 13
+Machine(s) ayant terminé leur travail : 14
+Machine(s) ayant terminé leur travail : 15
+Machine(s) ayant terminé leur travail : 16
+Machine(s) ayant terminé leur travail : 17
+Machine(s) ayant terminé leur travail : 18
+Machine(s) ayant terminé leur travail : 19
+Machine(s) ayant terminé leur travail : 20
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de petits fichiers" a duré 11.905298 secondes. (debit : 804.683763480763 Mo/s)
+bench : ecriture de gros fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Machine(s) ayant terminé leur travail : 2
+Machine(s) ayant terminé leur travail : 3
+Machine(s) ayant terminé leur travail : 4
+Machine(s) ayant terminé leur travail : 5
+Machine(s) ayant terminé leur travail : 6
+Machine(s) ayant terminé leur travail : 7
+Machine(s) ayant terminé leur travail : 8
+Machine(s) ayant terminé leur travail : 9
+Machine(s) ayant terminé leur travail : 10
+Machine(s) ayant terminé leur travail : 11
+Machine(s) ayant terminé leur travail : 12
+Machine(s) ayant terminé leur travail : 13
+Machine(s) ayant terminé leur travail : 14
+Machine(s) ayant terminé leur travail : 15
+Machine(s) ayant terminé leur travail : 16
+Machine(s) ayant terminé leur travail : 17
+Machine(s) ayant terminé leur travail : 18
+Machine(s) ayant terminé leur travail : 19
+Machine(s) ayant terminé leur travail : 20
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de gros fichiers" a duré 11.718411 secondes. (debit : 5249.85853457435 Mo/s)
+bench : lecture de petits fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Machine(s) ayant terminé leur travail : 2
+Machine(s) ayant terminé leur travail : 3
+Machine(s) ayant terminé leur travail : 4
+Machine(s) ayant terminé leur travail : 5
+Machine(s) ayant terminé leur travail : 6
+Machine(s) ayant terminé leur travail : 7
+Machine(s) ayant terminé leur travail : 8
+Machine(s) ayant terminé leur travail : 9
+Machine(s) ayant terminé leur travail : 10
+Machine(s) ayant terminé leur travail : 11
+Machine(s) ayant terminé leur travail : 12
+Machine(s) ayant terminé leur travail : 13
+Machine(s) ayant terminé leur travail : 14
+Machine(s) ayant terminé leur travail : 15
+Machine(s) ayant terminé leur travail : 16
+Machine(s) ayant terminé leur travail : 17
+Machine(s) ayant terminé leur travail : 18
+Machine(s) ayant terminé leur travail : 19
+Machine(s) ayant terminé leur travail : 20
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de petits fichiers" a duré 11.930976 secondes. (debit : 802.951912735387 Mo/s)
+bench : lecture de gros fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Machine(s) ayant terminé leur travail : 2
+Machine(s) ayant terminé leur travail : 3
+Machine(s) ayant terminé leur travail : 4
+Machine(s) ayant terminé leur travail : 5
+Machine(s) ayant terminé leur travail : 6
+Machine(s) ayant terminé leur travail : 7
+Machine(s) ayant terminé leur travail : 8
+Machine(s) ayant terminé leur travail : 9
+Machine(s) ayant terminé leur travail : 10
+Machine(s) ayant terminé leur travail : 11
+Machine(s) ayant terminé leur travail : 12
+Machine(s) ayant terminé leur travail : 13
+Machine(s) ayant terminé leur travail : 14
+Machine(s) ayant terminé leur travail : 15
+Machine(s) ayant terminé leur travail : 16
+Machine(s) ayant terminé leur travail : 17
+Machine(s) ayant terminé leur travail : 18
+Machine(s) ayant terminé leur travail : 19
+Machine(s) ayant terminé leur travail : 20
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de gros fichiers" a duré 12.519101 secondes. (debit : 4914.09087601418 Mo/s)
+Nettoyage de l'espace de travail...
+
+Benchmark termine
+nombre de clients : 50
+Lancement du benchmarck sur 50 clients.
+bench : ecriture de petits fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Machine(s) ayant terminé leur travail : 2
+Machine(s) ayant terminé leur travail : 3
+Machine(s) ayant terminé leur travail : 4
+Machine(s) ayant terminé leur travail : 5
+Machine(s) ayant terminé leur travail : 6
+Machine(s) ayant terminé leur travail : 7
+Machine(s) ayant terminé leur travail : 8
+Machine(s) ayant terminé leur travail : 9
+Machine(s) ayant terminé leur travail : 10
+Machine(s) ayant terminé leur travail : 11
+Machine(s) ayant terminé leur travail : 12
+Machine(s) ayant terminé leur travail : 13
+Machine(s) ayant terminé leur travail : 14
+Machine(s) ayant terminé leur travail : 15
+Machine(s) ayant terminé leur travail : 16
+Machine(s) ayant terminé leur travail : 17
+Machine(s) ayant terminé leur travail : 18
+Machine(s) ayant terminé leur travail : 19
+Machine(s) ayant terminé leur travail : 20
+Machine(s) ayant terminé leur travail : 21
+Machine(s) ayant terminé leur travail : 22
+Machine(s) ayant terminé leur travail : 23
+Machine(s) ayant terminé leur travail : 24
+Machine(s) ayant terminé leur travail : 25
+Machine(s) ayant terminé leur travail : 26
+Machine(s) ayant terminé leur travail : 27
+Machine(s) ayant terminé leur travail : 28
+Machine(s) ayant terminé leur travail : 29
+Machine(s) ayant terminé leur travail : 30
+Machine(s) ayant terminé leur travail : 31
+Machine(s) ayant terminé leur travail : 32
+Machine(s) ayant terminé leur travail : 33
+Machine(s) ayant terminé leur travail : 34
+Machine(s) ayant terminé leur travail : 35
+Machine(s) ayant terminé leur travail : 36
+Machine(s) ayant terminé leur travail : 37
+Machine(s) ayant terminé leur travail : 38
+Machine(s) ayant terminé leur travail : 39
+Machine(s) ayant terminé leur travail : 40
+Machine(s) ayant terminé leur travail : 41
+Machine(s) ayant terminé leur travail : 42
+Machine(s) ayant terminé leur travail : 43
+Machine(s) ayant terminé leur travail : 44
+Machine(s) ayant terminé leur travail : 45
+Machine(s) ayant terminé leur travail : 46
+Machine(s) ayant terminé leur travail : 47
+Machine(s) ayant terminé leur travail : 48
+Machine(s) ayant terminé leur travail : 49
+Machine(s) ayant terminé leur travail : 50
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de petits fichiers" a duré 12.234951 secondes. (debit : 1957.50681796764 Mo/s)
+bench : ecriture de gros fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Machine(s) ayant terminé leur travail : 2
+Machine(s) ayant terminé leur travail : 3
+Machine(s) ayant terminé leur travail : 4
+Machine(s) ayant terminé leur travail : 5
+Machine(s) ayant terminé leur travail : 6
+Machine(s) ayant terminé leur travail : 7
+Machine(s) ayant terminé leur travail : 8
+Machine(s) ayant terminé leur travail : 9
+Machine(s) ayant terminé leur travail : 10
+Machine(s) ayant terminé leur travail : 11
+Machine(s) ayant terminé leur travail : 12
+Machine(s) ayant terminé leur travail : 13
+Machine(s) ayant terminé leur travail : 14
+Machine(s) ayant terminé leur travail : 15
+Machine(s) ayant terminé leur travail : 16
+Machine(s) ayant terminé leur travail : 17
+Machine(s) ayant terminé leur travail : 18
+Machine(s) ayant terminé leur travail : 19
+Machine(s) ayant terminé leur travail : 20
+Machine(s) ayant terminé leur travail : 21
+Machine(s) ayant terminé leur travail : 22
+Machine(s) ayant terminé leur travail : 23
+Machine(s) ayant terminé leur travail : 24
+Machine(s) ayant terminé leur travail : 25
+Machine(s) ayant terminé leur travail : 26
+Machine(s) ayant terminé leur travail : 27
+Machine(s) ayant terminé leur travail : 28
+Machine(s) ayant terminé leur travail : 29
+Machine(s) ayant terminé leur travail : 30
+Machine(s) ayant terminé leur travail : 31
+Machine(s) ayant terminé leur travail : 32
+Machine(s) ayant terminé leur travail : 33
+Machine(s) ayant terminé leur travail : 34
+Machine(s) ayant terminé leur travail : 35
+Machine(s) ayant terminé leur travail : 36
+Machine(s) ayant terminé leur travail : 37
+Machine(s) ayant terminé leur travail : 38
+Machine(s) ayant terminé leur travail : 39
+Machine(s) ayant terminé leur travail : 40
+Machine(s) ayant terminé leur travail : 41
+Machine(s) ayant terminé leur travail : 42
+Machine(s) ayant terminé leur travail : 43
+Machine(s) ayant terminé leur travail : 44
+Machine(s) ayant terminé leur travail : 45
+Machine(s) ayant terminé leur travail : 46
+Machine(s) ayant terminé leur travail : 47
+Machine(s) ayant terminé leur travail : 48
+Machine(s) ayant terminé leur travail : 49
+Machine(s) ayant terminé leur travail : 50
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "ecriture de gros fichiers" a duré 13.482598 secondes. (debit : 11407.2970209451 Mo/s)
+bench : lecture de petits fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Machine(s) ayant terminé leur travail : 2
+Machine(s) ayant terminé leur travail : 3
+Machine(s) ayant terminé leur travail : 4
+Machine(s) ayant terminé leur travail : 5
+Machine(s) ayant terminé leur travail : 6
+Machine(s) ayant terminé leur travail : 7
+Machine(s) ayant terminé leur travail : 8
+Machine(s) ayant terminé leur travail : 9
+Machine(s) ayant terminé leur travail : 10
+Machine(s) ayant terminé leur travail : 11
+Machine(s) ayant terminé leur travail : 12
+Machine(s) ayant terminé leur travail : 13
+Machine(s) ayant terminé leur travail : 14
+Machine(s) ayant terminé leur travail : 15
+Machine(s) ayant terminé leur travail : 16
+Machine(s) ayant terminé leur travail : 17
+Machine(s) ayant terminé leur travail : 18
+Machine(s) ayant terminé leur travail : 19
+Machine(s) ayant terminé leur travail : 20
+Machine(s) ayant terminé leur travail : 21
+Machine(s) ayant terminé leur travail : 22
+Machine(s) ayant terminé leur travail : 23
+Machine(s) ayant terminé leur travail : 24
+Machine(s) ayant terminé leur travail : 25
+Machine(s) ayant terminé leur travail : 26
+Machine(s) ayant terminé leur travail : 27
+Machine(s) ayant terminé leur travail : 28
+Machine(s) ayant terminé leur travail : 29
+Machine(s) ayant terminé leur travail : 30
+Machine(s) ayant terminé leur travail : 31
+Machine(s) ayant terminé leur travail : 32
+Machine(s) ayant terminé leur travail : 33
+Machine(s) ayant terminé leur travail : 34
+Machine(s) ayant terminé leur travail : 35
+Machine(s) ayant terminé leur travail : 36
+Machine(s) ayant terminé leur travail : 37
+Machine(s) ayant terminé leur travail : 38
+Machine(s) ayant terminé leur travail : 39
+Machine(s) ayant terminé leur travail : 40
+Machine(s) ayant terminé leur travail : 41
+Machine(s) ayant terminé leur travail : 42
+Machine(s) ayant terminé leur travail : 43
+Machine(s) ayant terminé leur travail : 44
+Machine(s) ayant terminé leur travail : 45
+Machine(s) ayant terminé leur travail : 46
+Machine(s) ayant terminé leur travail : 47
+Machine(s) ayant terminé leur travail : 48
+Machine(s) ayant terminé leur travail : 49
+Machine(s) ayant terminé leur travail : 50
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de petits fichiers" a duré 13.632404 secondes. (debit : 1756.84347382897 Mo/s)
+bench : lecture de gros fichiers en cours...
+Machine(s) ayant terminé leur travail : 1
+Machine(s) ayant terminé leur travail : 2
+Machine(s) ayant terminé leur travail : 3
+Machine(s) ayant terminé leur travail : 4
+Machine(s) ayant terminé leur travail : 5
+Machine(s) ayant terminé leur travail : 6
+Machine(s) ayant terminé leur travail : 7
+Machine(s) ayant terminé leur travail : 8
+Machine(s) ayant terminé leur travail : 9
+Machine(s) ayant terminé leur travail : 10
+Machine(s) ayant terminé leur travail : 11
+Machine(s) ayant terminé leur travail : 12
+Machine(s) ayant terminé leur travail : 13
+Machine(s) ayant terminé leur travail : 14
+Machine(s) ayant terminé leur travail : 15
+Machine(s) ayant terminé leur travail : 16
+Machine(s) ayant terminé leur travail : 17
+Machine(s) ayant terminé leur travail : 18
+Machine(s) ayant terminé leur travail : 19
+Machine(s) ayant terminé leur travail : 20
+Machine(s) ayant terminé leur travail : 21
+Machine(s) ayant terminé leur travail : 22
+Machine(s) ayant terminé leur travail : 23
+Machine(s) ayant terminé leur travail : 24
+Machine(s) ayant terminé leur travail : 25
+Machine(s) ayant terminé leur travail : 26
+Machine(s) ayant terminé leur travail : 27
+Machine(s) ayant terminé leur travail : 28
+Machine(s) ayant terminé leur travail : 29
+Machine(s) ayant terminé leur travail : 30
+Machine(s) ayant terminé leur travail : 31
+Machine(s) ayant terminé leur travail : 32
+Machine(s) ayant terminé leur travail : 33
+Machine(s) ayant terminé leur travail : 34
+Machine(s) ayant terminé leur travail : 35
+Machine(s) ayant terminé leur travail : 36
+Machine(s) ayant terminé leur travail : 37
+Machine(s) ayant terminé leur travail : 38
+Machine(s) ayant terminé leur travail : 39
+Machine(s) ayant terminé leur travail : 40
+Machine(s) ayant terminé leur travail : 41
+Machine(s) ayant terminé leur travail : 42
+Machine(s) ayant terminé leur travail : 43
+Machine(s) ayant terminé leur travail : 44
+Machine(s) ayant terminé leur travail : 45
+Machine(s) ayant terminé leur travail : 46
+Machine(s) ayant terminé leur travail : 47
+Machine(s) ayant terminé leur travail : 48
+Machine(s) ayant terminé leur travail : 49
+Machine(s) ayant terminé leur travail : 50
+Toute les machines ont terminé leur travail.
+ --> Le benchmark "lecture de gros fichiers" a duré 13.807253 secondes. (debit : 11139.0730654389 Mo/s)
+Nettoyage de l'espace de travail...
+
+Benchmark termine
+
