@@ -263,7 +263,9 @@ Pour les besoins de ces travaux pratiques, les fonctions de sécurité Kerberos 
 	    mount serveur:/ -t nfs4 /tmp/partage
 	  \end{lstlisting}
 	  Afin d'utiliser la version 4 de NFS, il est nécessaire de le spécifier dans le type lors du montage.\\
-
+Depuis le serveur, la commande exportfs est chargée de la gestion de la liste des systèmes de fichiers partagés. L'exécution de cette commande sans argument affiche la liste des répertoires exportés.
+Ainsi on peut vérifier que les directives données dans le fichier /etc/exports sont effectivement appliquées.
+Sur le client, nous avons le programme appelé showmount associé à l'option -e.
 	  \chapter{Fuse}
     FUSE est un logiciel libre signifiant << Filesystem in Userspace >>. Il s'agit d'un module, disponible pour les kernels 2.4 et 2.6, grâce auquel 
     il est possible d'implémenter toutes les fonctionnalités d'un système de fichier dans un espace utilisateur. Ces fonctionnalités incluent :\\
