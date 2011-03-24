@@ -92,7 +92,7 @@
 \title{}
 \location{Nancy}\blurb{}
 \makeatother
-\title{\textcolor[RGB]{153,0,0}{Systèmes de fichiers distribué : comparaison de GlusterFS, MooseFS et Ceph avec déploiement sur la grille de calcul Grid’5000.}}
+\title{\textcolor[RGB]{153,0,0}{Système de fichiers distribué : comparaison de GlusterFS, MooseFS et Ceph avec déploiement sur la grille de calcul Grid’5000.}}
 \author{Jean-François Garçia, Florent Lévigne,\\Maxime Douheret, Vincent Claudel.}
 \location{Nancy}
 \blurb{%
@@ -695,10 +695,10 @@ umount /mnt/mfs)
 				% autre fichier (améliorer le script)
 			\section{MooseFs}
 			\section{Ceph}
-			  Fichier deploimentCeph.rb :
+				Fichier deploimentCeph.rb :
 				\lstinputlisting[language=Ruby]{../cephFS/deploiementCeph.rb}
 			\section{NFS}
-			  Fichier deploimentNFS.rb :
+				Fichier deploimentNFS.rb :
 				\lstinputlisting[language=Ruby]{../NFS/deploiementNFS.rb}
 			\section{Benchmark}
 				Fichier benchmark.rb :
@@ -715,5 +715,17 @@ umount /mnt/mfs)
 
 				Fichier readingBigFile.sh :
 				\lstinputlisting[language=Bash]{../benchmark/readingBigFile.sh}
+			\section{Meta scripts}
+				Fichier meta\_NFS.sh :
+				\lstinputlisting[language=Bash]{../metascript/meta_NFS.sh}
+
+				Fichier meta\_gluster.sh :
+				\lstinputlisting[language=Bash]{../metascript/meta_gluster.sh}
+
+				Fichier meta\_ceph.sh :
+				\lstinputlisting[language=Bash]{../metascript/meta_ceph.sh}
+
+				Fichier meta\_moose.sh :
+				\lstinputlisting[language=Bash]{../metascript/meta_moose.sh}
 \end{document}
 
