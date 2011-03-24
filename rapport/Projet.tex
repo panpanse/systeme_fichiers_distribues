@@ -328,6 +328,11 @@ Generating server volfiles.. for server '172.16.65.92'
 Generating server volfiles.. for server '172.16.65.91'
 Generating client volfiles.. for transport 'tcp'
 	  \end{lstlisting}
+Vous pouvez constater que la méthode de transport par défaut est le protocol TCP.\\
+En cas d'infrastructure équipé de l'InfiniBand (bus à haut débit), nous aurions pu le définir à cette étape par le biais de l'option t ib-verbs. Nous aurions eu :\\
+\begin{lstlisting}
+glusterfs-volgen --name mystore -t ib-verbs 172.16.65.92:/sharespace 172.16.65.91:/sharespace
+	  \end{lstlisting}
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
