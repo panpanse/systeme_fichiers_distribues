@@ -427,9 +427,18 @@ A des fins de test, concevons un fichier de 10 Mo
 \begin{lstlisting}
 dd if=/dev/urandom of=test bs=10M count=1
 1+0 enregistrements lus
-1+0 enregistrements écrits
-10485760 octets (10 MB) copiés, 1,45815 s, 7,2 MB/s
+1+0 enregistrements ecrits
+10485760 octets (10 MB) copies, 1,45815 s, 7,2 MB/s
 	  \end{lstlisting}
+Copions le fichier test sur le FS distribué :
+\begin{lstlisting}
+cp test /mnt/monglusterfsvolume
+	  \end{lstlisting}
+L'examinez le contenu des répertoires /mnt/monglusterfsvolume et /sharespace des deux serveurs.\\
+ls -lh /mnt/monglusterfsvolume\\
+ls -lh /sharespace\\
+Vous devriez constaté l'absence du fichier test sur l'un des noeuds, ce qui est totalement cohérent puisque la configuration par défaut de glusterfs est la mise en oeuvre de la concatenation des volumes physique et sans duplication ou réplication des données.\\
+Nous utilisons donc l'espace des deux volumes sur les serveurs et vu comme un seul par les clients.
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
