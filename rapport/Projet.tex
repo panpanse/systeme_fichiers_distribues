@@ -358,7 +358,7 @@ aptitude install libglusterfs0/sid
 Nous passons à la configuration du volume distribué. Nous créons un volume qui sera la concaténation des deux volumes offerts par nos deux serveurs.\\
 Le montage du volume sera réalisé dans /sharespace, créons ce répertoire maintenant\\
 \begin{lstlisting}
-mkdir sharespace
+mkdir -p sharespace
 	  \end{lstlisting}
 La génération des fichiers de configuration s'effectuera à partir de notre premier serveur grâce à la commande glusterfs-volgen.\\
 Voila les ip que nous allons utiliser pour une meilleur compréhension :
@@ -375,7 +375,7 @@ Generating server volfiles.. for server '172.16.65.92'
 Generating server volfiles.. for server '172.16.65.91'
 Generating client volfiles.. for transport 'tcp'
 	  \end{lstlisting}
-Vous pouvez constater que la méthode de transport par défaut est le protocole TCP.\\
+Vous pouvez constater que la méthode de transport par défaut est le protocole TCP.\\\\
 En cas d'infrastructure équipé de l'InfiniBand (bus à haut débit), nous aurions pu le définir à cette étape par le biais de l'option t ib-verbs, sans oublier d'installer les librairies nécessaires. Nous aurions eu :\\
 \begin{lstlisting}
 apt-get install libibverbs1 librdmacm1
@@ -384,10 +384,29 @@ glusterfs-volgen --name mystore -t ib-verbs 172.16.65.92:/sharespace 172.16.65.9
 La commande glusterfs-volgen génère les fichiers de configuration pour les serveurs et le client. Chaque fichier porte l'ip de la machine concerné dans son nom, nous allons les exporter dans leur répertoire d'exploitation et les renommer pour les qu'il soient pris en compte.
 \begin{lstlisting}
 cp 172.16.65.91-mystore-export.vol /etc/glusterfs/glusterfsd.vol
+cp mystore-tcp.vol /etc/glusterfs/glusterfs.vol
+
 pour le second serveur
 scp 172.16.65.92-mystore-export.vol serveur2:/etc/glusterfs/glusterfsd.vol
+scp mystore-tcp.vol /etc/glusterfs/glusterfs.vol
 	  \end{lstlisting}
-
+Une copie du fichier de transport ou fichier de configuration client doit être stocké par au-moins un serveur.\\
+A ce moment, vous êtes prêt à mettre en marche les services de GlusterFS sur chaque serveur :
+\begin{lstlisting}
+/etc/init.d/glusterfs-server start
+	  \end{lstlisting}
+Montage d'un poste client.\\\\
+Le paquet gluster étant installé, passons à la création du point de montage.
+\begin{lstlisting}
+mkdir -p /mnt/monglusterfsvolume
+	  \end{lstlisting}
+Notre client va maintenant monter le volume réparti, il suffit d'employer la commande mount.
+\begin{lstlisting}
+mount -t glusterfs 172.16.65.91:6996 /mnt/monglusterfsvolume/
+	  \end{lstlisting}
+Lors du montage, GlusterFS va initier une connexion vers le serveur spéficié afin de récupérer le fichier de configuration du client que nous avons stocké précédement sous /etc/glusterfs/glusterfs.vol.
+Nous avons pu constater que cette étape ne fonctionné pas toujours très bien. Cela à pour conséquence de générer des dysfonctionnements surtout de type écriture.\\
+Pour raisoudre cette mauvaise initialisation copier le fichier de transport manuellement dans /etc/glusterfs/.  
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
