@@ -310,21 +310,23 @@ Sur le client, nous avons le programme appelé showmount associé à l'option -e
 		\end{figure}
 
 GlusterFS est un système de fichiers distribués libre (gpl v.3), à la fois très simple à mettre en œuvre et dont les capacités de stockage peuvent monter jusqu'à plusieurs petabytes (1,000 milliards octets).\\
-GlusterFS est composé de deux éléments logiciels: un serveur et un client.\\
-GlusterFS supporte plusieurs protocoles de communication tels TCP/IP, InfiniBand RDMA.\\
+GlusterFS est composé de deux éléments logiciels : un serveur et un client.\\
+GlusterFS supporte plusieurs protocoles de communication tels que TCP/IP, InfiniBand RDMA.\\
 
-Les serveurs de stockage gèrent la réplication des données stockées dans le volume distribué, permettant une reprise rapide du service en cas d'indisponibilitéé de l'un des n\oe uds. \\
+Les serveurs de stockage gèrent la réplication des données stockées dans le volume distribué, permettant une reprise rapide du service en cas d'indisponibilité de l'un des n\oe uds. \\
 Les clients reposent sur Fuse pour monter localement l'espace de stockage fusionné, donc facilement administrable.\\
 Le nombre de serveur et le nombre de clients ne sont pas limité.\\\\
 Le fonctionnement de Glusterfs est très modulaire et peut être configuré pour assurer:\\
-   • fusionner l'espace de tous les nœuds,\\
-   • une redondance des données,\\
-   • découper les gros fichiers en tronçons plus petits qui seront répartis sur différents serveurs de stockage (stripping),\\
-   • fonctionner malgré la perte d'un ou plusieurs nœuds de stockage qui seront automatiquement réintégrée dans le cluster et resynchronisés dès qu'ils seront de nouveau actifs \dots \\
+	\begin{itemize}
+		\item fusionner l'espace de tous les nœuds,
+		\item une redondance des données,
+		\item découper les gros fichiers en tronçons plus petits qui seront répartis sur différents serveurs de stockage (stripping),
+		\item fonctionner malgré la perte d'un ou plusieurs nœuds de stockage qui seront automatiquement réintégrée dans le cluster et resynchronisés dès qu'ils seront de nouveau actifs \dots \\
+	\end{itemize}
 \textbf{Installation de GlusterFS}\\\\
-Pour vous présenter la méthodologie d'installation des deux parties Serveur et Client, je vais réaliser la plus simple architecture, à savoir deux serveurs qui abriterons le volume distribué et le montage de celle-ci par une machine cliente.\\
-La distribution choisie est une debian Squeeze pour l'ensemble de la maquette, et le choix des paquets Glusterfs-server et glusterfs-client en version 3.1.2 officiellement stable.\\\\
-Actuellement, l'ajout des dépots Sid est obligatoire pour pouvoir accès à cette version de Gluster.\\
+Pour vous présenter la méthodologie d'installation des deux parties Serveur et Client, nous allons réaliser la plus simple architecture, à savoir deux serveurs qui abriterons le volume distribué et le montage de celle-ci par une machine cliente.\\
+La distribution choisie est une Debian Squeeze pour l'ensemble de la maquette, et le choix des paquets glusterfs-server et glusterfs-client en version 3.1.2 officiellement stable.\\\\
+Actuellement, l'ajout du dépôt Sid\footnote{Version de Debian \og instalble\fg~, en développement} est obligatoire pour pouvoir accès à cette version de Gluster.\\\\
 \textbf{Installation de GlusterFS Serveur}\\\\
 Actualisez le contenu du catalogue de paquets, installez le module serveur sur les deux machines.
 \begin{lstlisting}
@@ -339,31 +341,34 @@ Le montage du volume sera réalisé dans /sharespace, créons ce répertoire mai
 \begin{lstlisting}
 mkdir sharespace
 	  \end{lstlisting}
-La génération des fichiers de configuration s'éffecturons à partir de notre première serveur grâce à la commande glusterfs-volgen.\\
-J'oubli de vous fournir les ip que nous allons utiliser pour une meilleur compréhension.\\
-Ip serveurs : 172.16.65.91 et 172.16.65.92\\
-Ip cliente :  172.16.65.90\\  
+La génération des fichiers de configuration s'effectuera à partir de notre premier serveur grâce à la commande glusterfs-volgen.\\
+Voila les ip que nous allons utiliser pour une meilleur compréhension :
+	\begin{itemize}
+		\item Ip serveurs : 172.16.65.91 et 172.16.65.92
+		\item Ip cliente :  172.16.65.90\\  
+	\end{itemize}
 \begin{lstlisting}
 glusterfs-volgen --name mystore 172.16.65.92:/sharespace 172.16.65.91:/sharespace
 	  \end{lstlisting}
-Retour serveur
+Retour de serveur :
 \begin{lstlisting}
 Generating server volfiles.. for server '172.16.65.92'
 Generating server volfiles.. for server '172.16.65.91'
 Generating client volfiles.. for transport 'tcp'
 	  \end{lstlisting}
-Vous pouvez constater que la méthode de transport par défaut est le protocol TCP.\\
+Vous pouvez constater que la méthode de transport par défaut est le protocole TCP.\\
 En cas d'infrastructure équipé de l'InfiniBand (bus à haut débit), nous aurions pu le définir à cette étape par le biais de l'option t ib-verbs, sans oublier d'installer les librairies nécessaires. Nous aurions eu :\\
 \begin{lstlisting}
 apt-get install libibverbs1 librdmacm1
 glusterfs-volgen --name mystore -t ib-verbs 172.16.65.92:/sharespace 172.16.65.91:/sharespace
 	  \end{lstlisting}
-La commande glusterfs-volgen vous a généré les fichiers de configuration pour les serveurs et le client. Chaque fichier porte le ip de la machine conserné dans son nom, nous allons les exporter dans leur répertoire d'exploitation et les renommer pour les rendre exécutable.
+La commande glusterfs-volgen génère les fichiers de configuration pour les serveurs et le client. Chaque fichier porte l'ip de la machine concerné dans son nom, nous allons les exporter dans leur répertoire d'exploitation et les renommer pour les qu'il soient pris en compte.
 \begin{lstlisting}
 cp 172.16.65.91-mystore-export.vol /etc/glusterfs/glusterfsd.vol
 pour le second serveur
 scp 172.16.65.92-mystore-export.vol serveur2:/etc/glusterfs/glusterfsd.vol
-	  \end{lstlisting}  
+	  \end{lstlisting}
+
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
