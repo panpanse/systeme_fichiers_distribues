@@ -202,6 +202,12 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 			278GB DISK
 		\end{description}
 
+		Il est possible de déployer des environnements sur des machines du Grid.
+		Un certain nombre d'images (OS) sont disponible. L'ensemble de nos tests ont été réalisés avec une Debian Squeeze (6),
+		que nous avons construit à partir d'une Debian Lenny (5), la version 6 n'étant pas disponible.
+		Un système de réservation permet de réserver à une date et heure voulue des nœuds, et, si on le souhaite,
+		d'exécuter un script.
+
 		\begin{figure}[H]
 			\begin{center}
 				\includegraphics[width=0.6\linewidth]{images/cluster_nancy.jpg}
@@ -359,33 +365,43 @@ scp 172.16.65.92-mystore-export.vol serveur2:/etc/glusterfs/glusterfsd.vol
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
 		\section{Présentation}
 
-			\subsection{Présentation générale}
-				% deux partie présentation ? Présentation générale, Présentation technique ?
-				\begin{figure}[H]
-					\begin{center}
-						\includegraphics[width=0.15\linewidth]{images/moosefs.png}
-					\end{center}
-				\end{figure}
-		
-				%MooseFS (Moose File System), un système de fichiers distribué. % enlever cette phrase ?
+			\begin{figure}[H]
+				\begin{center}
+					\includegraphics[width=0.15\linewidth]{images/moosefs.png}
+				\end{center}
+			\end{figure}
+	
+			%MooseFS (Moose File System), un système de fichiers distribué. % enlever cette phrase ?
 				
-MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne, c’est à dire résistant aux pannes d’un ou plusieurs noeuds de stockage. Développé par Gemius SA. Le code préalablement propriétaire a été libéré et mis à disposition publiquement le 5 mai 2008 sous licence GPLv3. Disponible pour Linux, FreeBSD, OpenSolaris et MacOS X.\\
-Les développeurs sont réactifs et suivent de très près la liste de diffusion et les remontés de bugs de leurs utilisateurs.\\
-Il permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs. 
-Les fichiers sont découpés en morceaux (appelés chunks) puis répartis sur les différents chunkservers (noeuds de stockage) : selon le paramétrage voulu pour ces fichiers, ou pour le répertoire dans lequel ils se trouvent, chaque chunk sera répliqué sur x noeuds (différents).\\
-Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique sur un serveur. L'atout principal de MooseFS, au-delà du fait qu'il s’agisse d’un logiciel libre, est sa simplicité d'administration et sa de mise en œuvre.\\\\
-				% plus simple à mettre en place que les autres ?
-D'autres qualités sont à son actif: \\\\
-Le respect de la norme Posix.\\
-L'utilisation de Fuse en espace client.\\
-La mise à disposition d'une poubelle automatique à durée de rétention modifiable à souhait.\\
-Une commande unique « mfssetgoal », à chaud pour le choix du nombre de répliquas, par fichier ou par répertoire.\\
-Disponibilité des données ou tolérance aux pannes en cas de réplication positionné à plus de 1 pour les données rendra transparent la perte d'un chunkserver au détriment d'un coût en matière de place.\\ 
-Simplicité de l'extension de l'espace de stockage à chaud quelque soit la configuration, comprenant la ré-indexation et la répartition des données vers ces nouveaux espaces sans vous deviez intervenir (cela peut prendre plusieurs heures).  \\
-Le système est réparti: les fichiers supérieurs à 64Mo sont découpés en paquets de 64Mio et distribués sur les différents serveurs de données dit « chunkserver ».\\
-			\subsection{Aspect technique}
+			MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne,
+			c’est à dire résistant aux pannes d’un ou plusieurs nœuds de stockage.
+			Développé par Gemius SA. Le code préalablement propriétaire a été libéré et mis à disposition publiquement le 5 mai 2008
+			sous licence GPLv3. Disponible pour Linux, FreeBSD, OpenSolaris et MacOS X.\\
+			Les développeurs sont réactifs et suivent de très près la liste de diffusion et les remontés de bugs de leurs utilisateurs.\\
+			MooseFS permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs. 
+			Les fichiers sont découpés en morceaux (appelés chunks) puis répartis sur les différents chunkservers (nœuds de stockage) :
+			selon le paramétrage voulu pour ces fichiers, ou pour le répertoire dans lequel ils se trouvent,
+			chaque chunk sera répliqué sur x noeuds (différents).\\
+			Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique
+			sur un serveur. L'atout principal de MooseFS, au-delà du fait qu'il s’agisse d’un logiciel libre,
+			est sa simplicité d'administration et sa de mise en œuvre.\\\\
+			% plus simple à mettre en place que les autres ?
+			D'autres qualités sont à son actif: \\\\
+			Le respect de la norme Posix.\\
+			L'utilisation de Fuse en espace client.\\
+			La mise à disposition d'une poubelle automatique à durée de rétention modifiable à souhait.\\
+			Une commande unique « mfssetgoal », à chaud pour le choix du nombre de répliquas, par fichier ou par répertoire.\\
+			Disponibilité des données ou tolérance aux pannes en cas de réplication positionné à plus de 1 pour les données
+			rendra transparent la perte d'un chunkserver au détriment d'un coût en matière de place.\\ 
+			Simplicité de l'extension de l'espace de stockage à chaud quelque soit la configuration,
+			comprenant la ré-indexation et la répartition des données vers ces nouveaux espaces sans vous deviez intervenir
+			(cela peut prendre plusieurs heures).  \\
+			Le système est réparti: les fichiers supérieurs à 64Mo sont découpés en paquets de 64Mio et distribués
+			sur les différents serveurs de données dit « chunkserver ».\\
+			\section{Aspect technique}
 				
-Les montage du système de fichiers par les clients se fait à l'aide de FUSE. MooseFS est constitué de trois types de serveurs :
+				Les montage du système de fichiers par les clients se fait à l'aide de FUSE.
+				MooseFS est constitué de trois types de serveurs :
 
 				\begin{enumerate}
 					\item Un serveur de métadonnées (MDS)
@@ -737,45 +753,41 @@ umount /mnt/mfs)
 		\chapter{Scripts}
 			\section{GlusterFs}
 				Fichier deploimentGluster.rb :
-				\lstinputlisting[language=Ruby]{../glusterFs/deploiementGluster.rb}
+				\lstinputlisting[language=Ruby,numbers=left]{../glusterFs/deploiementGluster.rb}
 				% autre fichier (améliorer le script)
 			\section{MooseFs}
 			\section{Ceph}
 				Fichier deploimentCeph.rb :
-				\lstinputlisting[language=Ruby]{../cephFS/deploiementCeph.rb}
+				\lstinputlisting[language=Ruby,numbers=left]{../cephFS/deploiementCeph.rb}
 			\section{NFS}
 				Fichier deploimentNFS.rb :
-				\lstinputlisting[language=Ruby]{../NFS/deploiementNFS.rb}
+				\lstinputlisting[language=Ruby,numbers=left]{../NFS/deploiementNFS.rb}
 			\section{Benchmark}
 				Fichier benchmark.rb :
-				\lstinputlisting[language=Ruby]{../benchmark/benchmark.rb}
+				\lstinputlisting[language=Ruby,numbers=left]{../benchmark/benchmark.rb}
 
 				Fichier writingSmallFiles.sh :
-				\lstinputlisting[language=Bash]{../benchmark/writingSmallFiles.sh}
+				\lstinputlisting[language=Bash,numbers=left]{../benchmark/writingSmallFiles.sh}
 
 				Fichier writingBigFiles.sh :
-				\lstinputlisting[language=Bash]{../benchmark/writingBigFiles.sh}
+				\lstinputlisting[language=Bash,numbers=left]{../benchmark/writingBigFiles.sh}
 
 				Fichier readingSmallFiles.sh :
-				\lstinputlisting[language=Bash]{../benchmark/readingSmallFiles.sh}
+				\lstinputlisting[language=Bash,numbers=left]{../benchmark/readingSmallFiles.sh}
 
 				Fichier readingBigFile.sh :
-				\lstinputlisting[language=Bash]{../benchmark/readingBigFile.sh}
-<<<<<<< HEAD
-			\section{Metas\_scripts}
-=======
+				\lstinputlisting[language=Bash, numbers=left]{../benchmark/readingBigFile.sh}
 			\section{Meta scripts}
 				Fichier meta\_NFS.sh :
-				\lstinputlisting[language=Bash]{../metascript/meta_NFS.sh}
+				\lstinputlisting[language=Bash,numbers=left]{../metascript/meta_NFS.sh}
 
->>>>>>> e17902fe3669e31536ce3d2cbb57034b0264c0ea
 				Fichier meta\_gluster.sh :
-				\lstinputlisting[language=Bash]{../metascript/meta_gluster.sh}
+				\lstinputlisting[language=Bash,numbers=left]{../metascript/meta_gluster.sh}
 
 				Fichier meta\_ceph.sh :
-				\lstinputlisting[language=Bash]{../metascript/meta_ceph.sh}
+				\lstinputlisting[language=Bash,numbers=left]{../metascript/meta_ceph.sh}
 
 				Fichier meta\_moose.sh :
-				\lstinputlisting[language=Bash]{../metascript/meta_moose.sh}
+				\lstinputlisting[language=Bash,numbers=left]{../metascript/meta_moose.sh}
 \end{document}
 
