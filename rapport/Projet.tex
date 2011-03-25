@@ -396,6 +396,7 @@ A ce moment, vous êtes prêt à mettre en marche les services de GlusterFS sur 
 /etc/init.d/glusterfs-server start
 	  \end{lstlisting}
 Montage d'un poste client.\\\\
+Petit apparté pour vous spécifier que le protocol en natif est fuse, mais que l'applicatif est capable de supporter d'autres protocol Nfs, Cifs ou encore Dav.\\
 Le paquet gluster étant installé, passons à la création du point de montage.
 \begin{lstlisting}
 mkdir -p /mnt/monglusterfsvolume
