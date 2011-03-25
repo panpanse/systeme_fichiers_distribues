@@ -202,7 +202,8 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 			278GB DISK
 		\end{description}
 
-		Il est possible de déployer des environnements sur des machines du Grid.
+		Pour travailler sur le Grid'5000, on se connecte en ssh\footnote{Secure Shell : protocole de communication sécurisé} à une machine appelé le \og frontend \fg, il y en a un sur chaque site.
+		A partir de ce frontend, il est possible de déployer des environnements sur des machines du Grid.
 		Un certain nombre d'images (OS) sont disponible. L'ensemble de nos tests ont été réalisés avec une Debian Squeeze (6),
 		que nous avons construit à partir d'une Debian Lenny (5), la version 6 n'étant pas disponible.
 		Un système de réservation permet de réserver à une date et heure voulue des nœuds, et, si on le souhaite,
@@ -239,9 +240,9 @@ NFS (Network File System, système de fichiers en réseau en français) est un s
 Au delà des évolutions entre les versions 3 et 4 du protocole, c'est la cohérence du système de nommage qui distingue la version 4 du système de fichiers réseau. Il s'agit de garantir qu'un objet (fichier ou répertoire) est représenté de la même manière sur un serveur et sur ses clients.
     
     \section{Mise en place}
-Le rôle du serveur NFS est de mettre à disposition sur le réseau une partie de son arborescence locale de système de fichiers. On parle d'«exportation».\\
+Le rôle du serveur NFS est de mettre à disposition sur le réseau une partie de son arborescence locale de système de fichiers. On parle d'\og exportation\fg.\\
 Il existe plusieurs implémentations libres de serveur NFS. On se limite ici à l'utilisation du logiciel lié au noyau Linux.\\
-Dans cette configuration nous traitons de l'installation d'un serveur NFS en version 4 dont le but est d'exporter le contenu un répertoire /tmp vers les clients.
+Dans cette configuration nous traitons de l'installation d'un serveur NFS en version 4 dont le but est d'exporter le contenu d'un répertoire /tmp vers les clients.
 Utilisant une image de Debian Squeeze, On recherche dans la liste des paquets disponibles, ceux dont le nom débute par 'nfs'.
 \begin{lstlisting}
 # aptitude search ?name"(^nfs)"
@@ -257,14 +258,13 @@ En exploitant la documentation \href{https://wiki.linux-nfs.org/wiki/index.php/N
     \begin{lstlisting}
 	    /tmp *.nancy.grid5000.fr(rw,fsid=0,insecure,subtree_check)
 	  \end{lstlisting}
-Pour les besoins de ces travaux pratiques, les fonctions de sécurité Kerberos ne sont pas utilisées. On utilise l'appartenance au domaine nancy.grid5000.fr comme critère de contrôle d'accès ; ce qui correspond à un niveau de sécurité faible.Puisque toutes les machines déployées sur la plateforme de Nancy peuvent accéder au répertoire.\\
+Pour les besoins de ces travaux pratiques, les fonctions de sécurité Kerberos ne sont pas utilisées. On utilise l'appartenance au domaine nancy.grid5000.fr comme critère de contrôle d'accès ; ce qui correspond à un niveau de sécurité faible, puisque toutes les machines déployées sur la plateforme de Nancy peuvent accéder au répertoire.\\
 	  \textbf{rw }: autorise les requêtes en lecture et écriture;\\
 	  \textbf{fsid=0} : (fsid=root ou fsid=0) cette option est propre à NFSv4. Elle permet de définir le point de partage racine. Ce qui permet de monter des partages en fonction d'une racine virtuelle.\\
 	  \textbf{insecure} : l'option insecure permet l'accès aux clients dont l'implémentation NFS n'utilisent pas un port réservé.\\
 	  \textbf{subtree\_check} : permet de limiter l'accès exclusivement au répertoire partager.\\
 	  
-	  Après la modification de ce fichier, il suffit de redémarrer le service, puis de monter les clients sur le répertoire partager à l'aide de la 
-	  commande suivante :\\
+	  Après la modification de ce fichier, il suffit de redémarrer le service, puis de monter les clients sur le répertoire partager à l'aide de la commande suivante :\\
 	  \begin{lstlisting}
 	    mount serveur:/ -t nfs4 /tmp/partage
 	  \end{lstlisting}
@@ -272,15 +272,18 @@ Pour les besoins de ces travaux pratiques, les fonctions de sécurité Kerberos 
 Depuis le serveur, la commande exportfs est chargée de la gestion de la liste des systèmes de fichiers partagés. L'exécution de cette commande sans argument affiche la liste des répertoires exportés.
 Ainsi on peut vérifier que les directives données dans le fichier /etc/exports sont effectivement appliquées.
 Sur le client, nous avons le programme appelé showmount associé à l'option -e.
+
 	  \chapter{Fuse}
-    FUSE est un logiciel libre signifiant << Filesystem in Userspace >>. Il s'agit d'un module, disponible pour les kernels 2.4 et 2.6, grâce auquel 
+    FUSE est un logiciel libre signifiant \og Filesystem in Userspace\fg. Il s'agit d'un module, disponible pour les kernels 2.4 et 2.6, grâce auquel 
     il est possible d'implémenter toutes les fonctionnalités d'un système de fichier dans un espace utilisateur. Ces fonctionnalités incluent :\\
-   • une API de librairie simple ;\\
-   • une installation simple (pas besoin de patcher ou recompiler le noyau) ;\\
-   • une implémentation sécurisée ;\\
-   • utilisable dans l'espace utilisateur.\\\\
-    Pour pouvoir monter un système de fichier, il faut être administrateur à moins que les informations de montage est été renseignées le fichier 
-    /etc/fstab.\\
+	\begin{itemize}
+		\item une API de librairie simple ;
+		\item une installation simple (pas besoin de patcher ou recompiler le noyau) ;
+		\item une implémentation sécurisée ;
+		\item utilisable dans l'espace utilisateur.\\
+   \end{itemize}
+
+    Pour pouvoir monter un système de fichier, il faut être administrateur à moins que les informations de montage aient été renseignées sur le fichier /etc/fstab.\\
     FUSE permet à un utilisateur de monter lui-même un système de fichier. Pour profiter de FUSE, il faut des programmes qui exploitent sa bibliothèque
     et  ces programmes sont nombreux.\\
     http://fuse.sourceforge.net\\\\
@@ -288,14 +291,15 @@ Sur le client, nous avons le programme appelé showmount associé à l'option -e
     \begin{lstlisting}
 	  apt-get install fuse-utils libfuse2
 	  \end{lstlisting}
-    Avant de pouvoir utiliser ce paquet, il faut charger le module « fuse » en mémoire :\\
+    Avant de pouvoir utiliser ce paquet, il faut charger le module \og fuse\fg~ en mémoire :\\
     \begin{lstlisting}
 	  modprobe fuse
 	  \end{lstlisting}
-    Pour charger le module automatiquement à chaque démarrage de l’ordinateur, il faut ajouter « fuse » dans le fichier « /etc/modules »\\
+    Pour charger le module automatiquement à chaque démarrage de l'ordinateur, il faut ajouter \og fuse \fg~ dans le fichier \og /etc/modules \fg.\\
     \begin{lstlisting}
 	 nano /etc/modules
 	 \end{lstlisting}
+
 	\chapter{GlusterFs, véritable serveur d'archivage.}
 		\section{Présentation}
 
@@ -377,7 +381,8 @@ scp 172.16.65.92-mystore-export.vol serveur2:/etc/glusterfs/glusterfsd.vol
 			c’est à dire résistant aux pannes d’un ou plusieurs nœuds de stockage.
 			Développé par Gemius SA. Le code préalablement propriétaire a été libéré et mis à disposition publiquement le 5 mai 2008
 			sous licence GPLv3. Disponible pour Linux, FreeBSD, OpenSolaris et MacOS X.\\
-			Les développeurs sont réactifs et suivent de très près la liste de diffusion et les remontés de bugs de leurs utilisateurs.\\
+			Les développeurs sont réactifs et suivent de très près la liste de diffusion et les remontés de bugs de leurs utilisateurs.
+
 			MooseFS permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs. 
 			Les fichiers sont découpés en morceaux (appelés chunks) puis répartis sur les différents chunkservers (nœuds de stockage) :
 			selon le paramétrage voulu pour ces fichiers, ou pour le répertoire dans lequel ils se trouvent,
