@@ -407,9 +407,18 @@ mount -t glusterfs 172.16.65.91:6996 /mnt/monglusterfsvolume/
 Lors du montage, GlusterFS va initier une connexion vers le serveur spéficié afin de récupérer le fichier de configuration du client que nous avons stocké précédement sous /etc/glusterfs/glusterfs.vol.\\\\
 ATTENTION\\
 Nous avons pu constater que cette étape ne fonctionné pas toujours très bien. Cela à pour conséquence de générer des dysfonctionnements du à des problémes de droits. Vous aurez droit à la lecture et à la modification des fichiers présent dans le volume.\\
-Pour raisoudre cette mauvaise initialisation, copier le fichier de transport manuellement dans /etc/glusterfs/ et remonté le volume pour recharger le fichier de configuration avec la commande :
+Pour raisoudre cette mauvaise initialisation, copier le fichier de transport manuellement dans /etc/glusterfs/ et remonté le volume pour recharger le nouveau fichier de configuration avec la commande :
 \begin{lstlisting}
 mount -t glusterfs /etc/glusterfs/glusterfs.vol /mnt/monglusterfsvolume/
+	  \end{lstlisting}
+Pour monter automatiquement à chaque boot, ajoutez la ligne suivante au fichier /etc/fstab
+Pour un serveur :
+\begin{lstlisting}
+172.16.65.91  /mnt/monglusterfsvolume  glusterfs  defaults,_netdev  0  0
+	  \end{lstlisting}
+Pour un client :
+\begin{lstlisting}
+/etc/glusterfs/glusterfs.vol  /mnt/monglusterfsvolume  glusterfs  defaults,_netdev  0  0
 	  \end{lstlisting}
 Vérifions le volume :
 \begin{lstlisting}
