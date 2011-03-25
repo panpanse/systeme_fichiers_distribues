@@ -433,16 +433,16 @@ scp 172.16.65.92-mystore-export.vol serveur2:/etc/glusterfs/glusterfsd.vol
 		\section{Mise en place}
 			\subsection{Environnement logiciel}
 
-Le système utilisé est une Debian Squeeze. MooseFs ne faisant pas partie des dépôts de la distribution, nous avons compilé le paquet à partir des sources dans la derniéres version disponible (1.6.20) sur le site officiel.\\
+Le système utilisé est une Debian Squeeze. MooseFs ne faisant pas partie des dépôts de la distribution, nous avons compilé le paquet à partir des sources dans la dernière version disponible (1.6.20) sur le site officiel.\\
 \href{http://pro.hit.gemius.pl/hitredir/id=0sWa0S8ft4sTAHF1bGAAEZPcP3ziyq7f9SdhoQf7oeT.c7/url=moosefs.org/tl\_files/mfscode/mfs-1.6.20-2.tar.gz}{http://www.moosefs.org/download.html} \\
-Méthodologie installation pour la mise en oeuvre dès différents serveurs ou services sur des machines dédiées :\\\\
-Commencons par \textbf{l'installation d'un Master serveur}\\\\
-Récupérer l'archive sur le site de moosefs et décompresser la dans le répertoire /usr/src/,\\ tar zxvf mfs-1.6.20-2.tar.gz\\
+Méthodologie installation pour la mise en œuvre des différents serveurs ou services sur des machines dédiées :\\\\
+Commençons par \textbf{l'installation d'un Master serveur}\\\\
+Récupérons l'archive sur le site de MooseFs et décompressons la dans le répertoire /usr/src/,\\ tar zxvf mfs-1.6.20-2.tar.gz\\
 Pour des questions d'isolement nous créons un utilisateur et un groupe pour faire tourner le futur service.\\
 \begin{lstlisting}
 	  groupadd mfs;useradd mfs -s /sbin/nologin
 	  \end{lstlisting}
-Positionnez vous dans le répertoire de l'archive, cd /usr/src/mfs-1.6.20-2\\
+Positionnons nous dans le répertoire de l'archive, cd /usr/src/mfs-1.6.20-2\\
 Nous compilons avec la prise en compte de notre nouveau utilisateur et nous désactivons les services non nécessaire à notre master.
 Désactivation du service mfschunck (stockage de données) et mfsmount (montage côté client)
 \begin{lstlisting}
@@ -451,19 +451,19 @@ Désactivation du service mfschunck (stockage de données) et mfsmount (montage 
 \begin{lstlisting}
 	   make;make install
 	  \end{lstlisting}
-Nous recopions les fichiers examples du répertoire /etc pour la configuration du service au nombre de trois:
+Nous recopions les fichiers exemples du répertoire /etc pour la configuration du service, au nombre de trois:
 \begin{lstlisting}
 cd /etc
 cp mfsmaster.cfg.dist mfsmaster.cfg
 cp mfsmetalogger.cfg.dist mfsmetalogger.cfg
 cp mfsexports.cfg.dist mfsexports.cfg
 	  \end{lstlisting}
-Si vous ne modifiez pas ces fichiers, les directives par défaut seront alors applique.
-Pour information toutes les directives sont très bien documenté dans le man (exp: man mfsmaster.cfg).\\
-Nous ne toucherons au fichier mfsmaster.cfg, celui-ci défini les principaux arrangements du serveur.
-Nous adaptons la configuration du fichier mfsexports.cfg qui permet de fixer la plage d'ip ou les ordinateurs qui pourrons monter le système de fichiers et de convenir des privilèges.
-La première ligne non commenté nous interessent, nous remplacons l'astérisque (*) en spécifions la plage IP et son masque que nous allons employer pour notre maquette.
-Cela aura pour effet de donner accès à toutes les machines de cette plage d'ip de pouvoir disposé de la totalité de la structure en mode lecture écriture.\\
+Si nous ne modifions pas ces fichiers, les directives par défaut seront alors appliquées.
+Pour information toutes les directives sont très bien documenté dans le page de man (exp: man mfsmaster.cfg).\\
+Nous ne toucherons pas au fichier mfsmaster.cfg, celui-ci défini les principaux arrangements du serveur.
+Nous adaptons la configuration du fichier mfsexports.cfg qui permet de fixer la plage d'IP ou les ordinateurs qui pourrons monter le système de fichiers et de convenir des privilèges.
+La première ligne non commenté nous intéresse, nous remplaçons l'astérisque (*) en spécifions la plage IP et son masque que nous allons employer pour notre maquette.
+Cela aura pour effet de donner accès à toutes les machines de cette plage d'IP à la totalité de la structure en mode lecture écriture.\\
 Exemple de la ligne modifié :
 \begin{lstlisting}
 	  192.168.2.0/24 / rw,alldirs,maproot=0
@@ -474,7 +474,7 @@ Nous allons changer cela:
 cd /var/lib/mfs
 cp metadata.mfs.empty metadata.mfs
 	  \end{lstlisting}
-Avant le démarrage du service nous devons pensez à la résolution de nom du serveur. Renseigné votre serveur dns, nous ici nous renseignerons notre fichier hosts.
+Avant le démarrage du service nous devons penser à la résolution de nom du serveur. Renseigné votre DNS\footnote{Domaine Name Serveur : serveur de noms}, nous renseignons dans notre fichier hosts.
 A titre d'exemple:
   \begin{lstlisting}
 192.168.1.1 mfsmaster
@@ -483,17 +483,17 @@ A ce stade nous pouvons démarrer le master serveur, le service démarrera avec 
   \begin{lstlisting}
 usr/sbin/mfsmaster start
 	  \end{lstlisting}
-En cas de mise en production pensez à modifier votre configue pour un démarrage automique du service lors des lancements de votre serveur.
+En cas de mise en production pensez à modifier votre configuration pour un démarrage automatique du service lors des lancements de votre serveur.
 
-Pour conclure cette section, un mode graphique en cgi est disponible pour suivre l'état de fonctionnement du système, disponible sous votre navigateur à l'adresse http://IP\_Master\_Server:9425
+Pour conclure cette section, un mode graphique en cgi\footnote{Common Gateway Interface : interface utilisée par les serveurs HTTP} est disponible pour suivre l'état de fonctionnement du système, disponible sous votre navigateur à l'adresse http://IP\_Master\_Server:9425
   \begin{lstlisting}
 /usr/sbin/mfscgiserv
 	  \end{lstlisting}
-Remarque: le contenu sera vide tant que les serveurs de données ne seront démarré.\\\\
+Remarque: le contenu sera vide tant que les serveurs de données ne seront pas démarrés.\\\\
 				% avec options différentes suivant les serveurs, clients (cf tuto site officiel)
 \textbf{Installation du Serveur de Backup Metalogger.}\\\\
-Le principe de ce serveur est la récuperation tous les événements du système de fichier et peut permettre, si le maître est vraiment mal en point (perte de ses metadada, ou de son historique), de lui faire rejouer les logs pour que le volume reste cohérent.\\
-Cette solution repose sur le protocole Carp << Common Address Redundancy Protocol >>, permet d'admettre à un groupe d'hôtes sur le même segment réseau (ici mfsmaster et mfsmetalogger) de partager même adresse IP (un maître et un esclave). 
+Le principe de ce serveur est la de récupérer tous les événements du système de fichier et peut permettre, si le maître est vraiment mal en point (perte de ses metadada, ou de son historique), de lui faire rejouer les logs pour que le volume reste cohérent.\\
+Cette solution repose sur le protocole Carp \og Common Address Redundancy Protocol\fg, permet d'admettre à un groupe d'hôtes sur le même segment réseau (ici mfsmaster et mfsmetalogger) de partager même adresse IP (un maître et un esclave). 
 La méthodologie d'installation est similaire au master serveur.\\
 Voici les commandes à suivre :\\
   \begin{lstlisting}
@@ -534,18 +534,18 @@ cp mfschunkserver.cfg.dist mfschunkserver.cfg
 cp mfshdd.cfg.dist mfshdd.cfg
 	  \end{lstlisting}
 Les directives du fichier mfshdd.cfg signalent les emplacements des unités de disque dur que l'on souhaite employer.\\\\
-Exemple de mise en oeuvre pour deux emplacements:\\
-Ajouter les deux lignes dans le fichier mfshdd.cfg.\\
+Exemple de mise en œuvre pour deux emplacements :\\
+Ajoutons les deux lignes suivantes dans le fichier mfshdd.cfg.\\
 /mnt/mfschunks1\\
 /mnt/mfschunks2\\
-Positionons les droits d'écriture nécessaire pour la création des dossiers de .lock :\\
+Positionnons les droits d'écriture nécessaire pour la création des dossiers de .lock :\\
   \begin{lstlisting}
 mkdir /mnt/mfschunks1
 mkdir /mnt/mfschunks2
 chown -R mfs:mfs /mnt/mfschunks1
 chown -R mfs:mfs /mnt/mfschunks2
 	  \end{lstlisting}
-Si vous ne souhaitez pas utiliser la totalité de l'espace libre de vos disques, je vous propose une autre méthode permettant de contrôler le volume disque.\\
+Si nous ne souhaitons pas utiliser la totalité de l'espace libre de vos disques, nous pouvons utiliser une autre méthode permettant de contrôler le volume disque.\\
 Création et formatage d'un volume de deux gigas et d'un formatage en ext3.\\
   \begin{lstlisting}
 dd if=/dev/zero of=disk1 bs=1024 count=1 seek=$((2*1024*1024-1))
@@ -553,7 +553,7 @@ dd if=/dev/zero of=disk2 bs=1024 count=1 seek=$((2*1024*1024-1))
 mkfs -t ext3 disk1
 mkfs -t ext3 disk2
 	  \end{lstlisting}
-On monte nos nouveaux disques, sans oublié les droits d'écriture.\\
+Nous montons nos nouveaux disques, sans oublier les droits d'écriture.\\
   \begin{lstlisting}
 mkdir /mnt/hd1
 mkdir /mnt/hd2
@@ -562,13 +562,13 @@ mount -t ext3 -o loop disk2 hd2
 chown -R mfs:mfs /mnt/hd1
 chown -R mfs:mfs /mnt/hd2
 	  \end{lstlisting}
-On informe le fichier /etc/hosts de la présence du master serveur : 192.168.1.1 mfsmaster\\
+Nous informons le fichier /etc/hosts de la présence du master serveur : 192.168.1.1 mfsmaster\\
 Il est prêt à être démarrer:
   \begin{lstlisting}
 /usr/sbin/mfschunkserver start
 	  \end{lstlisting}
 \textbf{Installation d'un Poste Client.}\\\\
-Afin de monter le système de fichiers basé sur Fuse, le paquet doit être égal ou supérieur à 2.7.2\\
+Afin de monter le système de fichiers basé sur Fuse, la version du paquet doit être égal ou supérieur à 2.7.2\\
 \href{http://sourceforge.net/projects/fuse/}{http://sourceforge.net/projects/fuse/} \\
 Compilation de Fuse et chargement du module du noyau linux.\\
   \begin{lstlisting}
@@ -585,14 +585,14 @@ cd mfs-1.6.20-2
 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var/lib --with-default-user=mfs --with-default-group=mfs --disable-mfsmaster --disable-mfschunkserver
 make;make install
 	  \end{lstlisting}
-On annonce le master serveur au fichier /etc/hosts : 192.168.1.1   mfsmaster\\
+Nous annonçons le master serveur au fichier /etc/hosts : 192.168.1.1   mfsmaster\\
 Supposons que nous souhaitons monter le système dans le dossier /mnt/mfs notre machine de cliente.\\
   \begin{lstlisting}
 mkdir -p /mnt/mfs
 chown -R mfs:mfs /mnt/mfs
 /usr/bin/mfsmount /mnt/mfs -H mfsmaster
 	  \end{lstlisting}
-Nous pouvons vérifier l'espace occupé par les systèmes de fichiers avec la commande DF, option H améliora la lisibilité.\\
+Nous pouvons vérifier l'espace occupé par les systèmes de fichiers avec la commande df, option h améliora la lisibilité.\\
 exemple : df -h | grep mfs\\
   \begin{lstlisting}
 /storage/mfschunks/mfschunks1
@@ -609,8 +609,8 @@ chown -R mfs:mfs /mnt/mfsmeta
 mfsmount -m /mnt/mfsmeta
 	  \end{lstlisting}
 Le temps est indiqué en secondes (valeurs utiles : 1 heure égal à 3600 secondes, 24h = 86400 secondes, 1 semaine = 604800 secondes).\\
-Si vous définisez la valeur à 0 cela signifira une suppréssion immédiate du dossier et sa récupération ne sera plus possible. \\
-Positionner la rétention désiré pour la corbeille mfssettrashtime (option r permet la récurcivité sur les répertoire) et vérifier la rétention appliqué mfsgettrashtime:
+Si nous définissons la valeur à 0 cela signifie une suppression immédiate du dossier et sa récupération ne sera plus possible. \\
+Positionnons la rétention désiré pour la corbeille mfssettrashtime (option r permet la récursivité sur les répertoires) et vérifions la rétention appliqué mfsgettrashtime:
 \begin{lstlisting}
 mfsgettrashtime -r /mnt/mfs-test/test2
 /mnt/mfs-test/test2:
@@ -628,7 +628,7 @@ mfsgettrashtime -r /mnt/mfs-test/test2
 files with trashtime 1209600 : 36
 directories with trashtime 1209600 : 1
 	  \end{lstlisting}
-Définir le nombre de copie que l'on désir par répertoire avec mfssetgoal –r :
+Définissons le nombre de copies que l'on désir par répertoire avec le commande mfssetgoal –r :
 \begin{lstlisting}
  mfssetgoal -r 1 /mnt/mfs/folder1
 /mnt/mfs/folder1:
@@ -645,7 +645,7 @@ mfssetgoal -r 2 /mnt/mfs/folder2
  inodes with goal not changed:    1
  inodes with permission denied:   0
 	  \end{lstlisting}
-Vérifier la redonnance avec la fonction mfsgetgoal:
+Vérifions la redondance avec la fonction mfsgetgoal:
 \begin{lstlisting}
 mfsgetgoal /mnt/mfs/folder1
 /mnt/mfs/folder1: 1
@@ -674,7 +674,7 @@ Testons le positionnement:
 cp /usr/src/mfs-1.6.20-2.tar.gz /mnt/mfs/folder1
 cp /usr/src/mfs-1.6.20-2.tar.gz /mnt/mfs/folder2
 	  \end{lstlisting}
-La commande mfscheckfile est employée pour la vérification du nombre de copie :
+La commande mfscheckfile est employée pour la vérification du nombre de copies :
 \begin{lstlisting}
 mfscheckfile /mnt/mfs/folder1/mfs-1.6.20-2.tar.gz
 /mnt/mfs/folder1/mfs-1.6.20-2.tar.gz:
@@ -684,7 +684,7 @@ mfscheckfile /mnt/mfs/folder2/mfs-1.6.20-2.tar.gz
 /mnt/mfs/folder2/mfs-1.6.20-2.tar.gz:
 2 copies: 1 chunks
 	  \end{lstlisting}
-Résumé du contenu de l'arbre entier du file systeme peut être appelé avec la commande mfsdirinfo :
+Le résumé du contenu de l'arbre entier du file systeme peut être appelé avec la commande mfsdirinfo :
 \begin{lstlisting}
 mfsdirinfo /mnt/mfs/folder1/:
 inodes: 15
@@ -708,6 +708,7 @@ umount /mnt/mfs)
 %	\caption{MooseFs Read Process}
 %	\label{identifiant test}
 %\end{figure} 
+
 	\chapter{Ceph}
 		\section{Présentation}
 
