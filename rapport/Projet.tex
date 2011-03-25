@@ -202,6 +202,13 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 			278GB DISK
 		\end{description}
 
+		Pour travailler sur le Grid'5000, on se connecte en ssh\footnote{Secure Shell : protocole de communication sécurisé} à une machine appelé le \og frontend \fg, il y en a un sur chaque site.
+		A partir de ce frontend, il est possible de déployer des environnements sur des machines du Grid.
+		Un certain nombre d'images (OS) sont disponible. L'ensemble de nos tests ont été réalisés avec une Debian Squeeze (6),
+		que nous avons construit à partir d'une Debian Lenny (5), la version 6 n'étant pas disponible.
+		Un système de réservation permet de réserver à une date et heure voulue des nœuds, et, si on le souhaite,
+		d'exécuter un script.
+
 		\begin{figure}[H]
 			\begin{center}
 				\includegraphics[width=0.6\linewidth]{images/cluster_nancy.jpg}
@@ -215,8 +222,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		\section{Présentation}
 		% FS distribué le plus simple ? (à mettre en place, dans ses possibilités) ?
 
-		NFS (Network File System, système de fichiers en réseau en français) est un système de fichiers développé par Sun Microsystem,
-		permettant de partager des données par le réseau. NFS est aujourd’hui la méthode standard de partage de disques entre machines Unix. 
+NFS (Network File System, système de fichiers en réseau en français) est un système de fichiers développé par Sun Microsystem, permettant de partager des données par le réseau. NFS est aujourd’hui la méthode standard de partage de disques entre machines Unix. 
 		C’est une solution simple et pratique, quoique peu sécurisée.\\
 		
 		\section{Aspect technique}
@@ -230,40 +236,54 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
     NFSv3 définie dans la RFC 1813 prenant en charge le TCP.\\
     NFSv4 définie dans la RFC 3010 puis réviser dans la RFC 3530. L'ensemble du protocole est repensé, et les codes sont réécrits.
     Cette version intègre une meilleur gestion de la sécurité, de la montée en charge, et un systèmes de maintenances simplifiés.
-    NFSv4 supporte les protocoles de transports TCP (par défaut) et RDMA, ce qui augmente la fiabilité. Nous utiliserons donc cette version
-    NFS dans l'ensemble de nos test.\\
+    NFSv4 supporte les protocoles de transports TCP (par défaut) et RDMA, ce qui augmente la fiabilité. Nous utiliserons donc cette version NFS dans l'ensemble de nos test.\\\\
+Au delà des évolutions entre les versions 3 et 4 du protocole, c'est la cohérence du système de nommage qui distingue la version 4 du système de fichiers réseau. Il s'agit de garantir qu'un objet (fichier ou répertoire) est représenté de la même manière sur un serveur et sur ses clients.
     
     \section{Mise en place}
-    
-    Dans cette configuration nous partageons un répertoire /tmp sur un serveur à plusieurs clients. Utilisant une image de Debian Squeeze,
-    les paquets nfs-common et nfs-kernel-server sont directement disponible dans les dépôts. Il faut ensuite ajouter la ligne suivante dans
-    le fichier /etc/exports :
+Le rôle du serveur NFS est de mettre à disposition sur le réseau une partie de son arborescence locale de système de fichiers. On parle d'\og exportation\fg.\\
+Il existe plusieurs implémentations libres de serveur NFS. On se limite ici à l'utilisation du logiciel lié au noyau Linux.\\
+Dans cette configuration nous traitons de l'installation d'un serveur NFS en version 4 dont le but est d'exporter le contenu d'un répertoire /tmp vers les clients.
+Utilisant une image de Debian Squeeze, On recherche dans la liste des paquets disponibles, ceux dont le nom débute par 'nfs'.
+\begin{lstlisting}
+# aptitude search ?name"(^nfs)"
+v   nfs-client         -
+i   nfs-common         - NFS support files common to client and server
+i   nfs-kernel-server - support for NFS kernel server
+v   nfs-server         -
+p   nfs4-acl-tools     - Commandline and GUI ACL utilities for the NFSv4 client
+p   nfswatch           - Program to monitor NFS traffic for the console
+	  \end{lstlisting}
+Dans la liste ci-dessus, on identifie les paquets nfs-common et nfs-kernel-server qui correspond bien aux fonctions souhaité pour le client et le serveur NFS.
+En exploitant la documentation \href{https://wiki.linux-nfs.org/wiki/index.php/Nfsv4_configuration_fr}{Nfsv4 configuration} et l'exemple donné dans le fichier de configuration, on applique la configuration suivante dans le fichier /etc/exports :
     \begin{lstlisting}
 	    /tmp *.nancy.grid5000.fr(rw,fsid=0,insecure,subtree_check)
 	  \end{lstlisting}
-	  Dans cette ligne le répertoire est partagé pour le domaine nancy.grid5000.fr. Cette manipulation n'est pas dutout sécurisé ! Puisque toutes
-	  les machines déployées sur la plateforme de Nancy peuvent accéder au répertoire.\\
-	  \textbf{rw }: autorise l'accès en lecture et écriture;\\
-	  \textbf{fsid=0} : cette option est propre à NFSv4. Elle indique le point de partage racine. Ce qui permet de monter des partages en fonction d'une  
-	  racine virtuelle.\\
+Pour les besoins de ces travaux pratiques, les fonctions de sécurité Kerberos ne sont pas utilisées. On utilise l'appartenance au domaine nancy.grid5000.fr comme critère de contrôle d'accès ; ce qui correspond à un niveau de sécurité faible, puisque toutes les machines déployées sur la plateforme de Nancy peuvent accéder au répertoire.\\
+	  \textbf{rw }: autorise les requêtes en lecture et écriture;\\
+	  \textbf{fsid=0} : (fsid=root ou fsid=0) cette option est propre à NFSv4. Elle permet de définir le point de partage racine. Ce qui permet de monter des partages en fonction d'une racine virtuelle.\\
 	  \textbf{insecure} : l'option insecure permet l'accès aux clients dont l'implémentation NFS n'utilisent pas un port réservé.\\
 	  \textbf{subtree\_check} : permet de limiter l'accès exclusivement au répertoire partager.\\
 	  
-	  Après la modification de ce fichier, il suffit de redémarrer le service, puis de monter les clients sur le répertoire partager à l'aide de la 
-	  commande suivante :\\
+	  Après la modification de ce fichier, il suffit de redémarrer le service, puis de monter les clients sur le répertoire partager à l'aide de la commande suivante :\\
 	  \begin{lstlisting}
 	    mount serveur:/ -t nfs4 /tmp/partage
 	  \end{lstlisting}
 	  Afin d'utiliser la version 4 de NFS, il est nécessaire de le spécifier dans le type lors du montage.\\
+Depuis le serveur, la commande exportfs est chargée de la gestion de la liste des systèmes de fichiers partagés. L'exécution de cette commande sans argument affiche la liste des répertoires exportés.
+Ainsi on peut vérifier que les directives données dans le fichier /etc/exports sont effectivement appliquées.
+Sur le client, nous avons le programme appelé showmount associé à l'option -e.
+
 	  \chapter{Fuse}
-    FUSE est un logiciel libre signifiant << Filesystem in Userspace >>. Il s'agit d'un module, disponible pour les kernels 2.4 et 2.6, grâce auquel 
+    FUSE est un logiciel libre signifiant \og Filesystem in Userspace\fg. Il s'agit d'un module, disponible pour les kernels 2.4 et 2.6, grâce auquel 
     il est possible d'implémenter toutes les fonctionnalités d'un système de fichier dans un espace utilisateur. Ces fonctionnalités incluent :\\
-   • une API de librairie simple ;\\
-   • une installation simple (pas besoin de patcher ou recompiler le noyau) ;\\
-   • une implémentation sécurisée ;\\
-   • utilisable dans l'espace utilisateur.\\\\
-    Pour pouvoir monter un système de fichier, il faut être administrateur à moins que les informations de montage est été renseignées le fichier 
-    /etc/fstab.\\
+	\begin{itemize}
+		\item une API de librairie simple ;
+		\item une installation simple (pas besoin de patcher ou recompiler le noyau) ;
+		\item une implémentation sécurisée ;
+		\item utilisable dans l'espace utilisateur.\\
+   \end{itemize}
+
+    Pour pouvoir monter un système de fichier, il faut être administrateur à moins que les informations de montage aient été renseignées sur le fichier /etc/fstab.\\
     FUSE permet à un utilisateur de monter lui-même un système de fichier. Pour profiter de FUSE, il faut des programmes qui exploitent sa bibliothèque
     et  ces programmes sont nombreux.\\
     http://fuse.sourceforge.net\\\\
@@ -271,14 +291,15 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
     \begin{lstlisting}
 	  apt-get install fuse-utils libfuse2
 	  \end{lstlisting}
-    Avant de pouvoir utiliser ce paquet, il faut charger le module « fuse » en mémoire :\\
+    Avant de pouvoir utiliser ce paquet, il faut charger le module \og fuse\fg~ en mémoire :\\
     \begin{lstlisting}
 	  modprobe fuse
 	  \end{lstlisting}
-    Pour charger le module automatiquement à chaque démarrage de l’ordinateur, il faut ajouter « fuse » dans le fichier « /etc/modules »\\
+    Pour charger le module automatiquement à chaque démarrage de l'ordinateur, il faut ajouter \og fuse \fg~ dans le fichier \og /etc/modules \fg.\\
     \begin{lstlisting}
 	 nano /etc/modules
 	 \end{lstlisting}
+
 	\chapter{GlusterFs, véritable serveur d'archivage.}
 		\section{Présentation}
 
@@ -289,21 +310,23 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		\end{figure}
 
 GlusterFS est un système de fichiers distribués libre (gpl v.3), à la fois très simple à mettre en œuvre et dont les capacités de stockage peuvent monter jusqu'à plusieurs petabytes (1,000 milliards octets).\\
-GlusterFS est composé de deux éléments logiciels: un serveur et un client.\\
-GlusterFS supporte plusieurs protocoles de communication tels TCP/IP, InfiniBand RDMA.\\
+GlusterFS est composé de deux éléments logiciels : un serveur et un client.\\
+GlusterFS supporte plusieurs protocoles de communication tels que TCP/IP, InfiniBand RDMA.\\
 
-Les serveurs de stockage gèrent la réplication des données stockées dans le volume distribué, permettant une reprise rapide du service en cas d'indisponibilitéé de l'un des n\oe uds. \\
+Les serveurs de stockage gèrent la réplication des données stockées dans le volume distribué, permettant une reprise rapide du service en cas d'indisponibilité de l'un des n\oe uds. \\
 Les clients reposent sur Fuse pour monter localement l'espace de stockage fusionné, donc facilement administrable.\\
 Le nombre de serveur et le nombre de clients ne sont pas limité.\\\\
 Le fonctionnement de Glusterfs est très modulaire et peut être configuré pour assurer:\\
-   • fusionner l'espace de tous les nœuds,\\
-   • une redondance des données,\\
-   • découper les gros fichiers en tronçons plus petits qui seront répartis sur différents serveurs de stockage (stripping),\\
-   • fonctionner malgré la perte d'un ou plusieurs nœuds de stockage qui seront automatiquement réintégrée dans le cluster et resynchronisés dès qu'ils seront de nouveau actifs \dots \\
+	\begin{itemize}
+		\item fusionner l'espace de tous les nœuds,
+		\item une redondance des données,
+		\item découper les gros fichiers en tronçons plus petits qui seront répartis sur différents serveurs de stockage (stripping),
+		\item fonctionner malgré la perte d'un ou plusieurs nœuds de stockage qui seront automatiquement réintégrée dans le cluster et resynchronisés dès qu'ils seront de nouveau actifs \dots \\
+	\end{itemize}
 \textbf{Installation de GlusterFS}\\\\
-Pour vous présenter la méthodologie d'installation des deux parties Serveur et Client, je vais réaliser la plus simple architecture, à savoir deux serveurs qui abriterons le volume distribué et le montage de celle-ci par une machine cliente.\\
-La distribution choisie est une debian Squeeze pour l'ensemble de la maquette, et le choix des paquets Glusterfs-server et glusterfs-client en version 3.1.2 officiellement stable.\\\\
-Actuellement, l'ajout des dépots Sid est obligatoire pour pouvoir accès à cette version de Gluster.\\
+Pour vous présenter la méthodologie d'installation des deux parties Serveur et Client, nous allons réaliser la plus simple architecture, à savoir deux serveurs qui abriterons le volume distribué et le montage de celle-ci par une machine cliente.\\
+La distribution choisie est une Debian Squeeze pour l'ensemble de la maquette, et le choix des paquets glusterfs-server et glusterfs-client en version 3.1.2 officiellement stable.\\\\
+Actuellement, l'ajout du dépôt Sid\footnote{Version de Debian \og instalble\fg~, en développement} est obligatoire pour pouvoir accès à cette version de Gluster.\\\\
 \textbf{Installation de GlusterFS Serveur}\\\\
 Actualisez le contenu du catalogue de paquets, installez le module serveur sur les deux machines.
 \begin{lstlisting}
@@ -318,63 +341,77 @@ Le montage du volume sera réalisé dans /sharespace, créons ce répertoire mai
 \begin{lstlisting}
 mkdir sharespace
 	  \end{lstlisting}
-La génération des fichiers de configuration s'éffecturons à partir de notre première serveur grâce à la commande glusterfs-volgen.\\
-J'oubli de vous fournir les ip que nous allons utiliser pour une meilleur compréhension.\\
-Ip serveurs : 172.16.65.91 et 172.16.65.92\\
-Ip cliente :  172.16.65.90\\  
+La génération des fichiers de configuration s'effectuera à partir de notre premier serveur grâce à la commande glusterfs-volgen.\\
+Voila les ip que nous allons utiliser pour une meilleur compréhension :
+	\begin{itemize}
+		\item Ip serveurs : 172.16.65.91 et 172.16.65.92
+		\item Ip cliente :  172.16.65.90\\  
+	\end{itemize}
 \begin{lstlisting}
 glusterfs-volgen --name mystore 172.16.65.92:/sharespace 172.16.65.91:/sharespace
 	  \end{lstlisting}
-Retour serveur
+Retour de serveur :
 \begin{lstlisting}
 Generating server volfiles.. for server '172.16.65.92'
 Generating server volfiles.. for server '172.16.65.91'
 Generating client volfiles.. for transport 'tcp'
 	  \end{lstlisting}
-Vous pouvez constater que la méthode de transport par défaut est le protocol TCP.\\
+Vous pouvez constater que la méthode de transport par défaut est le protocole TCP.\\
 En cas d'infrastructure équipé de l'InfiniBand (bus à haut débit), nous aurions pu le définir à cette étape par le biais de l'option t ib-verbs, sans oublier d'installer les librairies nécessaires. Nous aurions eu :\\
 \begin{lstlisting}
 apt-get install libibverbs1 librdmacm1
 glusterfs-volgen --name mystore -t ib-verbs 172.16.65.92:/sharespace 172.16.65.91:/sharespace
 	  \end{lstlisting}
-La commande glusterfs-volgen vous a généré les fichiers de configuration pour les serveurs et le client. Chaque fichier porte le ip de la machine conserné dans son nom, nous allons les exporter dans leur répertoire d'exploitation et les renommer pour les rendre exécutable.
+La commande glusterfs-volgen génère les fichiers de configuration pour les serveurs et le client. Chaque fichier porte l'ip de la machine concerné dans son nom, nous allons les exporter dans leur répertoire d'exploitation et les renommer pour les qu'il soient pris en compte.
 \begin{lstlisting}
 cp 172.16.65.91-mystore-export.vol /etc/glusterfs/glusterfsd.vol
 pour le second serveur
 scp 172.16.65.92-mystore-export.vol serveur2:/etc/glusterfs/glusterfsd.vol
-	  \end{lstlisting}  
+	  \end{lstlisting}
+
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
 		\section{Présentation}
 
-			\subsection{Présentation générale}
-				% deux partie présentation ? Présentation générale, Présentation technique ?
-				\begin{figure}[H]
-					\begin{center}
-						\includegraphics[width=0.15\linewidth]{images/moosefs.png}
-					\end{center}
-				\end{figure}
-		
-				%MooseFS (Moose File System), un système de fichiers distribué. % enlever cette phrase ?
+			\begin{figure}[H]
+				\begin{center}
+					\includegraphics[width=0.15\linewidth]{images/moosefs.png}
+				\end{center}
+			\end{figure}
+	
+			%MooseFS (Moose File System), un système de fichiers distribué. % enlever cette phrase ?
 				
-MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne, c’est à dire résistant aux pannes d’un ou plusieurs noeuds de stockage. Développé par Gemius SA. Le code préalablement propriétaire a été libéré et mis à disposition publiquement le 5 mai 2008 sous licence GPLv3. Disponible pour Linux, FreeBSD, OpenSolaris et MacOS X.\\
-Les développeurs sont réactifs et suivent de très près la liste de diffusion et les remontés de bugs de leurs utilisateurs.\\
-Il permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs. 
-Les fichiers sont découpés en morceaux (appelés chunks) puis répartis sur les différents chunkservers (noeuds de stockage) : selon le paramétrage voulu pour ces fichiers, ou pour le répertoire dans lequel ils se trouvent, chaque chunk sera répliqué sur x noeuds (différents).\\
-Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique sur un serveur. L'atout principal de MooseFS, au-delà du fait qu'il s’agisse d’un logiciel libre, est sa simplicité d'administration et sa de mise en œuvre.\\\\
-				% plus simple à mettre en place que les autres ?
-D'autres qualités sont à son actif: \\\\
-Le respect de la norme Posix.\\
-L'utilisation de Fuse en espace client.\\
-La mise à disposition d'une poubelle automatique à durée de rétention modifiable à souhait.\\
-Une commande unique « mfssetgoal », à chaud pour le choix du nombre de répliquas, par fichier ou par répertoire.\\
-Disponibilité des données ou tolérance aux pannes en cas de réplication positionné à plus de 1 pour les données rendra transparent la perte d'un chunkserver au détriment d'un coût en matière de place.\\ 
-Simplicité de l'extension de l'espace de stockage à chaud quelque soit la configuration, comprenant la ré-indexation et la répartition des données vers ces nouveaux espaces sans vous deviez intervenir (cela peut prendre plusieurs heures).  \\
-Le système est réparti: les fichiers supérieurs à 64Mo sont découpés en paquets de 64Mio et distribués sur les différents serveurs de données dit « chunkserver ».\\
-			\subsection{Aspect technique}
+			MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne,
+			c’est à dire résistant aux pannes d’un ou plusieurs nœuds de stockage.
+			Développé par Gemius SA. Le code préalablement propriétaire a été libéré et mis à disposition publiquement le 5 mai 2008
+			sous licence GPLv3. Disponible pour Linux, FreeBSD, OpenSolaris et MacOS X.\\
+			Les développeurs sont réactifs et suivent de très près la liste de diffusion et les remontés de bugs de leurs utilisateurs.
+
+			MooseFS permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs. 
+			Les fichiers sont découpés en morceaux (appelés chunks) puis répartis sur les différents chunkservers (nœuds de stockage) :
+			selon le paramétrage voulu pour ces fichiers, ou pour le répertoire dans lequel ils se trouvent,
+			chaque chunk sera répliqué sur x noeuds (différents).\\
+			Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique
+			sur un serveur. L'atout principal de MooseFS, au-delà du fait qu'il s’agisse d’un logiciel libre,
+			est sa simplicité d'administration et sa de mise en œuvre.\\\\
+			% plus simple à mettre en place que les autres ?
+			D'autres qualités sont à son actif: \\\\
+			Le respect de la norme Posix.\\
+			L'utilisation de Fuse en espace client.\\
+			La mise à disposition d'une poubelle automatique à durée de rétention modifiable à souhait.\\
+			Une commande unique « mfssetgoal », à chaud pour le choix du nombre de répliquas, par fichier ou par répertoire.\\
+			Disponibilité des données ou tolérance aux pannes en cas de réplication positionné à plus de 1 pour les données
+			rendra transparent la perte d'un chunkserver au détriment d'un coût en matière de place.\\ 
+			Simplicité de l'extension de l'espace de stockage à chaud quelque soit la configuration,
+			comprenant la ré-indexation et la répartition des données vers ces nouveaux espaces sans vous deviez intervenir
+			(cela peut prendre plusieurs heures).  \\
+			Le système est réparti: les fichiers supérieurs à 64Mo sont découpés en paquets de 64Mio et distribués
+			sur les différents serveurs de données dit « chunkserver ».\\
+			\section{Aspect technique}
 				
-Les montage du système de fichiers par les clients se fait à l'aide de FUSE. MooseFS est constitué de trois types de serveurs :
+				Les montage du système de fichiers par les clients se fait à l'aide de FUSE.
+				MooseFS est constitué de trois types de serveurs :
 
 				\begin{enumerate}
 					\item Un serveur de métadonnées (MDS)
@@ -396,16 +433,16 @@ Les montage du système de fichiers par les clients se fait à l'aide de FUSE. M
 		\section{Mise en place}
 			\subsection{Environnement logiciel}
 
-Le système utilisé est une Debian Squeeze. MooseFs ne faisant pas partie des dépôts de la distribution, nous avons compilé le paquet à partir des sources dans la derniéres version disponible (1.6.20) sur le site officiel.\\
+Le système utilisé est une Debian Squeeze. MooseFs ne faisant pas partie des dépôts de la distribution, nous avons compilé le paquet à partir des sources dans la dernière version disponible (1.6.20) sur le site officiel.\\
 \href{http://pro.hit.gemius.pl/hitredir/id=0sWa0S8ft4sTAHF1bGAAEZPcP3ziyq7f9SdhoQf7oeT.c7/url=moosefs.org/tl\_files/mfscode/mfs-1.6.20-2.tar.gz}{http://www.moosefs.org/download.html} \\
-Méthodologie installation pour la mise en oeuvre dès différents serveurs ou services sur des machines dédiées :\\\\
-Commencons par \textbf{l'installation d'un Master serveur}\\\\
-Récupérer l'archive sur le site de moosefs et décompresser la dans le répertoire /usr/src/,\\ tar zxvf mfs-1.6.20-2.tar.gz\\
+Méthodologie installation pour la mise en œuvre des différents serveurs ou services sur des machines dédiées :\\\\
+Commençons par \textbf{l'installation d'un Master serveur}\\\\
+Récupérons l'archive sur le site de MooseFs et décompressons la dans le répertoire /usr/src/,\\ tar zxvf mfs-1.6.20-2.tar.gz\\
 Pour des questions d'isolement nous créons un utilisateur et un groupe pour faire tourner le futur service.\\
 \begin{lstlisting}
 	  groupadd mfs;useradd mfs -s /sbin/nologin
 	  \end{lstlisting}
-Positionnez vous dans le répertoire de l'archive, cd /usr/src/mfs-1.6.20-2\\
+Positionnons nous dans le répertoire de l'archive, cd /usr/src/mfs-1.6.20-2\\
 Nous compilons avec la prise en compte de notre nouveau utilisateur et nous désactivons les services non nécessaire à notre master.
 Désactivation du service mfschunck (stockage de données) et mfsmount (montage côté client)
 \begin{lstlisting}
@@ -414,19 +451,19 @@ Désactivation du service mfschunck (stockage de données) et mfsmount (montage 
 \begin{lstlisting}
 	   make;make install
 	  \end{lstlisting}
-Nous recopions les fichiers examples du répertoire /etc pour la configuration du service au nombre de trois:
+Nous recopions les fichiers exemples du répertoire /etc pour la configuration du service, au nombre de trois:
 \begin{lstlisting}
 cd /etc
 cp mfsmaster.cfg.dist mfsmaster.cfg
 cp mfsmetalogger.cfg.dist mfsmetalogger.cfg
 cp mfsexports.cfg.dist mfsexports.cfg
 	  \end{lstlisting}
-Si vous ne modifiez pas ces fichiers, les directives par défaut seront alors applique.
-Pour information toutes les directives sont très bien documenté dans le man (exp: man mfsmaster.cfg).\\
-Nous ne toucherons au fichier mfsmaster.cfg, celui-ci défini les principaux arrangements du serveur.
-Nous adaptons la configuration du fichier mfsexports.cfg qui permet de fixer la plage d'ip ou les ordinateurs qui pourrons monter le système de fichiers et de convenir des privilèges.
-La première ligne non commenté nous interessent, nous remplacons l'astérisque (*) en spécifions la plage IP et son masque que nous allons employer pour notre maquette.
-Cela aura pour effet de donner accès à toutes les machines de cette plage d'ip de pouvoir disposé de la totalité de la structure en mode lecture écriture.\\
+Si nous ne modifions pas ces fichiers, les directives par défaut seront alors appliquées.
+Pour information toutes les directives sont très bien documenté dans le page de man (exp: man mfsmaster.cfg).\\
+Nous ne toucherons pas au fichier mfsmaster.cfg, celui-ci défini les principaux arrangements du serveur.
+Nous adaptons la configuration du fichier mfsexports.cfg qui permet de fixer la plage d'IP ou les ordinateurs qui pourrons monter le système de fichiers et de convenir des privilèges.
+La première ligne non commenté nous intéresse, nous remplaçons l'astérisque (*) en spécifions la plage IP et son masque que nous allons employer pour notre maquette.
+Cela aura pour effet de donner accès à toutes les machines de cette plage d'IP à la totalité de la structure en mode lecture écriture.\\
 Exemple de la ligne modifié :
 \begin{lstlisting}
 	  192.168.2.0/24 / rw,alldirs,maproot=0
@@ -437,7 +474,7 @@ Nous allons changer cela:
 cd /var/lib/mfs
 cp metadata.mfs.empty metadata.mfs
 	  \end{lstlisting}
-Avant le démarrage du service nous devons pensez à la résolution de nom du serveur. Renseigné votre serveur dns, nous ici nous renseignerons notre fichier hosts.
+Avant le démarrage du service nous devons penser à la résolution de nom du serveur. Renseigné votre DNS\footnote{Domaine Name Serveur : serveur de noms}, nous renseignons dans notre fichier hosts.
 A titre d'exemple:
   \begin{lstlisting}
 192.168.1.1 mfsmaster
@@ -446,17 +483,17 @@ A ce stade nous pouvons démarrer le master serveur, le service démarrera avec 
   \begin{lstlisting}
 usr/sbin/mfsmaster start
 	  \end{lstlisting}
-En cas de mise en production pensez à modifier votre configue pour un démarrage automique du service lors des lancements de votre serveur.
+En cas de mise en production pensez à modifier votre configuration pour un démarrage automatique du service lors des lancements de votre serveur.
 
-Pour conclure cette section, un mode graphique en cgi est disponible pour suivre l'état de fonctionnement du système, disponible sous votre navigateur à l'adresse http://IP\_Master\_Server:9425
+Pour conclure cette section, un mode graphique en cgi\footnote{Common Gateway Interface : interface utilisée par les serveurs HTTP} est disponible pour suivre l'état de fonctionnement du système, disponible sous votre navigateur à l'adresse http://IP\_Master\_Server:9425
   \begin{lstlisting}
 /usr/sbin/mfscgiserv
 	  \end{lstlisting}
-Remarque: le contenu sera vide tant que les serveurs de données ne seront démarré.\\\\
+Remarque: le contenu sera vide tant que les serveurs de données ne seront pas démarrés.\\\\
 				% avec options différentes suivant les serveurs, clients (cf tuto site officiel)
 \textbf{Installation du Serveur de Backup Metalogger.}\\\\
-Le principe de ce serveur est la récuperation tous les événements du système de fichier et peut permettre, si le maître est vraiment mal en point (perte de ses metadada, ou de son historique), de lui faire rejouer les logs pour que le volume reste cohérent.\\
-Cette solution repose sur le protocole Carp << Common Address Redundancy Protocol >>, permet d'admettre à un groupe d'hôtes sur le même segment réseau (ici mfsmaster et mfsmetalogger) de partager même adresse IP (un maître et un esclave). 
+Le principe de ce serveur est la de récupérer tous les événements du système de fichier et peut permettre, si le maître est vraiment mal en point (perte de ses metadada, ou de son historique), de lui faire rejouer les logs pour que le volume reste cohérent.\\
+Cette solution repose sur le protocole Carp \og Common Address Redundancy Protocol\fg, permet d'admettre à un groupe d'hôtes sur le même segment réseau (ici mfsmaster et mfsmetalogger) de partager même adresse IP (un maître et un esclave). 
 La méthodologie d'installation est similaire au master serveur.\\
 Voici les commandes à suivre :\\
   \begin{lstlisting}
@@ -497,18 +534,18 @@ cp mfschunkserver.cfg.dist mfschunkserver.cfg
 cp mfshdd.cfg.dist mfshdd.cfg
 	  \end{lstlisting}
 Les directives du fichier mfshdd.cfg signalent les emplacements des unités de disque dur que l'on souhaite employer.\\\\
-Exemple de mise en oeuvre pour deux emplacements:\\
-Ajouter les deux lignes dans le fichier mfshdd.cfg.\\
+Exemple de mise en œuvre pour deux emplacements :\\
+Ajoutons les deux lignes suivantes dans le fichier mfshdd.cfg.\\
 /mnt/mfschunks1\\
 /mnt/mfschunks2\\
-Positionons les droits d'écriture nécessaire pour la création des dossiers de .lock :\\
+Positionnons les droits d'écriture nécessaire pour la création des dossiers de .lock :\\
   \begin{lstlisting}
 mkdir /mnt/mfschunks1
 mkdir /mnt/mfschunks2
 chown -R mfs:mfs /mnt/mfschunks1
 chown -R mfs:mfs /mnt/mfschunks2
 	  \end{lstlisting}
-Si vous ne souhaitez pas utiliser la totalité de l'espace libre de vos disques, je vous propose une autre méthode permettant de contrôler le volume disque.\\
+Si nous ne souhaitons pas utiliser la totalité de l'espace libre de vos disques, nous pouvons utiliser une autre méthode permettant de contrôler le volume disque.\\
 Création et formatage d'un volume de deux gigas et d'un formatage en ext3.\\
   \begin{lstlisting}
 dd if=/dev/zero of=disk1 bs=1024 count=1 seek=$((2*1024*1024-1))
@@ -516,7 +553,7 @@ dd if=/dev/zero of=disk2 bs=1024 count=1 seek=$((2*1024*1024-1))
 mkfs -t ext3 disk1
 mkfs -t ext3 disk2
 	  \end{lstlisting}
-On monte nos nouveaux disques, sans oublié les droits d'écriture.\\
+Nous montons nos nouveaux disques, sans oublier les droits d'écriture.\\
   \begin{lstlisting}
 mkdir /mnt/hd1
 mkdir /mnt/hd2
@@ -525,13 +562,13 @@ mount -t ext3 -o loop disk2 hd2
 chown -R mfs:mfs /mnt/hd1
 chown -R mfs:mfs /mnt/hd2
 	  \end{lstlisting}
-On informe le fichier /etc/hosts de la présence du master serveur : 192.168.1.1 mfsmaster\\
+Nous informons le fichier /etc/hosts de la présence du master serveur : 192.168.1.1 mfsmaster\\
 Il est prêt à être démarrer:
   \begin{lstlisting}
 /usr/sbin/mfschunkserver start
 	  \end{lstlisting}
 \textbf{Installation d'un Poste Client.}\\\\
-Afin de monter le système de fichiers basé sur Fuse, le paquet doit être égal ou supérieur à 2.7.2\\
+Afin de monter le système de fichiers basé sur Fuse, la version du paquet doit être égal ou supérieur à 2.7.2\\
 \href{http://sourceforge.net/projects/fuse/}{http://sourceforge.net/projects/fuse/} \\
 Compilation de Fuse et chargement du module du noyau linux.\\
   \begin{lstlisting}
@@ -548,14 +585,14 @@ cd mfs-1.6.20-2
 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var/lib --with-default-user=mfs --with-default-group=mfs --disable-mfsmaster --disable-mfschunkserver
 make;make install
 	  \end{lstlisting}
-On annonce le master serveur au fichier /etc/hosts : 192.168.1.1   mfsmaster\\
+Nous annonçons le master serveur au fichier /etc/hosts : 192.168.1.1   mfsmaster\\
 Supposons que nous souhaitons monter le système dans le dossier /mnt/mfs notre machine de cliente.\\
   \begin{lstlisting}
 mkdir -p /mnt/mfs
 chown -R mfs:mfs /mnt/mfs
 /usr/bin/mfsmount /mnt/mfs -H mfsmaster
 	  \end{lstlisting}
-Nous pouvons vérifier l'espace occupé par les systèmes de fichiers avec la commande DF, option H améliora la lisibilité.\\
+Nous pouvons vérifier l'espace occupé par les systèmes de fichiers avec la commande df, option h améliora la lisibilité.\\
 exemple : df -h | grep mfs\\
   \begin{lstlisting}
 /storage/mfschunks/mfschunks1
@@ -572,8 +609,8 @@ chown -R mfs:mfs /mnt/mfsmeta
 mfsmount -m /mnt/mfsmeta
 	  \end{lstlisting}
 Le temps est indiqué en secondes (valeurs utiles : 1 heure égal à 3600 secondes, 24h = 86400 secondes, 1 semaine = 604800 secondes).\\
-Si vous définisez la valeur à 0 cela signifira une suppréssion immédiate du dossier et sa récupération ne sera plus possible. \\
-Positionner la rétention désiré pour la corbeille mfssettrashtime (option r permet la récurcivité sur les répertoire) et vérifier la rétention appliqué mfsgettrashtime:
+Si nous définissons la valeur à 0 cela signifie une suppression immédiate du dossier et sa récupération ne sera plus possible. \\
+Positionnons la rétention désiré pour la corbeille mfssettrashtime (option r permet la récursivité sur les répertoires) et vérifions la rétention appliqué mfsgettrashtime:
 \begin{lstlisting}
 mfsgettrashtime -r /mnt/mfs-test/test2
 /mnt/mfs-test/test2:
@@ -591,7 +628,7 @@ mfsgettrashtime -r /mnt/mfs-test/test2
 files with trashtime 1209600 : 36
 directories with trashtime 1209600 : 1
 	  \end{lstlisting}
-Définir le nombre de copie que l'on désir par répertoire avec mfssetgoal –r :
+Définissons le nombre de copies que l'on désir par répertoire avec le commande mfssetgoal –r :
 \begin{lstlisting}
  mfssetgoal -r 1 /mnt/mfs/folder1
 /mnt/mfs/folder1:
@@ -608,7 +645,7 @@ mfssetgoal -r 2 /mnt/mfs/folder2
  inodes with goal not changed:    1
  inodes with permission denied:   0
 	  \end{lstlisting}
-Vérifier la redonnance avec la fonction mfsgetgoal:
+Vérifions la redondance avec la fonction mfsgetgoal:
 \begin{lstlisting}
 mfsgetgoal /mnt/mfs/folder1
 /mnt/mfs/folder1: 1
@@ -637,7 +674,7 @@ Testons le positionnement:
 cp /usr/src/mfs-1.6.20-2.tar.gz /mnt/mfs/folder1
 cp /usr/src/mfs-1.6.20-2.tar.gz /mnt/mfs/folder2
 	  \end{lstlisting}
-La commande mfscheckfile est employée pour la vérification du nombre de copie :
+La commande mfscheckfile est employée pour la vérification du nombre de copies :
 \begin{lstlisting}
 mfscheckfile /mnt/mfs/folder1/mfs-1.6.20-2.tar.gz
 /mnt/mfs/folder1/mfs-1.6.20-2.tar.gz:
@@ -647,7 +684,7 @@ mfscheckfile /mnt/mfs/folder2/mfs-1.6.20-2.tar.gz
 /mnt/mfs/folder2/mfs-1.6.20-2.tar.gz:
 2 copies: 1 chunks
 	  \end{lstlisting}
-Résumé du contenu de l'arbre entier du file systeme peut être appelé avec la commande mfsdirinfo :
+Le résumé du contenu de l'arbre entier du file systeme peut être appelé avec la commande mfsdirinfo :
 \begin{lstlisting}
 mfsdirinfo /mnt/mfs/folder1/:
 inodes: 15
@@ -671,6 +708,7 @@ umount /mnt/mfs)
 %	\caption{MooseFs Read Process}
 %	\label{identifiant test}
 %\end{figure} 
+
 	\chapter{Ceph}
 		\section{Présentation}
 
@@ -726,41 +764,41 @@ umount /mnt/mfs)
 		\chapter{Scripts}
 			\section{GlusterFs}
 				Fichier deploimentGluster.rb :
-				\lstinputlisting[language=Ruby]{../glusterFs/deploiementGluster.rb}
+				\lstinputlisting[language=Ruby,numbers=left]{../glusterFs/deploiementGluster.rb}
 				% autre fichier (améliorer le script)
 			\section{MooseFs}
 			\section{Ceph}
 				Fichier deploimentCeph.rb :
-				\lstinputlisting[language=Ruby]{../cephFS/deploiementCeph.rb}
+				\lstinputlisting[language=Ruby,numbers=left]{../cephFS/deploiementCeph.rb}
 			\section{NFS}
 				Fichier deploimentNFS.rb :
-				\lstinputlisting[language=Ruby]{../NFS/deploiementNFS.rb}
+				\lstinputlisting[language=Ruby,numbers=left]{../NFS/deploiementNFS.rb}
 			\section{Benchmark}
 				Fichier benchmark.rb :
-				\lstinputlisting[language=Ruby]{../benchmark/benchmark.rb}
+				\lstinputlisting[language=Ruby,numbers=left]{../benchmark/benchmark.rb}
 
 				Fichier writingSmallFiles.sh :
-				\lstinputlisting[language=Bash]{../benchmark/writingSmallFiles.sh}
+				\lstinputlisting[language=Bash,numbers=left]{../benchmark/writingSmallFiles.sh}
 
 				Fichier writingBigFiles.sh :
-				\lstinputlisting[language=Bash]{../benchmark/writingBigFiles.sh}
+				\lstinputlisting[language=Bash,numbers=left]{../benchmark/writingBigFiles.sh}
 
 				Fichier readingSmallFiles.sh :
-				\lstinputlisting[language=Bash]{../benchmark/readingSmallFiles.sh}
+				\lstinputlisting[language=Bash,numbers=left]{../benchmark/readingSmallFiles.sh}
 
 				Fichier readingBigFile.sh :
-				\lstinputlisting[language=Bash]{../benchmark/readingBigFile.sh}
+				\lstinputlisting[language=Bash, numbers=left]{../benchmark/readingBigFile.sh}
 			\section{Meta scripts}
 				Fichier meta\_NFS.sh :
-				\lstinputlisting[language=Bash]{../metascript/meta_NFS.sh}
+				\lstinputlisting[language=Bash,numbers=left]{../metascript/meta_NFS.sh}
 
 				Fichier meta\_gluster.sh :
-				\lstinputlisting[language=Bash]{../metascript/meta_gluster.sh}
+				\lstinputlisting[language=Bash,numbers=left]{../metascript/meta_gluster.sh}
 
 				Fichier meta\_ceph.sh :
-				\lstinputlisting[language=Bash]{../metascript/meta_ceph.sh}
+				\lstinputlisting[language=Bash,numbers=left]{../metascript/meta_ceph.sh}
 
 				Fichier meta\_moose.sh :
-				\lstinputlisting[language=Bash]{../metascript/meta_moose.sh}
+				\lstinputlisting[language=Bash,numbers=left]{../metascript/meta_moose.sh}
 \end{document}
 
