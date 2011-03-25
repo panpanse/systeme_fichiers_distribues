@@ -327,14 +327,33 @@ Le fonctionnement de Glusterfs est très modulaire et peut être configuré pour
 Pour vous présenter la méthodologie d'installation des deux parties Serveur et Client, nous allons réaliser la plus simple architecture, à savoir deux serveurs qui abriterons le volume distribué et le montage de celle-ci par une machine cliente.\\
 La distribution choisie est une Debian Squeeze pour l'ensemble de la maquette, et le choix des paquets glusterfs-server et glusterfs-client en version 3.1.2 officiellement stable.\\\\
 Actuellement, l'ajout du dépôt Sid\footnote{Version de Debian \og instalble\fg~, en développement} est obligatoire pour pouvoir accès à cette version de Gluster.\\\\
+Modification du fichier /etc/apt/sources.list pour l'ajout des dépôts de Debian Sid, suivi de la gestion des priorités /etc/apt/preferences.
+\begin{lstlisting}
+Ajout des depots Sid
+deb http://ftp.fr.debian.org/debian squeeze main contrib
+deb http://security.debian.org/ squeeze/updates main contrib
+deb http://ftp.fr.debian.org/debian sid main contrib
+
+gestion des priorites
+Package: *
+Pin: release a=stable
+Pin-Priority: 700
+Package: *
+Pin: release a=unstable
+Pin-Priority: 600
+	  \end{lstlisting}
 \textbf{Installation de GlusterFS Serveur}\\\\
 Actualisez le contenu du catalogue de paquets, installez le module serveur sur les deux machines.
 \begin{lstlisting}
-apt-get update;apt-get install glusterfs-server
+aptitude update;aptitude install glusterfs-server
+Mettre a jour la librairie libglusterfs0 a partir de sid : 
+aptitude install libglusterfs0/sid
 	  \end{lstlisting}
 Choix du paquet différent pour le client.
 \begin{lstlisting}
-apt-get update;apt-get install glusterfs-client
+aptitude update;aptitude install glusterfs-client/sid
+Mettre a jour la librairie libglusterfs0 a partir de sid : 
+aptitude install libglusterfs0/sid
 	  \end{lstlisting}
 Nous passons à la configuration du volume distribué. Nous créons un volume qui sera la concaténation des deux volumes offerts par nos deux serveurs.\\
 Le montage du volume sera réalisé dans /sharespace, créons ce répertoire maintenant\\
