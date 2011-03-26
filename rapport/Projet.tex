@@ -484,7 +484,6 @@ Le module “plocks” hérite du module “posix” et y ajoute de verrous de f
 Le module “brick” hérite du module “plocks” et y ajoute un cache en lecture.\\
 Le module “brick-ns” pointe vers l'espace de stockage de l'annuaire de fichiers (”namespace”) “/mount/glusterfs-ns”.\\
 Le module “server” hérite des modules “bricks” et “brick-ns” et les publie sur le port TCP 6996 et pour le PC “localhost” uniquement.\\
-<<<<<<< HEAD
 On aurait par exemple pu ajouter un cache en écriture et un cache en lecture/écriture sur “brick-ns”.\\\\
 Il est toujours primordial de bien définir le niveau de log :
 \begin{lstlisting}
@@ -571,10 +570,6 @@ volume readahead
  subvolumes writebehind
 end-volume
 	  \end{lstlisting}
-=======
-On aurait par exemple pu ajouter un cache en écriture et un cache en lecture/écriture sur “brick-ns”.\\
-
->>>>>>> 01ca228a8f5dc95b9b76475d9209b0f517eb9a82
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
