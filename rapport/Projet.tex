@@ -358,17 +358,17 @@ aptitude install libglusterfs0/sid
 Nous passons à la configuration du volume distribué. Nous créons un volume qui sera la concaténation des deux volumes offerts par nos deux serveurs.\\
 Le montage du volume sera réalisé dans /sharespace, créons ce répertoire maintenant\\
 \begin{lstlisting}
-mkdir -p sharespace
+mkdir -p /sharespace
 	  \end{lstlisting}
 La génération des fichiers de configuration s'effectuera à partir de notre premier serveur grâce à la commande glusterfs-volgen.\\
 Voila les ip que nous allons utiliser pour une meilleur compréhension :
 	\begin{itemize}
 		\item Ip serveurs : 172.16.65.91 et 172.16.65.92
-		\item Ip cliente :  172.16.65.90\\  
+		\item Ip cliente :  172.16.65.90\\
 	\end{itemize}
 \begin{lstlisting}
 glusterfs-volgen --name mystore 172.16.65.92:/sharespace 172.16.65.91:/sharespace
-	  \end{lstlisting}
+\end{lstlisting}
 Retour de serveur :
 \begin{lstlisting}
 Generating server volfiles.. for server '172.16.65.92'
@@ -376,7 +376,7 @@ Generating server volfiles.. for server '172.16.65.91'
 Generating client volfiles.. for transport 'tcp'
 	  \end{lstlisting}
 Vous pouvez constater que la méthode de transport par défaut est le protocole TCP.\\\\
-En cas d'infrastructure équipé de l'InfiniBand (bus à haut débit), nous aurions pu le définir à cette étape par le biais de l'option t ib-verbs, sans oublier d'installer les librairies nécessaires. Nous aurions eu :\\
+En cas d'infrastructure équipé de l'InfiniBand (bus à haut débit), nous aurions pu le définir à cette étape par le biais de l'option -t ib-verbs, sans oublier d'installer les librairies nécessaires. Nous aurions eu :\\
 \begin{lstlisting}
 apt-get install libibverbs1 librdmacm1
 glusterfs-volgen --name mystore -t ib-verbs 172.16.65.92:/sharespace 172.16.65.91:/sharespace
@@ -387,8 +387,8 @@ cp 172.16.65.91-mystore-export.vol /etc/glusterfs/glusterfsd.vol
 cp mystore-tcp.vol /etc/glusterfs/glusterfs.vol
 
 pour le second serveur
-scp 172.16.65.92-mystore-export.vol serveur2:/etc/glusterfs/glusterfsd.vol
-scp mystore-tcp.vol /etc/glusterfs/glusterfs.vol
+scp 172.16.65.92-mystore-export.vol 172.16.65.92:/etc/glusterfs/glusterfsd.vol
+scp mystore-tcp.vol 172.16.65.92:/etc/glusterfs/glusterfs.vol
 	  \end{lstlisting}
 Une copie du fichier de transport ou fichier de configuration client doit être stocké par au-moins un serveur.\\
 A ce moment, vous êtes prêt à mettre en marche les services de GlusterFS sur chaque serveur :
@@ -446,7 +446,7 @@ cp test /mnt/monglusterfsvolume
 L'examinez le contenu des répertoires /mnt/monglusterfsvolume et /sharespace des deux serveurs.\\
 ls -lh /mnt/monglusterfsvolume\\
 ls -lh /sharespace\\
-Vous devriez constaté l'absence du fichier test sur l'un des noeuds, ce qui est totalement cohérent puisque la configuration par défaut de glusterfs est la mise en oeuvre de la concatenation des volumes physique et sans duplication ou réplication des données.\\
+On constate l'absence du fichier test sur l'un des noeuds, ce qui est totalement cohérent puisque la configuration par défaut de glusterfs est la mise en oeuvre de la concatenation des volumes physique et sans duplication ou réplication des données.\\
 Nous utilisons donc l'espace des deux volumes sur les serveurs et vu comme un seul par les clients.
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
@@ -483,9 +483,9 @@ Nous utilisons donc l'espace des deux volumes sur les serveurs et vu comme un se
 			Disponibilité des données ou tolérance aux pannes en cas de réplication positionné à plus de 1 pour les données
 			rendra transparent la perte d'un chunkserver au détriment d'un coût en matière de place.\\ 
 			Simplicité de l'extension de l'espace de stockage à chaud quelque soit la configuration,
-			comprenant la ré-indexation et la répartition des données vers ces nouveaux espaces sans vous deviez intervenir
+			comprenant la ré-indexation et la répartition des données vers ces nouveaux espaces avoir à intervenir
 			(cela peut prendre plusieurs heures).  \\
-			Le système est réparti: les fichiers supérieurs à 64Mo sont découpés en paquets de 64Mio et distribués
+			Le système est réparti: les fichiers supérieurs à 64Mo sont découpés en paquets de 64Mo et distribués
 			sur les différents serveurs de données dit « chunkserver ».\\
 			\section{Aspect technique}
 				
@@ -807,11 +807,11 @@ umount /mnt/mfs)
 			Nous avons réalisé un benchmark mesurant les performances (débit) de quatre type d'opérations sur le système de fichier distribué :
 			\begin{description}
 				\item[Écriture de petits fichiers :] écriture des sources du noyau linux (décompressé).
-				\item[Écriture de gros fichiers :] écriture d'un fichier de 3 Go\footnote{Fichier créé avec la commande : dd if=/dev/zero of=/lieu/voulu bs=1G count=3}.
+				\item[Écriture de gros fichiers :] écriture de trois fichiers de 1 Go\footnote{Fichier créé avec la commande : dd if=/dev/urandom of=/lieu/voulu bs=1G count=1}.
 				\item[Lecture de petits fichiers: ] lecture des fichiers du noyau linux.
 				Pour cela, nous avons compressé le dossier contenant le noyau (impliquant la lecture des fichiers),
 				en redirigeant la sortie vers /dev/nul (afin que les performances du disque ne rentrent pas en jeux).
-				\item[Lecture de gros fichiers :] lecture du fichier de 3 Go. Opération réalisé en faisant un "cat" du fichier,
+				\item[Lecture de gros fichiers :] lecture des fichiers de 1 Go. Opération réalisé en faisant un "cat" des fichier,
 				et en redirigeant la sortie vers /dev/nul afin de ne pas "polluer" le terminal.
 			\end{description}
 
@@ -839,6 +839,11 @@ umount /mnt/mfs)
 					\item Étude sur la mise en place de CephFS
 					\item Réalisation d'un script de déploiement de CephFS
 				\end{itemize}
+                        \section{Maxime Douhéret}
+                                \begin{itemize}
+                                        \item Étude sur la mise en place de GlusterFS
+                                        \item Étude sur la mise en place de CephFS
+                                        \item Aide à la réalisation des scripts de déploiement de CephFS et de benchmark
 
 		\chapter{Scripts}
 			\section{GlusterFs}
