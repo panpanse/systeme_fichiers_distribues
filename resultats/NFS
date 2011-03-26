@@ -1,0 +1,18 @@
+Benchmark sur 1 client
+ecriture de petits fichiers : 272.222749 sec : 1.75958843175153 Mo/s
+ecriture de gros fichiers : 87.600742 sec : 35.1138578255422 Mo/s
+lecture de petits fichiers : 6.696362 sec : 71.531377783937 Mo/s
+lecture de gros fichiers : 1.836099 sec : 1675.29092930174 Mo/s
+
+Benchmark sur 5 clients
+ecriture de petits fichiers : 2048.074035 sec : 1.16939132036797 Mo/s
+ecriture de gros fichiers : 406.534445 sec : 37.8319726388744 Mo/s
+lecture de petits fichiers : 16.428903 sec : 145.779666481688 Mo/s
+lecture de gros fichiers : 13.116721 sec : 1172.54914547622 Mo/s
+
+Benchmarck sur 20 clients
+ecriture de petits fichiers : 7299.541736 sec : 1.31241115490212 Mo/s
+ecriture de gros fichiers : 7200.8023 sec : 8.54349243833566 Mo/s
+lecture de petits fichiers : 18.145068 sec : 527.967158899597 Mo/s
+lecture de gros fichiers : 186.49496 sec : 329.874866323465 Mo/s
+
