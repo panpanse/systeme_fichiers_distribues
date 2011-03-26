@@ -910,7 +910,7 @@ umount /mnt/mfs)
 %	\caption{MooseFs Read Process}
 %	\label{identifiant test}
 %\end{figure} 
-
+Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par le biais d'un buffer (cache d'écriture). En conséquence, l'exécution de la requête d'écriture elle-même transfère seulement les données au buffer (cache), l'écriture réelle n'ayant donc pas lieu. Conséquence, la confirmation de la requête d'écriture ne signifie pas que les données ont été correctement écrites sur un disque. Elle est seulement invoquer et l'aboutissement passe par la commande fsync qui provoque le déchargement de toutes les données gardées en cache pour obtenir écrite physique sur le disque. Problématique en cas d'erreur avant la finalisation de cette phase, c'est un retour d'erreur de la commande fsync, voir la perte des données. 
 	\chapter{Ceph}
 		\section{Présentation}
 
