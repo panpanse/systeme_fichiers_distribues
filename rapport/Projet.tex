@@ -320,14 +320,16 @@ GlusterFS supporte plusieurs protocoles de communication tels que TCP/IP, Infini
 Les serveurs de stockage gèrent la réplication des données stockées dans le volume distribué, permettant une reprise rapide du service en cas d'indisponibilité de l'un des n\oe uds. \\
 Les clients reposent sur Fuse pour monter localement l'espace de stockage fusionné, donc facilement administrable.\\
 Le nombre de serveur et le nombre de clients ne sont pas limité.\\\\
-Le fonctionnement de Glusterfs est très modulaire et peut être configuré pour assurer:\\
+Le fonctionnement de Glusterfs est très modulaire et peut être configuré pour :\\
 	\begin{itemize}
 		\item fusionner l'espace de tous les nœuds,
-		\item une redondance des données,
+		\item assurer une redondance des données,
 		\item découper les gros fichiers en tronçons plus petits qui seront répartis sur différents serveurs de stockage (stripping),
 		\item fonctionner malgré la perte d'un ou plusieurs nœuds de stockage qui seront automatiquement réintégrée dans le cluster et resynchronisés dès qu'ils seront de nouveau actifs \dots \\
 	\end{itemize}
 \newpage
+
+\section{Mise en place}
 \textbf{Installation de GlusterFS}\\\\
 Pour vous présenter la méthodologie d'installation des deux parties Serveur et Client, nous allons réaliser la plus simple architecture, à savoir deux serveurs qui abriterons le volume distribué et le montage de celle-ci par une machine cliente.\\
 La distribution choisie est une Debian Squeeze pour l'ensemble de la maquette, et le choix des paquets glusterfs-server et glusterfs-client en version 3.1.2 officiellement stable.\\\\
@@ -668,11 +670,11 @@ Le tableau suivant répertorie les options de volume ainsi que sa description et
 				MooseFS permet de partager des données sur plusieurs machines de manière rapide, fiable et sécurisée.
 
 		\section{Mise en place}
-			\subsection{Environnement logiciel}
 
 Le système utilisé est une Debian Squeeze. MooseFs ne faisant pas partie des dépôts de la distribution, nous avons compilé le paquet à partir des sources dans la dernière version disponible (1.6.20) sur le site officiel.\\
-\href{http://pro.hit.gemius.pl/hitredir/id=0sWa0S8ft4sTAHF1bGAAEZPcP3ziyq7f9SdhoQf7oeT.c7/url=moosefs.org/tl\_files/mfscode/mfs-1.6.20-2.tar.gz}{http://www.moosefs.org/download.html} \\
-Méthodologie installation pour la mise en œuvre des différents serveurs ou services sur des machines dédiées :\\\\
+\href{http://pro.hit.gemius.pl/hitredir/id=0sWa0S8ft4sTAHF1bGAAEZPcP3ziyq7f9SdhoQf7oeT.c7/url=moosefs.org/tl\_files/mfscode/mfs-1.6.20-2.tar.gz}{http://www.moosefs.org/download.html} \\\\
+
+Méthodologie d'installation pour la mise en œuvre des différents serveurs ou services sur des machines dédiées :\\\\
 Commençons par \textbf{l'installation d'un Master serveur}\\\\
 Récupérons l'archive sur le site de MooseFs et décompressons la dans le répertoire /usr/src/,\\ tar zxvf mfs-1.6.20-2.tar.gz\\
 Pour des questions d'isolement nous créons un utilisateur et un groupe pour faire tourner le futur service.\\
