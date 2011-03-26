@@ -546,7 +546,7 @@ subvolumes afr1
 end-volume
 	  \end{lstlisting}
 Un dialogue est établi entre le client et les serveurs par le port par défaut de glusterts 6996. Les espaces de stockage nommé << brick >> de chacun de ses serveurs seront fusionnés module << cluster/unify >>.\\ L'amélioration des performances passent par l'écriture tour de rôle vers les serveurs, vous aurez reconnu l'utilisation de l'algorithme de répartition de charge round robin (rr).\\
-Les données de l'annuaire de données quand à l'elles sont écrites en parallèle sur les espaces de stockage << brick-ns >>, directive du module << cluster/afr >>.\\
+Les données de l'annuaire de données quand à l'elles sont écrites en parallèle sur les espaces de stockage << brick-ns >>, directive du module << cluster/afr >>.\\\\
 Vous pourriez rajouter des directives à des fins de performances, voici un exemple:
 \begin{lstlisting}
 volume iot
