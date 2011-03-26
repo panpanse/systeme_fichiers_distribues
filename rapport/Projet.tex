@@ -9,6 +9,7 @@
 \usepackage{hyperref}
 \usepackage[T1]{fontenc}
 \usepackage{float}
+\usepackage{array}
 
 \usepackage{listingsutf8} % ne change rien, a virer ?
 
@@ -570,6 +571,31 @@ volume readahead
  subvolumes writebehind
 end-volume
 	  \end{lstlisting}
+Tableau suivant répertorie les options de volume ainsi que sa description et la valeur par défaut (d'autres options existent):\\\\
+\begin{tabular}{|p{5cm}|p{8cm}|m{4cm}|}
+  \hline
+  Option & Description & Valeur par défaut \\
+  \hline
+  performance.cache-refresh-timeout & Les données mises en cache pour un fichier sera conservé x secondes, après quoi revalidation des données est effectuée. & 1 sec \\
+  \hline
+  performance.cache-size & Taille du cache de lecture. & 32 MB \\
+  \hline
+  performance.write-behind-window-size & taille du per-file écrire dérriere le buffer & 1 MB \\
+  \hline
+  network.frame-timeout & Le délai après lequel l'opération doit être déclaré comme mort, si le serveur ne répond pas à une opération particulière. & 1800 (30 mn) \\
+  \hline
+  network.ping-timeout & La durée pendant laquelle le client attend de vérifier si le serveur est sensible. & 42 secs  \\
+  \hline
+  auth.allow & Les adresses IP ou nom d'hôte qui devraient être autorisés à accéder au volume & * (permis à tous) \\
+  \hline
+  auth.reject & Les adresses IP ou nom d'hôte qui devraient se voir refuser l'accès au volume. & NONE (aucun rejet) \\
+  \hline
+  diagnostics.brick-log-level & Changements du niveau de journalisation des serveurs. & NORMAL \\
+  \hline
+  diagnostics.client-log-level & Changements du niveau de journalisation des clients & NORMAL \\
+  \hline
+  
+\end{tabular}
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
