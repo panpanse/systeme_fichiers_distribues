@@ -484,8 +484,92 @@ Le module “plocks” hérite du module “posix” et y ajoute de verrous de f
 Le module “brick” hérite du module “plocks” et y ajoute un cache en lecture.\\
 Le module “brick-ns” pointe vers l'espace de stockage de l'annuaire de fichiers (”namespace”) “/mount/glusterfs-ns”.\\
 Le module “server” hérite des modules “bricks” et “brick-ns” et les publie sur le port TCP 6996 et pour le PC “localhost” uniquement.\\
-On aurait par exemple pu ajouter un cache en écriture et un cache en lecture/écriture sur “brick-ns”.\\
+On aurait par exemple pu ajouter un cache en écriture et un cache en lecture/écriture sur “brick-ns”.\\\\
+Il est toujours primordial de bien définir le niveau de log :
+\begin{lstlisting}
+glusterfsd -f server1.vol -L DEBUG -l server1.log
+glusterfsd -f server2.vol -L DEBUG -l server2.log
+	  \end{lstlisting}
+L'option « -f » pointe vers le fichier de configuration, « -L » indique le niveau de journalisation souhaité et « -l » donne le nom du fichier de journaux par
+instance de « Glusterfs ».\\\\
+Listing du fichier /etc/glusterfs/client.vol.
+\begin{lstlisting}172.16.65.91
+### Ajoutez la caracteristique du client et rattachez au subvolume des servers
+volume brick1
+type protocol/client
+option transport-type tcp/client
+option remote-host 172.16.65.91    
+option remote-subvolume brick       
+end-volume
 
+volume brick2
+type protocol/client
+option transport-type tcp/client
+option remote-host 172.16.65.92
+option remote-subvolume brick      
+end-volume
+
+### Fichier d'index du serveur1
+volume brick1-ns
+type protocol/client
+option transport-type tcp/client
+option remote-host 172.16.65.91 
+option remote-subvolume brick-ns  
+end-volume
+
+### Fichier d'index du serveur2
+volume brick2-ns
+type protocol/client
+option transport-type tcp/client
+option remote-host 172.16.65.92 
+option remote-subvolume brick-ns
+end-volume
+ 
+###Volume repique pour les donnees
+volume afr1
+type cluster/afr
+subvolumes brick1 brick2
+end-volume
+ 
+###Volume repique pour les index
+volume afr-ns
+type cluster/afr
+subvolumes brick1-ns brick2-ns
+end-volume
+ 
+###Unification des volumes afr (utilises quans il y a plus de deux serveurs)
+volume unify
+type cluster/unify
+option scheduler rr # round robin
+option namespace afr-ns
+subvolumes afr1
+end-volume
+	  \end{lstlisting}
+Un dialogue est établi entre le client et les serveurs par le port par défaut de glusterts 6996. Les espaces de stockage nommé << brick >> de chacun de ses serveurs seront fusionnés module << cluster/unify >>.\\ L'amélioration des performances passent par l'écriture tour de rôle vers les serveurs, vous aurez reconnu l'utilisation de l'algorithme de répartition de charge round robin (rr).\\
+Les données de l'annuaire de données quand à l'elles sont écrites en parallèle sur les espaces de stockage << brick-ns >>, directive du module << cluster/afr >>.\\
+Vous pourriez rajouter des directives à des fins de performances, voici un exemple:
+\begin{lstlisting}
+volume iot
+ type performance/io-threads
+ option thread-count 2
+ subvolumes bricks
+end-volume
+
+### Ajout de la directive writebehind pour la structure de donnees
+volume writebehind
+type performance/write-behind
+option aggregate-size 131072 # unite en bytes
+subvolumes iot
+end-volume
+
+### Ajout de la directive readahead pour la structure de donnees
+volume readahead
+ type performance/read-ahead
+ option page-size 65536   # unit in bytes
+ option page-count 16     # cache per file = (page-count x page-size)
+ subvolumes writebehind
+end-volume
+	  \end{lstlisting}
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
