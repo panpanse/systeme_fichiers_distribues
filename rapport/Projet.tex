@@ -345,7 +345,7 @@ Pin-Priority: 600
 \textbf{Installation de GlusterFS Serveur}\\\\
 Actualisez le contenu du catalogue de paquets, installez le module serveur sur les deux machines.
 \begin{lstlisting}
-aptitude update;aptitude install glusterfs-server
+aptitude update;aptitude install glusterfs-server/sid
 Mettre a jour la librairie libglusterfs0 a partir de sid : 
 aptitude install libglusterfs0/sid
 	  \end{lstlisting}
@@ -448,7 +448,43 @@ L'examinez le contenu des répertoires /mnt/monglusterfsvolume et /sharespace de
 ls -lh /mnt/monglusterfsvolume\\
 ls -lh /sharespace\\
 Vous devriez constaté l'absence du fichier test sur l'un des noeuds, ce qui est totalement cohérent puisque la configuration par défaut de glusterfs est la mise en oeuvre de la concatenation des volumes physique et sans duplication ou réplication des données.\\
-Nous utilisons donc l'espace des deux volumes sur les serveurs et vu comme un seul par les clients.
+Nous utilisons donc l'espace des deux volumes sur les serveurs et vu comme un seul par les clients.\\\\
+Je vais vous fournir des informations complementaires sur les possibilités des fichiers de configuration même si nous n'y toucherons pas pour notre travail.\\
+Listing du fichier glusterfsd.vol
+\begin{lstlisting}
+volume posix
+     type storage/posix
+     option directory /mount/glusterfs
+end-volume
+volume plocks
+ type features/posix-locks
+ subvolumes posix
+end-volume
+volume brick
+ type performance/io-threads
+ option thread-count 4
+ option cache-size 64MB
+ subvolumes plocks
+end-volume
+volume brick-ns
+     type storage/posix
+     option directory /mount/glusterfs-ns
+end-volume
+volume server
+     type protocol/server
+     option transport-type tcp/server
+     option listen-port 6996
+     option bind-address 127.0.0.1
+     subvolumes brick brick-ns
+     option auth.ip.brick.allow 127.0.0.1
+end-volume
+	  \end{lstlisting}
+Le module “posix” pointe vers l'espace de stockage des données “/mount/glusterfs”.\\
+Le module “plocks” hérite du module “posix” et y ajoute de verrous de fichiers.\\
+Le module “brick” hérite du module “plocks” et y ajoute un cache en lecture.\\
+Le module “brick-ns” pointe vers l'espace de stockage de l'annuaire de fichiers (”namespace”) “/mount/glusterfs-ns”.\\
+Le module “server” hérite des modules “bricks” et “brick-ns” et les publie sur le port TCP 6996 et pour le PC “localhost” uniquement.\\
+On aurait par exemple pu ajouter un cache en écriture et un cache en lecture/écriture sur “brick-ns”.\\
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
