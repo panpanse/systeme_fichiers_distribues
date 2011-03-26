@@ -914,12 +914,6 @@ umount /mnt/mfs)
 /usr/sbin/mfsmetalogger stop
 /usr/sbin/mfsmaster stop
 	  \end{lstlisting}
-% insertion d'une image :
-%\begin{figure}[p]
-%	\includegraphics[width=12cm,height=120mm]{mastersrv.png}
-%	\caption{MooseFs Read Process}
-%	\label{identifiant test}
-%\end{figure} 
 Discution général.\\
 Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par le biais d'un buffer (cache d'écriture). En conséquence, l'exécution de la requête d'écriture elle-même transfère seulement les données au buffer (cache), l'écriture réelle n'ayant donc pas lieu. Conséquence, la confirmation de la requête d'écriture ne signifie pas que les données ont été correctement écrites sur un disque.\\ Elle est seulement invoquer et l'aboutissement passe par la commande fsync qui provoque le déchargement de toutes les données gardées en cache pour obtenir écrite physique sur le disque. Problématique en cas d'erreur avant la finalisation de cette phase, c'est un retour d'erreur de la commande fsync, voir la perte des données. 
 	\chapter{Ceph}
@@ -965,7 +959,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				\item 278 Go d'espace disque\\
 			\end{itemize}
 
-			Nous avons réalisé un benchmark mesurant les performances (débit) de quatre type d'opérations sur le système de fichier distribué :
+			Nous avons développé un benchmark mesurant les performances (débit) de quatre type d'opérations sur le système de fichier distribué :
 			\begin{description}
 				\item[Écriture de petits fichiers :] écriture des sources du noyau linux (décompressé).
 				\item[Écriture de gros fichiers :] écriture de trois fichiers de 1 Go\footnote{Fichier créé avec la commande : dd if=/dev/urandom of=/lieu/voulu bs=1G count=1}.
@@ -973,7 +967,19 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				Pour cela, nous avons compressé le dossier contenant le noyau (impliquant la lecture des fichiers),
 				en redirigeant la sortie vers /dev/nul (afin que les performances du disque ne rentrent pas en jeux).
 				\item[Lecture de gros fichiers :] lecture des fichiers de 1 Go. Opération réalisé en faisant un "cat" des fichier,
-				et en redirigeant la sortie vers /dev/nul afin de ne pas "polluer" le terminal.
+				et en redirigeant la sortie vers /dev/nul afin de ne pas \og polluer\fg~le terminal.\\
+			\end{description}
+
+			Les scripts de benchmark se découpent en deux parties :
+			\begin{description}
+				\item[Quatre petits scripts Bash ]décrivant les opérations à réaliser, décrite ci dessus.
+				\item[Un script écrit en Ruby] contrôlant l'ensemble du benchmark.
+				Ce script se charge de distribuer les scripts Bash aux clients par SCP
+				\footnote{Secure copy : désigne un transfert sécurisé de fichiers entre deux ordinateurs utilisant le protocole de communication SSH (Wikipédia)},
+				et leur demande de les exécuter. Afin que l'ensemble des clients effectuent ces opérations simultanément, il a fallu mutlithreader le script
+				(en utilisant la fonction fork\footnote{Cette fonction permet à un processus de donner naissance à un nouveau processus,
+				par exemple en vue de réaliser un second traitement parallèlement au premier. (Wikipédia)}).
+				Le déroulement du benchmark peut être suivis de manière précise sur le terminal, et les résultats sont consultable dans un fichier texte.
 			\end{description}
 
 
@@ -994,6 +1000,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 
 				Nous avons aussi utilisé le dépôt Git\footnote{Git est un logiciel de gestion de versions, écrit par Linus Torvalds.} pour gérer le développement
 				de nos scripts, et notre rapport de projet.
+\newpage
 			\section{Répartition des taches}
 				\subsection{Florent Lévigne}
 					\begin{itemize}
