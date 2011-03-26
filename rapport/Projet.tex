@@ -173,6 +173,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 			et pour certains de répartir la charge entre plusieurs machines, et de gérer la sécurité des données
 			(par réplication)
 
+                        \newpage
 		\section{Le Grid'5000}
 		Le Grid'5000 est une infrastructure distribuée de neuf sites sur la France, dédié à la recherche,
 		sur des systèmes distribuées à grande échelle.
@@ -202,7 +203,8 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 			16GB RAM\\
 			278GB DISK
 		\end{description}
-
+                \newpage
+                
 		Pour travailler sur le Grid'5000, on se connecte en ssh\footnote{Secure Shell : protocole de communication sécurisé} à une machine appelé le \og frontend \fg, il y en a un sur chaque site.
 		A partir de ce frontend, il est possible de déployer des environnements sur des machines du Grid.
 		Un certain nombre d'images (OS) sont disponible. L'ensemble de nos tests ont été réalisés avec une Debian Squeeze (6),
@@ -239,7 +241,8 @@ NFS (Network File System, système de fichiers en réseau en français) est un s
     Cette version intègre une meilleur gestion de la sécurité, de la montée en charge, et un systèmes de maintenances simplifiés.
     NFSv4 supporte les protocoles de transports TCP (par défaut) et RDMA, ce qui augmente la fiabilité. Nous utiliserons donc cette version NFS dans l'ensemble de nos test.\\\\
 Au delà des évolutions entre les versions 3 et 4 du protocole, c'est la cohérence du système de nommage qui distingue la version 4 du système de fichiers réseau. Il s'agit de garantir qu'un objet (fichier ou répertoire) est représenté de la même manière sur un serveur et sur ses clients.
-    
+\newpage
+
     \section{Mise en place}
 Le rôle du serveur NFS est de mettre à disposition sur le réseau une partie de son arborescence locale de système de fichiers. On parle d'\og exportation\fg.\\
 Il existe plusieurs implémentations libres de serveur NFS. On se limite ici à l'utilisation du logiciel lié au noyau Linux.\\
@@ -324,6 +327,7 @@ Le fonctionnement de Glusterfs est très modulaire et peut être configuré pour
 		\item découper les gros fichiers en tronçons plus petits qui seront répartis sur différents serveurs de stockage (stripping),
 		\item fonctionner malgré la perte d'un ou plusieurs nœuds de stockage qui seront automatiquement réintégrée dans le cluster et resynchronisés dès qu'ils seront de nouveau actifs \dots \\
 	\end{itemize}
+\newpage
 \textbf{Installation de GlusterFS}\\\\
 Pour vous présenter la méthodologie d'installation des deux parties Serveur et Client, nous allons réaliser la plus simple architecture, à savoir deux serveurs qui abriterons le volume distribué et le montage de celle-ci par une machine cliente.\\
 La distribution choisie est une Debian Squeeze pour l'ensemble de la maquette, et le choix des paquets glusterfs-server et glusterfs-client en version 3.1.2 officiellement stable.\\\\
@@ -342,7 +346,8 @@ Pin-Priority: 700
 Package: *
 Pin: release a=unstable
 Pin-Priority: 600
-	  \end{lstlisting}
+	  \end{lstlisting}\\
+
 \textbf{Installation de GlusterFS Serveur}\\\\
 Actualisez le contenu du catalogue de paquets, installez le module serveur sur les deux machines.
 \begin{lstlisting}
@@ -451,6 +456,7 @@ ls -lh /sharespace\\
 On constate l'absence du fichier test sur l'un des noeuds, ce qui est totalement cohérent puisque la configuration par défaut de glusterfs est la mise en oeuvre de la concatenation des volumes physique et sans duplication ou réplication des données.\\
 Nous utilisons donc l'espace des deux volumes sur les serveurs et vu comme un seul par les clients.
 Ci-dessous des informations complementaires sur les possibilités des fichiers de configuration même si nous n'y toucherons pas pour notre travail.\\
+\newpage
 Listing du fichier glusterfsd.vol
 \begin{lstlisting}
 volume posix
@@ -493,6 +499,7 @@ glusterfsd -f server2.vol -L DEBUG -l server2.log
 	  \end{lstlisting}
 L'option « -f » pointe vers le fichier de configuration, « -L » indique le niveau de journalisation souhaité et « -l » donne le nom du fichier de journaux par
 instance de « Glusterfs ».\\\\
+\newpage
 Listing du fichier /etc/glusterfs/client.vol.
 \begin{lstlisting}172.16.65.91
 ### Ajoutez la caracteristique du client et rattachez au subvolume des servers
@@ -719,6 +726,7 @@ Pour conclure cette section, un mode graphique en cgi\footnote{Common Gateway In
 	  \end{lstlisting}
 Remarque: le contenu sera vide tant que les serveurs de données ne seront pas démarrés.\\\\
 				% avec options différentes suivant les serveurs, clients (cf tuto site officiel)
+\newpage
 \textbf{Installation du Serveur de Backup Metalogger.}\\\\
 Le principe de ce serveur est la de récupérer tous les événements du système de fichier et peut permettre, si le maître est vraiment mal en point (perte de ses metadada, ou de son historique), de lui faire rejouer les logs pour que le volume reste cohérent.\\
 Cette solution repose sur le protocole Carp \og Common Address Redundancy Protocol\fg, permet d'admettre à un groupe d'hôtes sur le même segment réseau (ici mfsmaster et mfsmetalogger) de partager même adresse IP (un maître et un esclave). 
@@ -806,6 +814,7 @@ cd fuse-2.8.5
 ./configure;make;make install
 modprobe fuse
 	  \end{lstlisting}
+\newpage
 Afin d'installer le service mfsmount nous réalisons les étapes suivantes :
   \begin{lstlisting}
 tar -zxvf mfs-1.6.20-2.tar.gz
@@ -902,6 +911,7 @@ Testons le positionnement:
 cp /usr/src/mfs-1.6.20-2.tar.gz /mnt/mfs/folder1
 cp /usr/src/mfs-1.6.20-2.tar.gz /mnt/mfs/folder2
 	  \end{lstlisting}
+\newpage
 La commande mfscheckfile est employée pour la vérification du nombre de copies :
 \begin{lstlisting}
 mfscheckfile /mnt/mfs/folder1/mfs-1.6.20-2.tar.gz
@@ -930,12 +940,6 @@ umount /mnt/mfs)
 /usr/sbin/mfsmetalogger stop
 /usr/sbin/mfsmaster stop
 	  \end{lstlisting}
-% insertion d'une image :
-%\begin{figure}[p]
-%	\includegraphics[width=12cm,height=120mm]{mastersrv.png}
-%	\caption{MooseFs Read Process}
-%	\label{identifiant test}
-%\end{figure} 
 Discution général.\\
 Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par le biais d'un buffer (cache d'écriture). En conséquence, l'exécution de la requête d'écriture elle-même transfère seulement les données au buffer (cache), l'écriture réelle n'ayant donc pas lieu. Conséquence, la confirmation de la requête d'écriture ne signifie pas que les données ont été correctement écrites sur un disque.\\ Elle est seulement invoquer et l'aboutissement passe par la commande fsync qui provoque le déchargement de toutes les données gardées en cache pour obtenir écrite physique sur le disque. Problématique en cas d'erreur avant la finalisation de cette phase, c'est un retour d'erreur de la commande fsync, voir la perte des données. 
 	\chapter{Ceph}
@@ -956,6 +960,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
                           \item robustesse du stockage distribué open-source. CephFS fournit une variété de fonctionnalités clés, généralement manquante dans les systèmes de fichiers open-source, tel que l'évolutivité transparente (capacité d'ajouter simplement un disque pour étendre le volume de stockage), la répartition de charge intelligente
                           \item évolutivité en terme de charge de travail ou de capacité destockage. CephFS a été créer pour supporter des charges de l'ordre de dizaines de milliers de clients accédant au même fichier ou au même dossier. La capacité de stockage va du gigaoctet au petaoctet\footnote{1 petaoctet = 1024 teraoctet} et au-delà.
                         \end{itemize}
+\newpage
                         
                 \section{Aspect technique}
                         
@@ -980,7 +985,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				\item 278 Go d'espace disque\\
 			\end{itemize}
 
-			Nous avons réalisé un benchmark mesurant les performances (débit) de quatre type d'opérations sur le système de fichier distribué :
+			Nous avons développé un benchmark mesurant les performances (débit) de quatre type d'opérations sur le système de fichier distribué :
 			\begin{description}
 				\item[Écriture de petits fichiers :] écriture des sources du noyau linux (décompressé).
 				\item[Écriture de gros fichiers :] écriture de trois fichiers de 1 Go\footnote{Fichier créé avec la commande : dd if=/dev/urandom of=/lieu/voulu bs=1G count=1}.
@@ -988,7 +993,19 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				Pour cela, nous avons compressé le dossier contenant le noyau (impliquant la lecture des fichiers),
 				en redirigeant la sortie vers /dev/nul (afin que les performances du disque ne rentrent pas en jeux).
 				\item[Lecture de gros fichiers :] lecture des fichiers de 1 Go. Opération réalisé en faisant un "cat" des fichier,
-				et en redirigeant la sortie vers /dev/nul afin de ne pas "polluer" le terminal.
+				et en redirigeant la sortie vers /dev/nul afin de ne pas \og polluer\fg~le terminal.\\
+			\end{description}
+
+			Les scripts de benchmark se découpent en deux parties :
+			\begin{description}
+				\item[Quatre petits scripts Bash ]décrivant les opérations à réaliser, décrite ci dessus.
+				\item[Un script écrit en Ruby] contrôlant l'ensemble du benchmark.
+				Ce script se charge de distribuer les scripts Bash aux clients par SCP
+				\footnote{Secure copy : désigne un transfert sécurisé de fichiers entre deux ordinateurs utilisant le protocole de communication SSH (Wikipédia)},
+				et leur demande de les exécuter. Afin que l'ensemble des clients effectuent ces opérations simultanément, il a fallu mutlithreader le script
+				(en utilisant la fonction fork\footnote{Cette fonction permet à un processus de donner naissance à un nouveau processus,
+				par exemple en vue de réaliser un second traitement parallèlement au premier. (Wikipédia)}).
+				Le déroulement du benchmark peut être suivis de manière précise sur le terminal, et les résultats sont consultable dans un fichier texte.
 			\end{description}
 
 
@@ -998,29 +1015,42 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 	% apport du projet tuteuré pour nous, bonne expérience avant départ en stage, ...
 
 	\appendix
-		\chapter{Répartition des taches}
-			\section{Florent Lévigne}
-				\begin{itemize}
-					\item Étude sur la mise en place de GlusterFS
-					\item Réalisation d'un script de déploiement de GlusterFS
-					\item Étude sur la mise en place de MooseFS
-					\item Réalisation d'un script de déploiement de MooseFS
-					\item Réalisation d'un script de benchmark pour système de fichiers distribué
-				\end{itemize}
-			\section{Jean-François Garcia}
-				\begin{itemize}
-					\item Étude sur la mise en place de GlusterFS
-					\item Étude sur la mise en place de NFS
-					\item Réalisation d'un script de déploiement de NFS
-					\item Étude sur la mise en place de CephFS
-					\item Réalisation d'un script de déploiement de CephFS
-				\end{itemize}
-                        \section{Maxime Douhéret}
-                                \begin{itemize}
-                                        \item Étude sur la mise en place de GlusterFS
-                                        \item Étude sur la mise en place de CephFS
-                                        \item Aide à la réalisation des scripts de déploiement de CephFS et de benchmark
+		\chapter{Organisation du travail}
+			\section{Outils utilisés}
+				Afin d'organiser au mieux notre travail, nous avons mise en place un projet sur GitHub
+				\footnote{GitHub est un service web d'hébergement et de gestion de développement de logiciels (Wikipédia).}.
+				Nous avons utilisé le wiki
+				\footnote{Un wiki est un site Web dont les pages comportent des hyperliens les unes vers les autres
+				et sont modifiables par les visiteurs afin de permettre l'écriture et l'illustration collaboratives des documents numériques qu'il contient. (Wikipédia)}
+				mise à notre disposition afin de mettre en commun nos connaissances et nos découvertes sur notre projet.
 
+				Nous avons aussi utilisé le dépôt Git\footnote{Git est un logiciel de gestion de versions, écrit par Linus Torvalds.} pour gérer le développement
+				de nos scripts, et notre rapport de projet.
+\newpage
+			\section{Répartition des taches}
+				\subsection{Florent Lévigne}
+					\begin{itemize}
+						\item Étude sur la mise en place de GlusterFS
+						\item Réalisation d'un script de déploiement de GlusterFS
+						\item Étude sur la mise en place de MooseFS
+						\item Réalisation d'un script de déploiement de MooseFS
+						\item Réalisation d'un script de benchmark pour système de fichiers distribué
+					\end{itemize}
+				\subsection{Jean-François Garcia}
+					\begin{itemize}
+						\item Étude sur la mise en place de GlusterFS
+						\item Étude sur la mise en place de NFS
+						\item Réalisation d'un script de déploiement de NFS
+						\item Étude sur la mise en place de CephFS
+						\item Réalisation d'un script de déploiement de CephFS
+					\end{itemize}
+				\subsection{Maxime Douhéret}
+					\begin{itemize}
+						\item Étude sur la mise en place de GlusterFS
+						\item Étude sur la mise en place de CephFS
+						\item Aide à la réalisation des scripts de déploiement de CephFS et de benchmarka
+					\end{itemize}
+	
 		\chapter{Scripts}
 			\section{GlusterFs}
 				Fichier deploimentGluster.rb :
@@ -1033,6 +1063,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 			\section{NFS}
 				Fichier deploimentNFS.rb :
 				\lstinputlisting[language=Ruby,numbers=left]{../NFS/deploiementNFS.rb}
+\newpage
 			\section{Benchmark}
 				Fichier benchmark.rb :
 				\lstinputlisting[language=Ruby,numbers=left]{../benchmark/benchmark.rb}
