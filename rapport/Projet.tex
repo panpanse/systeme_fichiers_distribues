@@ -586,29 +586,30 @@ end-volume
 			MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne,
 			c’est à dire résistant aux pannes d’un ou plusieurs nœuds de stockage.
 			Développé par Gemius SA. Le code préalablement propriétaire a été libéré et mis à disposition publiquement le 5 mai 2008
-			sous licence GPLv3. Disponible pour Linux, FreeBSD, OpenSolaris et MacOS X.\\
+			sous licence GPLv3. Disponible pour Linux, FreeBSD, OpenSolaris et MacOS X.
+
 			Les développeurs sont réactifs et suivent de très près la liste de diffusion et les remontés de bugs de leurs utilisateurs.
 
 			MooseFS permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs. 
 			Les fichiers sont découpés en morceaux (appelés chunks) puis répartis sur les différents chunkservers (nœuds de stockage) :
 			selon le paramétrage voulu pour ces fichiers, ou pour le répertoire dans lequel ils se trouvent,
-			chaque chunk sera répliqué sur x noeuds (différents).\\
+			chaque chunk sera répliqué sur x noeuds (différents).
+
 			Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique
 			sur un serveur. L'atout principal de MooseFS, au-delà du fait qu'il s’agisse d’un logiciel libre,
-			est sa simplicité d'administration et sa de mise en œuvre.\\\\
+			est sa simplicité d'administration et sa de mise en œuvre.\\
 			% plus simple à mettre en place que les autres ?
-			D'autres qualités sont à son actif: \\\\
-			Le respect de la norme Posix.\\
-			L'utilisation de Fuse en espace client.\\
-			La mise à disposition d'une poubelle automatique à durée de rétention modifiable à souhait.\\
-			Une commande unique « mfssetgoal », à chaud pour le choix du nombre de répliquas, par fichier ou par répertoire.\\
-			Disponibilité des données ou tolérance aux pannes en cas de réplication positionné à plus de 1 pour les données
-			rendra transparent la perte d'un chunkserver au détriment d'un coût en matière de place.\\ 
-			Simplicité de l'extension de l'espace de stockage à chaud quelque soit la configuration,
-			comprenant la ré-indexation et la répartition des données vers ces nouveaux espaces avoir à intervenir
-			(cela peut prendre plusieurs heures).  \\
-			Le système est réparti: les fichiers supérieurs à 64Mo sont découpés en paquets de 64Mo et distribués
-			sur les différents serveurs de données dit « chunkserver ».\\
+
+			D'autres qualités sont à son actif:
+			\begin{itemize}
+                          \item Le respect de la norme Posix.
+			  \item L'utilisation de Fuse en espace client.
+			  \item La mise à disposition d'une poubelle automatique à durée de rétention modifiable à souhait.
+			  \item Une commande unique « mfssetgoal », à chaud pour le choix du nombre de répliquas, par fichier ou par répertoire. Disponibilité des données ou tolérance aux pannes en cas de réplication positionné à plus de 1 pour les données rendra transparent la perte d'un chunkserver au détriment d'un coût en matière de place.
+			  \item Simplicité de l'extension de l'espace de stockage à chaud quelque soit la configuration, comprenant la ré-indexation et la répartition des données vers ces nouveaux espaces avoir à intervenir (cela peut prendre plusieurs heures).
+			  \item Le système est réparti: les fichiers supérieurs à 64Mo sont découpés en paquets de 64Mo et distribués sur les différents serveurs de données dit « chunkserver ».
+                        \end{itemize}
+
 			\section{Aspect technique}
 				
 				Les montage du système de fichiers par les clients se fait à l'aide de FUSE.
@@ -912,6 +913,26 @@ umount /mnt/mfs)
 
 	\chapter{Ceph}
 		\section{Présentation}
+
+                        \begin{figure}[H]
+				\begin{center}
+					\includegraphics[width=0.40\linewidth]{images/cephfs.jpg}
+				\end{center}
+			\end{figure}
+
+                        CephFS est un système de fichiers distribué sous Licence LGPL, créé initialement par Sage Weill en 2007 pendant ses étude à l'université de Californie à Santa Cruz. Le but principal de CephFS est d'être compatible POSIX et d'être complètement distribué sans un seul point de défaillance. Les données sont répliqué de façon transparente ce qui fait de CephFS un système tolérant aux pannes. Mais CephFS est encore en phase de développement et il est fortement conseillé de ne pas l'utiliser en production.\\
+
+                        Tout comme avec MooseFS les données sont découpées, réparties sur les différents serveurs et répliquées sur x noeuds. Cette répartition permet à CephFS d'avoir une grande tolérance vis-à-vis de la perte de noeuds stockant les données. De plus CephFS permet de rajouter ou d'enlever des serveurs de données pendant le fonctionnement de CephFS sans être obligé de couper le service.\\
+
+                        CephFS remplit deux lacunes importantes des systèmes de fichiers actuellement disponible :
+                        \begin{itemize}
+                          \item robustesse du stockage distribué open-source. CephFS fournit une variété de fonctionnalités clés, généralement manquante dans les systèmes de fichiers open-source, tel que l'évolutivité transparente (capacité d'ajouter simplement un disque pour étendre le volume de stockage), la répartition de charge intelligente
+                          \item évolutivité en terme de charge de travail ou de capacité destockage. CephFS a été créer pour supporter des charges de l'ordre de dizaines de milliers de clients accédant au même fichier ou au même dossier. La capacité de stockage va du gigaoctet au petaoctet\footnote{1 petaoctet = 1024 teraoctet} et au-delà.
+                        \end{itemize}
+                        La partie serveur de CephFS est divisé en trois partie : un moniteur, un ou plusieurs serveurs de metadonnées et plusieurs serveurs de données.\\
+                        
+
+
 
 	\chapter{Comparaison}
 	% comparaison des performances
