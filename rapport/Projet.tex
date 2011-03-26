@@ -978,10 +978,10 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
                            Le moniteur gère l'administration centrale, la configuration et l'état du cluster. C'est à partir du moniteur que l'on modifié le cluster : ajout ou suppresion de serveurs de données et métadonnées. Les clients ont accès au données gérées par CephFS par l'intermédiaire d'un moniteur. Il garde en mémoire une carte du cluster, ce qu'il lui permet de communiquer aux clients sur quels serveurs de métadonnées et de données se connecter pour modifier, ajouter ou supprimer des fichiers.
 
                         \subsection{Serveurs de métadonnées}
-                           
+                           Le démon gérant les serveurs de métadonnées agit en tant que cache cohérent et distribué du système de fichiers. Il contient les données concernant l'arborescence des fichiers et leurs métadonnées (nom, taille, emplacement mémoire sur les serveur de donées). Avoir plusieurs serveurs de métadonnées a un certain avantage car cela permet d'équilibrer la charge de travail entre les différents serveurs et donc de gérer plus de clients au même moment.
 
                         \subsection{Serveurs de données}
-                           
+                           Les serveurs de données stockent les fichiers du cluster. Ils sont découpés en morceaux et répliqués plusieurs fois sur des serveurs différents. Cela permet une certaine tolérance vis-à-vis de la perte de serveurs. Si jamais un serveur tombe en panne, les données sont toujours accessible car elles sont présente sur un autre serveur de données.
 
 				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 				%%%%%%%%%%%%%%%%%%%%%%% ajouter l'image au dépôt %%%%%%%%%%%%%%%%%%%%%%%%
@@ -1079,13 +1079,23 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				\lstinputlisting[language=Ruby,numbers=left]{../glusterFs/deploiementGluster.rb}
 				% autre fichier (améliorer le script)
 			\section{MooseFs}
+                                Fichier deploiementMoose.rb :
+                                \lstinputlisting[language=Ruby,numbers=left]{../mooseFs/deploiementMoose.rb}
+                                Fichier masterServer.sh :
+                                \lstinputlisting[language=Ruby,numbers=left]{../mooseFs/masterServer.sh}
+\newpage
+                                Fichier chunkServer.rb :
+                                \lstinputlisting[language=Ruby,numbers=left]{../mooseFs/chunkServer.rb}
+                                Fichier metaloggerServer.sh :
+                                \lstinputlisting[language=Ruby,numbers=left]{../mooseFs/metaloggerServer.sh}
+                                Fichier client.sh :
+                                \lstinputlisting[language=Ruby,numbers=left]{../mooseFs/client.sh}
 			\section{Ceph}
 				Fichier deploimentCeph.rb :
 				\lstinputlisting[language=Ruby,numbers=left]{../cephFS/deploiementCeph.rb}
 			\section{NFS}
 				Fichier deploimentNFS.rb :
 				\lstinputlisting[language=Ruby,numbers=left]{../NFS/deploiementNFS.rb}
-\newpage
 			\section{Benchmark}
 				Fichier benchmark.rb :
 				\lstinputlisting[language=Ruby,numbers=left]{../benchmark/benchmark.rb}
