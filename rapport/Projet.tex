@@ -978,10 +978,10 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
                            Le moniteur gère l'administration centrale, la configuration et l'état du cluster. C'est à partir du moniteur que l'on modifié le cluster : ajout ou suppresion de serveurs de données et métadonnées. Les clients ont accès au données gérées par CephFS par l'intermédiaire d'un moniteur. Il garde en mémoire une carte du cluster, ce qu'il lui permet de communiquer aux clients sur quels serveurs de métadonnées et de données se connecter pour modifier, ajouter ou supprimer des fichiers.
 
                         \subsection{Serveurs de métadonnées}
-                           
+                           Le démon gérant les serveurs de métadonnées agit en tant que cache cohérent et distribué du système de fichiers. Il contient les données concernant l'arborescence des fichiers et leurs métadonnées (nom, taille, emplacement mémoire sur les serveur de donées). Avoir plusieurs serveurs de métadonnées a un certain avantage car cela permet d'équilibrer la charge de travail entre les différents serveurs et donc de gérer plus de clients au même moment.
 
                         \subsection{Serveurs de données}
-                           
+                           Les serveurs de données stockent les fichiers du cluster. Ils sont découpés en morceaux et répliqués plusieurs fois sur des serveurs différents. Cela permet une certaine tolérance vis-à-vis de la perte de serveurs. Si jamais un serveur tombe en panne, les données sont toujours accessible car elles sont présente sur un autre serveur de données.
 
 
 		        \begin{figure}[H]
