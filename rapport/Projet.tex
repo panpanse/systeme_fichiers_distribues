@@ -9,6 +9,7 @@
 \usepackage{hyperref}
 \usepackage[T1]{fontenc}
 \usepackage{float}
+\usepackage{array}
 
 \usepackage{listingsutf8} % ne change rien, a virer ?
 
@@ -204,7 +205,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		\end{description}
                 \newpage
                 
-		Pour travailler sur le Grid'5000, on se connecte en ssh\footnote{Secure Shell : protocole de communication sécurisé} à une machine appelé le \og frontend \fg, il y en a un sur chaque site.
+		Pour travailler sur le Grid'5000, on se connecte en ssh\footnote{Secure Shell : protocole de communication sécurisé} à une machine appelé le \og frontend\fg, il y en a un sur chaque site.
 		A partir de ce frontend, il est possible de déployer des environnements sur des machines du Grid.
 		Un certain nombre d'images (OS) sont disponible. L'ensemble de nos tests ont été réalisés avec une Debian Squeeze (6),
 		que nous avons construit à partir d'une Debian Lenny (5), la version 6 n'étant pas disponible.
@@ -298,7 +299,7 @@ Sur le client, nous avons le programme appelé showmount associé à l'option -e
     \begin{lstlisting}
 	  modprobe fuse
 	  \end{lstlisting}
-    Pour charger le module automatiquement à chaque démarrage de l'ordinateur, il faut ajouter \og fuse \fg~ dans le fichier \og /etc/modules \fg.\\
+    Pour charger le module automatiquement à chaque démarrage de l'ordinateur, il faut ajouter \og fuse\fg~ dans le fichier \og /etc/modules\fg.\\
     \begin{lstlisting}
 	 nano /etc/modules
 	 \end{lstlisting}
@@ -386,7 +387,7 @@ En cas d'infrastructure équipé de l'InfiniBand (bus à haut débit), nous auri
 apt-get install libibverbs1 librdmacm1
 glusterfs-volgen --name mystore -t ib-verbs 172.16.65.92:/sharespace 172.16.65.91:/sharespace
 	  \end{lstlisting}
-La commande glusterfs-volgen génère les fichiers de configuration pour les serveurs et le client. Chaque fichier porte l'ip de la machine concerné dans son nom, nous allons les exporter dans leur répertoire d'exploitation et les renommer pour les qu'il soient pris en compte.
+La commande glusterfs-volgen génère les fichiers de configuration pour les serveurs et le client. Chaque fichier porte l'IP de la machine concerné dans son nom, nous allons les exporter dans leur répertoire d'exploitation et les renommer pour les qu'il soient pris en compte.
 \begin{lstlisting}
 cp 172.16.65.91-mystore-export.vol /etc/glusterfs/glusterfsd.vol
 cp mystore-tcp.vol /etc/glusterfs/glusterfs.vol
@@ -395,13 +396,13 @@ pour le second serveur
 scp 172.16.65.92-mystore-export.vol 172.16.65.92:/etc/glusterfs/glusterfsd.vol
 scp mystore-tcp.vol 172.16.65.92:/etc/glusterfs/glusterfs.vol
 	  \end{lstlisting}
-Une copie du fichier de transport ou fichier de configuration client doit être stocké par au-moins un serveur.\\
-A ce moment, vous êtes prêt à mettre en marche les services de GlusterFS sur chaque serveur :
+Une copie du fichier de transport ou fichier de configuration client doit être stocké par au moins un serveur.\\
+A ce moment, nous sommes êtes prêt à mettre en marche les services de GlusterFS sur chaque serveur :
 \begin{lstlisting}
 /etc/init.d/glusterfs-server start
 	  \end{lstlisting}
 Montage d'un poste client.\\\\
-Petit apparté pour vous spécifier que le protocol en natif est fuse, mais que l'applicatif est capable de supporter d'autres protocol Nfs, Cifs ou encore Dav.\\
+Petit aparté pour vous spécifier que le protocole en natif est fuse, mais que l'applicatif est capable de supporter d'autres protocoles, NFS, CIFS ou encore Dav.\\
 Le paquet gluster étant installé, passons à la création du point de montage.
 \begin{lstlisting}
 mkdir -p /mnt/monglusterfsvolume
@@ -410,14 +411,14 @@ Notre client va maintenant monter le volume réparti, il suffit d'employer la co
 \begin{lstlisting}
 mount -t glusterfs 172.16.65.91:6996 /mnt/monglusterfsvolume/
 	  \end{lstlisting}
-Lors du montage, GlusterFS va initier une connexion vers le serveur spéficié afin de récupérer le fichier de configuration du client que nous avons stocké précédement sous /etc/glusterfs/glusterfs.vol.\\\\
+Lors du montage, GlusterFS va initier une connexion vers le serveur spécifié afin de récupérer le fichier de configuration du client que nous avons stocké précédemment sous /etc/glusterfs/glusterfs.vol.\\\\
 ATTENTION\\
-Nous avons pu constater que cette étape ne fonctionné pas toujours très bien. Cela à pour conséquence de générer des dysfonctionnements du à des problémes de droits. Vous aurez droit à la lecture et à la modification des fichiers présent dans le volume.\\
-Pour raisoudre cette mauvaise initialisation, copier le fichier de transport manuellement dans /etc/glusterfs/ et remonté le volume pour recharger le nouveau fichier de configuration avec la commande :
+Nous avons pu constater que cette étape ne fonctionnait pas toujours très bien. Cela a pour conséquence de générer des dysfonctionnements dues à des problèmes de droits. Nous aurons droit à la lecture et à la modification des fichiers présent dans le volume.\\
+Pour résoudre cette mauvaise initialisation, copions le fichier de transport manuellement dans /etc/glusterfs/ et remontons le volume pour recharger le nouveau fichier de configuration avec la commande :
 \begin{lstlisting}
 mount -t glusterfs /etc/glusterfs/glusterfs.vol /mnt/monglusterfsvolume/
 	  \end{lstlisting}
-Pour monter automatiquement à chaque boot, ajoutez la ligne suivante au fichier /etc/fstab
+Pour le monter automatiquement à chaque démarrage, il faut ajouter la ligne suivante au fichier /etc/fstab
 Pour un serveur :
 \begin{lstlisting}
 172.16.65.91  /mnt/monglusterfsvolume  glusterfs  defaults,_netdev  0  0
@@ -449,12 +450,12 @@ Copions le fichier test sur le FS distribué :
 \begin{lstlisting}
 cp test /mnt/monglusterfsvolume
 	  \end{lstlisting}
-L'examinez le contenu des répertoires /mnt/monglusterfsvolume et /sharespace des deux serveurs.\\
+Examinons le contenu des répertoires /mnt/monglusterfsvolume et /sharespace des deux serveurs.\\
 ls -lh /mnt/monglusterfsvolume\\
 ls -lh /sharespace\\
-On constate l'absence du fichier test sur l'un des noeuds, ce qui est totalement cohérent puisque la configuration par défaut de glusterfs est la mise en oeuvre de la concatenation des volumes physique et sans duplication ou réplication des données.\\
-Nous utilisons donc l'espace des deux volumes sur les serveurs et vu comme un seul par les clients.
-Ci-dessous des informations complementaires sur les possibilités des fichiers de configuration même si nous n'y toucherons pas pour notre travail.\\
+On constate l'absence du fichier test sur l'un des nœuds, ce qui est totalement cohérent puisque la configuration par défaut de glusterfs est la mise en œuvre de la concaténation des volumes physiques et sans duplication ou réplication des données.\\
+Nous utilisons donc l'espace des deux volumes sur les serveurs, qui est vu comme un seul par les clients.
+Vous trouverez ci-dessous des informations complémentaires sur les possibilités des fichiers de configuration même si nous n'y toucherons pas pour notre travail.\\
 \newpage
 Listing du fichier glusterfsd.vol
 \begin{lstlisting}
@@ -490,14 +491,14 @@ Le module “plocks” hérite du module “posix” et y ajoute de verrous de f
 Le module “brick” hérite du module “plocks” et y ajoute un cache en lecture.\\
 Le module “brick-ns” pointe vers l'espace de stockage de l'annuaire de fichiers (”namespace”) “/mount/glusterfs-ns”.\\
 Le module “server” hérite des modules “bricks” et “brick-ns” et les publie sur le port TCP 6996 et pour le PC “localhost” uniquement.\\
-On aurait par exemple pu ajouter un cache en écriture et un cache en lecture/écriture sur “brick-ns”.\\\\
+Nous aurions par exemple pu ajouter un cache en écriture et un cache en lecture/écriture sur “brick-ns”.\\\\
 Il est toujours primordial de bien définir le niveau de log :
 \begin{lstlisting}
 glusterfsd -f server1.vol -L DEBUG -l server1.log
 glusterfsd -f server2.vol -L DEBUG -l server2.log
 	  \end{lstlisting}
-L'option « -f » pointe vers le fichier de configuration, « -L » indique le niveau de journalisation souhaité et « -l » donne le nom du fichier de journaux par
-instance de « Glusterfs ».\\\\
+L'option \og -f\fg~ pointe vers le fichier de configuration, \og -L\fg~  indique le niveau de journalisation souhaité et \og -l\fg~ donne le nom du fichier de journaux par
+instance de \og Glusterfs\fg.\\\\
 \newpage
 Listing du fichier /etc/glusterfs/client.vol.
 \begin{lstlisting}172.16.65.91
@@ -552,9 +553,9 @@ option namespace afr-ns
 subvolumes afr1
 end-volume
 	  \end{lstlisting}
-Un dialogue est établi entre le client et les serveurs par le port par défaut de glusterts 6996. Les espaces de stockage nommé << brick >> de chacun de ses serveurs seront fusionnés module << cluster/unify >>.\\ L'amélioration des performances passent par l'écriture tour de rôle vers les serveurs, vous aurez reconnu l'utilisation de l'algorithme de répartition de charge round robin (rr).\\
-Les données de l'annuaire de données quand à l'elles sont écrites en parallèle sur les espaces de stockage << brick-ns >>, directive du module << cluster/afr >>.\\\\
-Vous pourriez rajouter des directives à des fins de performances, voici un exemple:
+Un dialogue est établi entre le client et les serveurs par le port par défaut de glusterts : 6996. Les espaces de stockage nommés \og brick\fg~ de chacun de ses serveurs seront fusionnés par le module \og cluster/unify\fg.\\ L'amélioration des performances passe par l'écriture à tour de rôle vers les différents serveurs ; vous aurez reconnu l'utilisation de l'algorithme de répartition de charge round robin (rr).\\
+Les données de l'annuaire de données quand à elles sont écrites en parallèle sur les espaces de stockage \og brick-ns\fg, directive du module \og cluster/afr\fg.\\\\
+Nous pourrions rajouter des directives à des fins de performances, voici un exemple:
 \begin{lstlisting}
 volume iot
  type performance/io-threads
@@ -577,6 +578,33 @@ volume readahead
  subvolumes writebehind
 end-volume
 	  \end{lstlisting}
+
+Le tableau suivant répertorie les options de volume ainsi que sa description et la valeur par défaut (d'autres options existent):\\\\
+\begin{tabular}{|p{5cm}|p{8cm}|m{4cm}|}
+  \hline
+  Option & Description & Valeur par défaut \\
+  \hline
+  performance.cache-refresh-timeout & Les données mises en cache pour un fichier sera conservé x secondes, après quoi revalidation des données est effectuée. & 1 sec \\
+  \hline
+  performance.cache-size & Taille du cache de lecture. & 32 MB \\
+  \hline
+  performance.write-behind-window-size & taille du per-file écrire dérriere le buffer & 1 MB \\
+  \hline
+  network.frame-timeout & Le délai après lequel l'opération doit être déclaré comme mort, si le serveur ne répond pas à une opération particulière. & 1800 (30 mn) \\
+  \hline
+  network.ping-timeout & La durée pendant laquelle le client attend de vérifier si le serveur est sensible. & 42 secs  \\
+  \hline
+  auth.allow & Les adresses IP ou nom d'hôte qui devraient être autorisés à accéder au volume & * (permis à tous) \\
+  \hline
+  auth.reject & Les adresses IP ou nom d'hôte qui devraient se voir refuser l'accès au volume. & NONE (aucun rejet) \\
+  \hline
+  diagnostics.brick-log-level & Changements du niveau de journalisation des serveurs. & NORMAL \\
+  \hline
+  diagnostics.client-log-level & Changements du niveau de journalisation des clients & NORMAL \\
+  \hline
+  
+\end{tabular}
+
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
@@ -914,12 +942,6 @@ umount /mnt/mfs)
 /usr/sbin/mfsmetalogger stop
 /usr/sbin/mfsmaster stop
 	  \end{lstlisting}
-% insertion d'une image :
-%\begin{figure}[p]
-%	\includegraphics[width=12cm,height=120mm]{mastersrv.png}
-%	\caption{MooseFs Read Process}
-%	\label{identifiant test}
-%\end{figure} 
 Discution général.\\
 Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par le biais d'un buffer (cache d'écriture). En conséquence, l'exécution de la requête d'écriture elle-même transfère seulement les données au buffer (cache), l'écriture réelle n'ayant donc pas lieu. Conséquence, la confirmation de la requête d'écriture ne signifie pas que les données ont été correctement écrites sur un disque.\\ Elle est seulement invoquer et l'aboutissement passe par la commande fsync qui provoque le déchargement de toutes les données gardées en cache pour obtenir écrite physique sur le disque. Problématique en cas d'erreur avant la finalisation de cette phase, c'est un retour d'erreur de la commande fsync, voir la perte des données. 
 
@@ -983,7 +1005,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				\item 278 Go d'espace disque\\
 			\end{itemize}
 
-			Nous avons réalisé un benchmark mesurant les performances (débit) de quatre type d'opérations sur le système de fichier distribué :
+			Nous avons développé un benchmark mesurant les performances (débit) de quatre type d'opérations sur le système de fichier distribué :
 			\begin{description}
 				\item[Écriture de petits fichiers :] écriture des sources du noyau linux (décompressé).
 				\item[Écriture de gros fichiers :] écriture de trois fichiers de 1 Go\footnote{Fichier créé avec la commande : dd if=/dev/urandom of=/lieu/voulu bs=1G count=1}.
@@ -991,7 +1013,19 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				Pour cela, nous avons compressé le dossier contenant le noyau (impliquant la lecture des fichiers),
 				en redirigeant la sortie vers /dev/nul (afin que les performances du disque ne rentrent pas en jeux).
 				\item[Lecture de gros fichiers :] lecture des fichiers de 1 Go. Opération réalisé en faisant un "cat" des fichier,
-				et en redirigeant la sortie vers /dev/nul afin de ne pas "polluer" le terminal.
+				et en redirigeant la sortie vers /dev/nul afin de ne pas \og polluer\fg~le terminal.\\
+			\end{description}
+
+			Les scripts de benchmark se découpent en deux parties :
+			\begin{description}
+				\item[Quatre petits scripts Bash ]décrivant les opérations à réaliser, décrite ci dessus.
+				\item[Un script écrit en Ruby] contrôlant l'ensemble du benchmark.
+				Ce script se charge de distribuer les scripts Bash aux clients par SCP
+				\footnote{Secure copy : désigne un transfert sécurisé de fichiers entre deux ordinateurs utilisant le protocole de communication SSH (Wikipédia)},
+				et leur demande de les exécuter. Afin que l'ensemble des clients effectuent ces opérations simultanément, il a fallu mutlithreader le script
+				(en utilisant la fonction fork\footnote{Cette fonction permet à un processus de donner naissance à un nouveau processus,
+				par exemple en vue de réaliser un second traitement parallèlement au premier. (Wikipédia)}).
+				Le déroulement du benchmark peut être suivis de manière précise sur le terminal, et les résultats sont consultable dans un fichier texte.
 			\end{description}
 
 
@@ -1001,29 +1035,42 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 	% apport du projet tuteuré pour nous, bonne expérience avant départ en stage, ...
 
 	\appendix
-		\chapter{Répartition des taches}
-			\section{Florent Lévigne}
-				\begin{itemize}
-					\item Étude sur la mise en place de GlusterFS
-					\item Réalisation d'un script de déploiement de GlusterFS
-					\item Étude sur la mise en place de MooseFS
-					\item Réalisation d'un script de déploiement de MooseFS
-					\item Réalisation d'un script de benchmark pour système de fichiers distribué
-				\end{itemize}
-			\section{Jean-François Garcia}
-				\begin{itemize}
-					\item Étude sur la mise en place de GlusterFS
-					\item Étude sur la mise en place de NFS
-					\item Réalisation d'un script de déploiement de NFS
-					\item Étude sur la mise en place de CephFS
-					\item Réalisation d'un script de déploiement de CephFS
-				\end{itemize}
-                        \section{Maxime Douhéret}
-                                \begin{itemize}
-                                        \item Étude sur la mise en place de GlusterFS
-                                        \item Étude sur la mise en place de CephFS
-                                        \item Aide à la réalisation des scripts de déploiement de CephFS et de benchmark
+		\chapter{Organisation du travail}
+			\section{Outils utilisés}
+				Afin d'organiser au mieux notre travail, nous avons mise en place un projet sur GitHub
+				\footnote{GitHub est un service web d'hébergement et de gestion de développement de logiciels (Wikipédia).}.
+				Nous avons utilisé le wiki
+				\footnote{Un wiki est un site Web dont les pages comportent des hyperliens les unes vers les autres
+				et sont modifiables par les visiteurs afin de permettre l'écriture et l'illustration collaboratives des documents numériques qu'il contient. (Wikipédia)}
+				mise à notre disposition afin de mettre en commun nos connaissances et nos découvertes sur notre projet.
 
+				Nous avons aussi utilisé le dépôt Git\footnote{Git est un logiciel de gestion de versions, écrit par Linus Torvalds.} pour gérer le développement
+				de nos scripts, et notre rapport de projet.
+\newpage
+			\section{Répartition des taches}
+				\subsection{Florent Lévigne}
+					\begin{itemize}
+						\item Étude sur la mise en place de GlusterFS
+						\item Réalisation d'un script de déploiement de GlusterFS
+						\item Étude sur la mise en place de MooseFS
+						\item Réalisation d'un script de déploiement de MooseFS
+						\item Réalisation d'un script de benchmark pour système de fichiers distribué
+					\end{itemize}
+				\subsection{Jean-François Garcia}
+					\begin{itemize}
+						\item Étude sur la mise en place de GlusterFS
+						\item Étude sur la mise en place de NFS
+						\item Réalisation d'un script de déploiement de NFS
+						\item Étude sur la mise en place de CephFS
+						\item Réalisation d'un script de déploiement de CephFS
+					\end{itemize}
+				\subsection{Maxime Douhéret}
+					\begin{itemize}
+						\item Étude sur la mise en place de GlusterFS
+						\item Étude sur la mise en place de CephFS
+						\item Aide à la réalisation des scripts de déploiement de CephFS et de benchmarka
+					\end{itemize}
+	
 		\chapter{Scripts}
 			\section{GlusterFs}
 				Fichier deploimentGluster.rb :
