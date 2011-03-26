@@ -346,7 +346,7 @@ Pin-Priority: 700
 Package: *
 Pin: release a=unstable
 Pin-Priority: 600
-	  \end{lstlisting}\\
+\end{lstlisting}\\
 
 \textbf{Installation de GlusterFS Serveur}\\\\
 Actualisez le contenu du catalogue de paquets, installez le module serveur sur les deux machines.
@@ -983,13 +983,15 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
                         \subsection{Serveurs de données}
                            
 
-
+				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+				%%%%%%%%%%%%%%%%%%%%%%% ajouter l'image au dépôt %%%%%%%%%%%%%%%%%%%%%%%%
 		        \begin{figure}[H]
 			        \begin{center}
-				        \includegraphics[width=0.9\linewidth]{images/Ceph_architecture2.png}
+				        %\includegraphics[width=0.9\linewidth]{images/Ceph_architecture2.png}
 				        \caption{Fonctionnement de CephFS}
 			        \end{center}
 		        \end{figure}
+				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 	\chapter{Comparaison}
@@ -1018,7 +1020,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 
 			Les scripts de benchmark se découpent en deux parties :
 			\begin{description}
-				\item[Quatre petits scripts Bash ]décrivant les opérations à réaliser, décrite ci dessus.
+				\item[Quatre petits scripts Bash]décrivant les opérations à réaliser, décrite ci dessus.
 				\item[Un script écrit en Ruby] contrôlant l'ensemble du benchmark.
 				Ce script se charge de distribuer les scripts Bash aux clients par SCP
 				\footnote{Secure copy : désigne un transfert sécurisé de fichiers entre deux ordinateurs utilisant le protocole de communication SSH (Wikipédia)},
