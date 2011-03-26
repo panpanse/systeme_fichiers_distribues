@@ -922,6 +922,7 @@ umount /mnt/mfs)
 %\end{figure} 
 Discution général.\\
 Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par le biais d'un buffer (cache d'écriture). En conséquence, l'exécution de la requête d'écriture elle-même transfère seulement les données au buffer (cache), l'écriture réelle n'ayant donc pas lieu. Conséquence, la confirmation de la requête d'écriture ne signifie pas que les données ont été correctement écrites sur un disque.\\ Elle est seulement invoquer et l'aboutissement passe par la commande fsync qui provoque le déchargement de toutes les données gardées en cache pour obtenir écrite physique sur le disque. Problématique en cas d'erreur avant la finalisation de cette phase, c'est un retour d'erreur de la commande fsync, voir la perte des données. 
+
 	\chapter{Ceph}
 		\section{Présentation}
 
@@ -947,9 +948,26 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
                         La partie serveur de CephFS utilise trois types distinct de démons : 
                         \begin{itemize}
                         \item moniteur de cluster, qui garde trace des noeuds actifs et défaillants
-                          \item serveurs de metadonnées, qui stockent les metadonnées des inoeuds et des répertoires
+                          \item serveurs de métadonnées, qui stockent les métadonnées des inoeuds et des répertoires
                           \item serveurs de données, qui stockent les données.
                         \end{itemize}
+
+                        \subsection{Moniteur de cluster}
+                           Le moniteur gère l'administration centrale, la configuration et l'état du cluster. C'est à partir du moniteur que l'on modifié le cluster : ajout ou suppresion de serveurs de données et métadonnées. Les clients ont accès au données gérées par CephFS par l'intermédiaire d'un moniteur. Il garde en mémoire une carte du cluster, ce qu'il lui permet de communiquer aux clients sur quels serveurs de métadonnées et de données se connecter pour modifier, ajouter ou supprimer des fichiers.
+
+                        \subsection{Serveurs de métadonnées}
+                           
+
+                        \subsection{Serveurs de données}
+                           
+
+
+		        \begin{figure}[H]
+			        \begin{center}
+				        \includegraphics[width=0.9\linewidth]{images/Ceph_architecture2.png}
+				        \caption{Fonctionnement de CephFS}
+			        \end{center}
+		        \end{figure}
 
 
 	\chapter{Comparaison}
