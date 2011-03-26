@@ -829,6 +829,26 @@ umount /mnt/mfs)
 	\chapter{Ceph}
 		\section{Présentation}
 
+                        \begin{figure}[H]
+				\begin{center}
+					\includegraphics[width=0.40\linewidth]{images/cephfs.jpg}
+				\end{center}
+			\end{figure}
+
+                        CephFS est un système de fichiers distribué sous Licence LGPL, créé initialement par Sage Weill en 2007 pendant ses étude à l'université de Californie à Santa Cruz. Le but principal de CephFS est d'être compatible POSIX et d'être complètement distribué sans un seul point de défaillance. Les données sont répliqué de façon transparente ce qui fait de CephFS un système tolérant aux pannes. Mais CephFS est encore en phase de développement et il est fortement conseillé de ne pas l'utiliser en production.\\
+
+                        Tout comme avec MooseFS les données sont découpées, réparties sur les différents serveurs et répliquées sur x noeuds. Cette répartition permet à CephFS d'avoir une grande tolérance vis-à-vis de la perte de noeuds stockant les données. De plus CephFS permet de rajouter ou d'enlever des serveurs de données pendant le fonctionnement de CephFS sans être obligé de couper le service.\\
+
+                        CephFS remplit deux lacunes importantes des systèmes de fichiers actuellement disponible :
+                        \begin{itemize}
+                          \item robustesse du stockage distribué open-source. CephFS fournit une variété de fonctionnalités clés, généralement manquante dans les systèmes de fichiers open-source, tel que l'évolutivité transparente (capacité d'ajouter simplement un disque pour étendre le volume de stockage), la répartition de charge intelligente
+                          \item évolutivité en terme de charge de travail ou de capacité destockage. CephFS a été créer pour supporter des charges de l'ordre de dizaines de milliers de clients accédant au même fichier ou au même dossier. La capacité de stockage va du gigaoctet au petaoctet\footnote{1 petaoctet = 1024 teraoctet} et au-delà.
+                        \end{itemize}
+                        La partie serveur de CephFS est divisé en trois partie : un moniteur, un ou plusieurs serveurs de metadonnées et plusieurs serveurs de données.\\
+                        
+
+
+
 	\chapter{Comparaison}
 	% comparaison des performances
 	% aspects générales, site officiel (doc, tuto), avis personnels
