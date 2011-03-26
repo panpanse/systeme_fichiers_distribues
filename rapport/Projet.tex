@@ -204,7 +204,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		\end{description}
                 \newpage
                 
-		Pour travailler sur le Grid'5000, on se connecte en ssh\footnote{Secure Shell : protocole de communication sécurisé} à une machine appelé le \og frontend \fg, il y en a un sur chaque site.
+		Pour travailler sur le Grid'5000, on se connecte en ssh\footnote{Secure Shell : protocole de communication sécurisé} à une machine appelé le \og frontend\fg, il y en a un sur chaque site.
 		A partir de ce frontend, il est possible de déployer des environnements sur des machines du Grid.
 		Un certain nombre d'images (OS) sont disponible. L'ensemble de nos tests ont été réalisés avec une Debian Squeeze (6),
 		que nous avons construit à partir d'une Debian Lenny (5), la version 6 n'étant pas disponible.
@@ -298,7 +298,7 @@ Sur le client, nous avons le programme appelé showmount associé à l'option -e
     \begin{lstlisting}
 	  modprobe fuse
 	  \end{lstlisting}
-    Pour charger le module automatiquement à chaque démarrage de l'ordinateur, il faut ajouter \og fuse \fg~ dans le fichier \og /etc/modules \fg.\\
+    Pour charger le module automatiquement à chaque démarrage de l'ordinateur, il faut ajouter \og fuse\fg~ dans le fichier \og /etc/modules\fg.\\
     \begin{lstlisting}
 	 nano /etc/modules
 	 \end{lstlisting}
@@ -386,7 +386,7 @@ En cas d'infrastructure équipé de l'InfiniBand (bus à haut débit), nous auri
 apt-get install libibverbs1 librdmacm1
 glusterfs-volgen --name mystore -t ib-verbs 172.16.65.92:/sharespace 172.16.65.91:/sharespace
 	  \end{lstlisting}
-La commande glusterfs-volgen génère les fichiers de configuration pour les serveurs et le client. Chaque fichier porte l'ip de la machine concerné dans son nom, nous allons les exporter dans leur répertoire d'exploitation et les renommer pour les qu'il soient pris en compte.
+La commande glusterfs-volgen génère les fichiers de configuration pour les serveurs et le client. Chaque fichier porte l'IP de la machine concerné dans son nom, nous allons les exporter dans leur répertoire d'exploitation et les renommer pour les qu'il soient pris en compte.
 \begin{lstlisting}
 cp 172.16.65.91-mystore-export.vol /etc/glusterfs/glusterfsd.vol
 cp mystore-tcp.vol /etc/glusterfs/glusterfs.vol
@@ -395,13 +395,13 @@ pour le second serveur
 scp 172.16.65.92-mystore-export.vol 172.16.65.92:/etc/glusterfs/glusterfsd.vol
 scp mystore-tcp.vol 172.16.65.92:/etc/glusterfs/glusterfs.vol
 	  \end{lstlisting}
-Une copie du fichier de transport ou fichier de configuration client doit être stocké par au-moins un serveur.\\
-A ce moment, vous êtes prêt à mettre en marche les services de GlusterFS sur chaque serveur :
+Une copie du fichier de transport ou fichier de configuration client doit être stocké par au moins un serveur.\\
+A ce moment, nous sommes êtes prêt à mettre en marche les services de GlusterFS sur chaque serveur :
 \begin{lstlisting}
 /etc/init.d/glusterfs-server start
 	  \end{lstlisting}
 Montage d'un poste client.\\\\
-Petit apparté pour vous spécifier que le protocol en natif est fuse, mais que l'applicatif est capable de supporter d'autres protocol Nfs, Cifs ou encore Dav.\\
+Petit aparté pour vous spécifier que le protocole en natif est fuse, mais que l'applicatif est capable de supporter d'autres protocoles, NFS, CIFS ou encore Dav.\\
 Le paquet gluster étant installé, passons à la création du point de montage.
 \begin{lstlisting}
 mkdir -p /mnt/monglusterfsvolume
@@ -410,14 +410,14 @@ Notre client va maintenant monter le volume réparti, il suffit d'employer la co
 \begin{lstlisting}
 mount -t glusterfs 172.16.65.91:6996 /mnt/monglusterfsvolume/
 	  \end{lstlisting}
-Lors du montage, GlusterFS va initier une connexion vers le serveur spéficié afin de récupérer le fichier de configuration du client que nous avons stocké précédement sous /etc/glusterfs/glusterfs.vol.\\\\
+Lors du montage, GlusterFS va initier une connexion vers le serveur spécifié afin de récupérer le fichier de configuration du client que nous avons stocké précédemment sous /etc/glusterfs/glusterfs.vol.\\\\
 ATTENTION\\
-Nous avons pu constater que cette étape ne fonctionné pas toujours très bien. Cela à pour conséquence de générer des dysfonctionnements du à des problémes de droits. Vous aurez droit à la lecture et à la modification des fichiers présent dans le volume.\\
-Pour raisoudre cette mauvaise initialisation, copier le fichier de transport manuellement dans /etc/glusterfs/ et remonté le volume pour recharger le nouveau fichier de configuration avec la commande :
+Nous avons pu constater que cette étape ne fonctionnait pas toujours très bien. Cela a pour conséquence de générer des dysfonctionnements dues à des problèmes de droits. Nous aurons droit à la lecture et à la modification des fichiers présent dans le volume.\\
+Pour résoudre cette mauvaise initialisation, copions le fichier de transport manuellement dans /etc/glusterfs/ et remontons le volume pour recharger le nouveau fichier de configuration avec la commande :
 \begin{lstlisting}
 mount -t glusterfs /etc/glusterfs/glusterfs.vol /mnt/monglusterfsvolume/
 	  \end{lstlisting}
-Pour monter automatiquement à chaque boot, ajoutez la ligne suivante au fichier /etc/fstab
+Pour le monter automatiquement à chaque démarrage, il faut ajouter la ligne suivante au fichier /etc/fstab
 Pour un serveur :
 \begin{lstlisting}
 172.16.65.91  /mnt/monglusterfsvolume  glusterfs  defaults,_netdev  0  0
@@ -449,12 +449,12 @@ Copions le fichier test sur le FS distribué :
 \begin{lstlisting}
 cp test /mnt/monglusterfsvolume
 	  \end{lstlisting}
-L'examinez le contenu des répertoires /mnt/monglusterfsvolume et /sharespace des deux serveurs.\\
+Examinons le contenu des répertoires /mnt/monglusterfsvolume et /sharespace des deux serveurs.\\
 ls -lh /mnt/monglusterfsvolume\\
 ls -lh /sharespace\\
-On constate l'absence du fichier test sur l'un des noeuds, ce qui est totalement cohérent puisque la configuration par défaut de glusterfs est la mise en oeuvre de la concatenation des volumes physique et sans duplication ou réplication des données.\\
-Nous utilisons donc l'espace des deux volumes sur les serveurs et vu comme un seul par les clients.
-Ci-dessous des informations complementaires sur les possibilités des fichiers de configuration même si nous n'y toucherons pas pour notre travail.\\
+On constate l'absence du fichier test sur l'un des nœuds, ce qui est totalement cohérent puisque la configuration par défaut de glusterfs est la mise en œuvre de la concaténation des volumes physiques et sans duplication ou réplication des données.\\
+Nous utilisons donc l'espace des deux volumes sur les serveurs, qui est vu comme un seul par les clients.
+Vous trouverez ci-dessous des informations complémentaires sur les possibilités des fichiers de configuration même si nous n'y toucherons pas pour notre travail.\\
 \newpage
 Listing du fichier glusterfsd.vol
 \begin{lstlisting}
@@ -490,14 +490,14 @@ Le module “plocks” hérite du module “posix” et y ajoute de verrous de f
 Le module “brick” hérite du module “plocks” et y ajoute un cache en lecture.\\
 Le module “brick-ns” pointe vers l'espace de stockage de l'annuaire de fichiers (”namespace”) “/mount/glusterfs-ns”.\\
 Le module “server” hérite des modules “bricks” et “brick-ns” et les publie sur le port TCP 6996 et pour le PC “localhost” uniquement.\\
-On aurait par exemple pu ajouter un cache en écriture et un cache en lecture/écriture sur “brick-ns”.\\\\
+Nous aurions par exemple pu ajouter un cache en écriture et un cache en lecture/écriture sur “brick-ns”.\\\\
 Il est toujours primordial de bien définir le niveau de log :
 \begin{lstlisting}
 glusterfsd -f server1.vol -L DEBUG -l server1.log
 glusterfsd -f server2.vol -L DEBUG -l server2.log
 	  \end{lstlisting}
-L'option « -f » pointe vers le fichier de configuration, « -L » indique le niveau de journalisation souhaité et « -l » donne le nom du fichier de journaux par
-instance de « Glusterfs ».\\\\
+L'option \og -f\fg~ pointe vers le fichier de configuration, \og -L\fg~  indique le niveau de journalisation souhaité et \og -l\fg~ donne le nom du fichier de journaux par
+instance de \og Glusterfs\fg.\\\\
 \newpage
 Listing du fichier /etc/glusterfs/client.vol.
 \begin{lstlisting}172.16.65.91
@@ -552,9 +552,9 @@ option namespace afr-ns
 subvolumes afr1
 end-volume
 	  \end{lstlisting}
-Un dialogue est établi entre le client et les serveurs par le port par défaut de glusterts 6996. Les espaces de stockage nommé << brick >> de chacun de ses serveurs seront fusionnés module << cluster/unify >>.\\ L'amélioration des performances passent par l'écriture tour de rôle vers les serveurs, vous aurez reconnu l'utilisation de l'algorithme de répartition de charge round robin (rr).\\
-Les données de l'annuaire de données quand à l'elles sont écrites en parallèle sur les espaces de stockage << brick-ns >>, directive du module << cluster/afr >>.\\\\
-Vous pourriez rajouter des directives à des fins de performances, voici un exemple:
+Un dialogue est établi entre le client et les serveurs par le port par défaut de glusterts : 6996. Les espaces de stockage nommés \og brick\fg~ de chacun de ses serveurs seront fusionnés par le module \og cluster/unify\fg.\\ L'amélioration des performances passe par l'écriture à tour de rôle vers les différents serveurs ; vous aurez reconnu l'utilisation de l'algorithme de répartition de charge round robin (rr).\\
+Les données de l'annuaire de données quand à elles sont écrites en parallèle sur les espaces de stockage \og brick-ns\fg, directive du module \og cluster/afr\fg.\\\\
+Nous pourrions rajouter des directives à des fins de performances, voici un exemple:
 \begin{lstlisting}
 volume iot
  type performance/io-threads
@@ -577,6 +577,7 @@ volume readahead
  subvolumes writebehind
 end-volume
 	  \end{lstlisting}
+
 	\chapter{MooseFS}
 		% données temporaires, penser à citer les sources si passages copiés collés
 		% il est apparemment aussi possible de mettre en place MooseFS sur un seul serveur
