@@ -1010,7 +1010,8 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 			Nous avons développé un benchmark mesurant les performances (débit) de quatre type d'opérations sur le système de fichier distribué :
 			\begin{description}
 				\item[Écriture de petits fichiers :] écriture des sources du noyau linux (décompressé).
-				\item[Écriture de gros fichiers :] écriture de trois fichiers de 1 Go\footnote{Fichier créé avec la commande : dd if=/dev/urandom of=/lieu/voulu bs=1G count=1}. Les trois fichiers sont différents.
+				\item[Écriture de gros fichiers :] écriture de trois fichiers de 1 Go
+				\footnote{Fichier créé avec la commande : dd if=/dev/urandom of=/lieu/voulu bs=1G count=1}. Les trois fichiers sont différents.
 				\item[Lecture de petits fichiers: ] lecture des fichiers du noyau linux.
 				Pour cela, nous avons compressé le dossier contenant le noyau (impliquant la lecture des fichiers),
 				en redirigeant la sortie vers /dev/nul (afin que les performances du disque ne rentrent pas en jeux).
@@ -1029,6 +1030,43 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				par exemple en vue de réaliser un second traitement parallèlement au premier. (Wikipédia)}).
 				Le déroulement du benchmark peut être suivis de manière précise sur le terminal, et les résultats sont consultable dans un fichier texte.
 			\end{description}
+
+			\subsection{Cinq serveurs}
+
+			\subsection{Vingt serveurs}
+
+			\subsection{Cinquante serveurs}
+
+			% a remplacer par des graphs Gnu Plot
+
+		        \begin{figure}[H]
+			        \begin{center}
+				        \includegraphics[width=1\linewidth]{graph/calc/50WS.png}
+				        \caption{Écriture de petits fichiers avec 50 serveurs}
+			        \end{center}
+		        \end{figure}
+
+		        \begin{figure}[H]
+			        \begin{center}
+				        \includegraphics[width=1\linewidth]{graph/calc/50WB.png}
+				        \caption{Écriture de gros fichiers avec 50 serveurs}
+			        \end{center}
+		        \end{figure}
+
+		        \begin{figure}[H]
+			        \begin{center}
+				        \includegraphics[width=1\linewidth]{graph/calc/50RS.png}
+				        \caption{Lecture de petits fichiers avec 50 serveurs}
+			        \end{center}
+		        \end{figure}
+
+		        \begin{figure}[H]
+			        \begin{center}
+				        \includegraphics[width=1\linewidth]{graph/calc/50RB.png}
+				        \caption{Lecture de gros fichiers avec 50 serveurs}
+			        \end{center}
+		        \end{figure}
+
 
 
 	\chapter{Conclusion}
