@@ -313,7 +313,7 @@ Sur le client, nous avons le programme appelé showmount associé à l'option -e
 			\end{center}
 		\end{figure}
 
-GlusterFS est un système de fichiers distribués libre (gpl v.3), à la fois très simple à mettre en œuvre et dont les capacités de stockage peuvent monter jusqu'à plusieurs petabytes (1,000 milliards octets).\\
+GlusterFS est un système de fichiers distribués libre (GPLv3), à la fois très simple à mettre en œuvre et dont les capacités de stockage peuvent monter jusqu'à plusieurs petabytes (1,000 milliards octets).\\
 GlusterFS est composé de deux éléments logiciels : un serveur et un client.\\
 GlusterFS supporte plusieurs protocoles de communication tels que TCP/IP, InfiniBand RDMA.\\
 
@@ -953,7 +953,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				\begin{center}
 					\includegraphics[width=0.40\linewidth]{images/cephfs.jpg}
 				\end{center}
-			\end{figure}
+			\end{figure}-k -e squeeze-collective -u flevigne
 
                         CephFS est un système de fichiers distribué sous Licence LGPL, créé initialement par Sage Weill en 2007 pendant ses étude à l'université de Californie à Santa Cruz. Le but principal de CephFS est d'être compatible POSIX et d'être complètement distribué sans un seul point de défaillance. Les données sont répliqué de façon transparente ce qui fait de CephFS un système tolérant aux pannes. Mais CephFS est encore en phase de développement et il est fortement conseillé de ne pas l'utiliser en production.\\
 
@@ -961,8 +961,8 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 
                         CephFS remplit deux lacunes importantes des systèmes de fichiers actuellement disponible :
                         \begin{itemize}
-                          \item robustesse du stockage distribué open-source. CephFS fournit une variété de fonctionnalités clés, généralement manquante dans les systèmes de fichiers open-source, tel que l'évolutivité transparente (capacité d'ajouter simplement un disque pour étendre le volume de stockage), la répartition de charge intelligente
-                          \item évolutivité en terme de charge de travail ou de capacité destockage. CephFS a été créer pour supporter des charges de l'ordre de dizaines de milliers de clients accédant au même fichier ou au même dossier. La capacité de stockage va du gigaoctet au petaoctet\footnote{1 petaoctet = 1024 teraoctet} et au-delà.
+                          \item robustesse du stockage distribué open-source. CephFS fournit une variété de fonctionnalités clés, généralement manquante dans les systèmes de fichiers open-s-k -e squeeze-collective -u flevigneource, tel que l'évolutivité transparente (capacité d'ajouter simplement un disque pour étendre le volume de stockage), la répartition de charge intelligente
+                          \item évolutivité en terme de charge de travail ou de capacité de stockage. CephFS a été créer pour supporter des charges de l'ordre de dizaines de milliers de clients accédant au même fichier ou au même dossier. La capacité de stockage va du gigaoctet au petaoctet\footnote{1 petaoctet = 1024 teraoctet} et au-delà.
                         \end{itemize}
 \newpage
                         
@@ -970,16 +970,16 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
                         
                         La partie serveur de CephFS utilise trois types distinct de démons : 
                         \begin{itemize}
-                        \item moniteur de cluster, qui garde trace des noeuds actifs et défaillants
+                        \item moniteur de cluster, qui garde trace des nœuds actifs et défaillants
                           \item serveurs de métadonnées, qui stockent les métadonnées des inoeuds et des répertoires
                           \item serveurs de données, qui stockent les données.
                         \end{itemize}
 
                         \subsection{Moniteur de cluster}
-                           Le moniteur gère l'administration centrale, la configuration et l'état du cluster. C'est à partir du moniteur que l'on modifié le cluster : ajout ou suppresion de serveurs de données et métadonnées. Les clients ont accès au données gérées par CephFS par l'intermédiaire d'un moniteur. Il garde en mémoire une carte du cluster, ce qu'il lui permet de communiquer aux clients sur quels serveurs de métadonnées et de données se connecter pour modifier, ajouter ou supprimer des fichiers.
+                           Le moniteur gère l'administration centrale, la configuration et l'état du cluster. C'est à partir du moniteur que l'on modifie le cluster : ajout ou suppression de serveurs de données et métadonnées. Les clients ont accès au données gérées par CephFS par l'intermédiaire d'un moniteur. Il garde en mémoire une carte du cluster, ce qu'il lui permet de communiquer aux clients sur quels serveurs de métadonnées et de données se connecter pour modifier, ajouter ou supprimer des fichiers.
 
                         \subsection{Serveurs de métadonnées}
-                           Le démon gérant les serveurs de métadonnées agit en tant que cache cohérent et distribué du système de fichiers. Il contient les données concernant l'arborescence des fichiers et leurs métadonnées (nom, taille, emplacement mémoire sur les serveur de donées). Avoir plusieurs serveurs de métadonnées a un certain avantage car cela permet d'équilibrer la charge de travail entre les différents serveurs et donc de gérer plus de clients au même moment.
+                           Le démon gérant les serveurs de métadonnées agit en tant que cache cohérent et distribué du système de fichiers. Il contient les données concernant l'arborescence des fichiers et leurs métadonnées (nom, taille, emplacement mémoire sur les serveur de données). Avoir plusieurs serveurs de métadonnées a un certain avantage car cela permet d'équilibrer la charge de travail entre les différents serveurs et donc de gérer plus de clients au même moment.
 
                         \subsection{Serveurs de données}
                            Les serveurs de données stockent les fichiers du cluster. Ils sont découpés en morceaux et répliqués plusieurs fois sur des serveurs différents. Cela permet une certaine tolérance vis-à-vis de la perte de serveurs. Si jamais un serveur tombe en panne, les données sont toujours accessible car elles sont présente sur un autre serveur de données.
@@ -991,6 +991,49 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				        \caption{Fonctionnement de CephFS}
 			        \end{center}
 		        \end{figure}
+		        \section{Mise en place}
+		                       Avant toute configuration, il nous faut déterminiez les paquets qui nous seront utiles.Utilisant une image de Debian Squeeze, On recherche dans la liste des paquets disponibles, ceux dont le nom débute par 'ceph'.
+		                       \begin{lstlisting}
+# aptitude search ?name"(^ceph)
+i   ceph                   - distributed storage and file system                                         
+i A ceph-client-tools      - utilities to mount a ceph filesystem with the kernel client                 
+p   ceph-client-tools-dbg  - debugging symbols for ceph-client-tools                                     
+p   ceph-dbg               - debugging symbols for ceph                                                  
+i A ceph-fuse              - FUSE-based client for the Ceph distributed file system                      
+p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
+                           \end{lstlisting}	                       
+		                       Afin de mettre en place Ceph, il faut connaitre le nombre exacte de serveurs qui seront utilisés. Dans cet exemple de mise en place, nous prenons deux serveurs, node0 et node1. node0 sera le serveur principal, que l'on appel aussi moniteur. La totalité de la configuration, hormis le montage des clients, se fait à partir du moniteur. Pour commencer, il faut créer un fichier de configuration ceph.conf qui contiendra une grande partie des données nécessaires au bon fonctionnement des serveurs :
+		           \begin{lstlisting}
+[global]
+       pid file = /var/run/ceph/$name.pid
+       debug ms = 1
+       keyring = /etc/ceph/keyring.bin
+[mon]
+       mon data = /tmp/partage/mon$id
+[mon0]
+       host = node0
+       mon addr = 10.0.0.10:6789
+[mds]
+       debug mds = 1
+       keyring = /etc/ceph/keyring.$name
+[mds0]
+       host = node0
+[mds1]
+       host = node1
+[osd]
+       sudo = true
+       osd data = /tmp/partage/osd$id
+       keyring = /etc/ceph/keyring.$name
+       debug osd = 1
+       debug filstore = 1
+       osd journal = /tmp/partage/osd$id/journal
+       osd journal size = 1000
+[osd0]
+       host = node0
+[osd1]
+       host = node1
+
+		           \end{lstlisting}           
 
 
 	\chapter{Comparaison}
@@ -1112,7 +1155,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 					\begin{itemize}
 						\item Étude sur la mise en place de GlusterFS
 						\item Étude sur la mise en place de CephFS
-						\item Aide à la réalisation des scripts de déploiement de CephFS et de benchmarka
+						\item Aide à la réalisation des scripts de déploiement de CephFS et de benchmark
 					\end{itemize}
 	
 		\chapter{Scripts}
@@ -1401,14 +1444,16 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				\item NFS :
 				\item GlusterFS :
 				\begin{itemize}
-					\item Documentation de GlusterFS\footnote{http://gluster.com/community/documentation/index.php/Main\_Page}
+					\item Documentation de GlusterFS\footnote{\href{http://gluster.com/community/documentation/index.php/Main_Page}
+					{http://gluster.com/community/documentation/index.php/Main\_Page}}
 					\item Gnu/Linux Magazine numéro 133 : \og Introduction à GlusterFS\fg
 				\end{itemize}
 				\item MooseFS :
 				\begin{itemize}
-					\item Documentation de MooseFS\footnote{http://www.moosefs.org/reference-guide.html}, en particulier
+					\item Documentation de MooseFS\footnote{\href{http://www.moosefs.org/reference-guide.html}{http://www.moosefs.org/reference-guide.html}}, en particulier
 					\og Installing MooseFS Step by Step Tutorial\fg
-					\footnote{http://www.moosefs.org/tl\_files/manpageszip/moosefs-step-by-step-tutorial-v.1.1.pdf}
+					\footnote{\href{http://www.moosefs.org/tl_files/manpageszip/moosefs-step-by-step-tutorial-v.1.1.pdf}
+					{http://www.moosefs.org/tl\_files/manpageszip/moosefs-step-by-step-tutorial-v.1.1.pdf}}
 				\end{itemize}
 				\item Ceph :
 			\end{itemize}
