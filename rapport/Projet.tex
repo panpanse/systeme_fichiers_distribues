@@ -954,7 +954,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				\begin{center}
 					\includegraphics[width=0.40\linewidth]{images/cephfs.jpg}
 				\end{center}
-			\end{figure}
+			\end{figure}-k -e squeeze-collective -u flevigne
 
                         CephFS est un système de fichiers distribué sous Licence LGPL, créé initialement par Sage Weill en 2007 pendant ses étude à l'université de Californie à Santa Cruz. Le but principal de CephFS est d'être compatible POSIX et d'être complètement distribué sans un seul point de défaillance. Les données sont répliqué de façon transparente ce qui fait de CephFS un système tolérant aux pannes. Mais CephFS est encore en phase de développement et il est fortement conseillé de ne pas l'utiliser en production.\\
 
@@ -962,7 +962,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 
                         CephFS remplit deux lacunes importantes des systèmes de fichiers actuellement disponible :
                         \begin{itemize}
-                          \item robustesse du stockage distribué open-source. CephFS fournit une variété de fonctionnalités clés, généralement manquante dans les systèmes de fichiers open-source, tel que l'évolutivité transparente (capacité d'ajouter simplement un disque pour étendre le volume de stockage), la répartition de charge intelligente
+                          \item robustesse du stockage distribué open-source. CephFS fournit une variété de fonctionnalités clés, généralement manquante dans les systèmes de fichiers open-s-k -e squeeze-collective -u flevigneource, tel que l'évolutivité transparente (capacité d'ajouter simplement un disque pour étendre le volume de stockage), la répartition de charge intelligente
                           \item évolutivité en terme de charge de travail ou de capacité destockage. CephFS a été créer pour supporter des charges de l'ordre de dizaines de milliers de clients accédant au même fichier ou au même dossier. La capacité de stockage va du gigaoctet au petaoctet\footnote{1 petaoctet = 1024 teraoctet} et au-delà.
                         \end{itemize}
 \newpage
@@ -992,6 +992,39 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				        \caption{Fonctionnement de CephFS}
 			        \end{center}
 		        \end{figure}
+		        \section{Mise en place}
+		                       Afin de mettre en place Ceph, il faut connaitre le nombre exacte de serveur qui seront utilisés. Dans cet exemple de mise en place, nous prenons 2 serveurs, node0 et node1. node0 sera le serveur principal que l'on appel aussi moniteur. La totalité des configurations, hormis le montage des clients, se font à partir du moniteur. Pour commencer, il faut créer un fichier de configuration ceph.conf qui contiendra une grande partie des données nécessaires au bon fonctionnement des serveurs :
+		           \begin{lstlisting}
+[global]
+       pid file = /var/run/ceph/$name.pid
+       debug ms = 1
+       keyring = /etc/ceph/keyring.bin
+[mon]
+       mon data = /tmp/partage/mon$id
+[mon0]
+       host = node0
+       mon addr = 10.0.0.10:6789
+[mds]
+       debug mds = 1
+       keyring = /etc/ceph/keyring.$name
+[mds0]
+       host = node0
+[mds1]
+       host = node1
+[osd]
+       sudo = true
+       osd data = /tmp/partage/osd$id
+       keyring = /etc/ceph/keyring.$name
+       debug osd = 1
+       debug filstore = 1
+       osd journal = /tmp/partage/osd$id/journal
+       osd journal size = 1000
+[osd0]
+       host = node0
+[osd1]
+       host = node1
+
+		           \end{lstlisting}           
 
 
 	\chapter{Comparaison}
