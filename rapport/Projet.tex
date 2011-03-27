@@ -954,22 +954,22 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				\begin{center}
 					\includegraphics[width=0.40\linewidth]{images/cephfs.jpg}
 				\end{center}
-			\end{figure}-k -e squeeze-collective -u flevigne
+			\end{figure}
 
-                        CephFS est un système de fichiers distribué sous Licence LGPL, créé initialement par Sage Weill en 2007 pendant ses étude à l'université de Californie à Santa Cruz. Le but principal de CephFS est d'être compatible POSIX et d'être complètement distribué sans un seul point de défaillance. Les données sont répliqué de façon transparente ce qui fait de CephFS un système tolérant aux pannes. Mais CephFS est encore en phase de développement et il est fortement conseillé de ne pas l'utiliser en production.\\
+                        Ceph est un système de fichiers distribué sous Licence LGPL, créé initialement par Sage Weill en 2007 pendant ses étude à l'université de Californie à Santa Cruz. Le but principal de Ceph est d'être compatible POSIX et d'être complètement distribué sans un seul point de défaillance. Les données sont répliqué de façon transparente ce qui fait de Ceph un système tolérant aux pannes. Mais Ceph est encore en phase de développement et il est fortement conseillé de ne pas l'utiliser en production.\\
 
-                        Tout comme avec MooseFS les données sont découpées, réparties sur les différents serveurs et répliquées sur x nœuds. Cette répartition permet à CephFS d'avoir une grande tolérance vis-à-vis de la perte de nœuds stockant les données. De plus CephFS permet de rajouter ou d'enlever des serveurs de données pendant le fonctionnement de CephFS sans être obligé de couper le service.\\
+                        Tout comme avec MooseFS les données sont découpées, réparties sur les différents serveurs et répliquées sur x nœuds. Cette répartition permet à Ceph d'avoir une grande tolérance vis-à-vis de la perte de nœuds stockant les données. De plus Ceph permet de rajouter ou d'enlever des serveurs de données pendant le fonctionnement de Ceph sans être obligé de couper le service.\\
 
-                        CephFS remplit deux lacunes importantes des systèmes de fichiers actuellement disponible :
+                        Ceph remplit deux lacunes importantes des systèmes de fichiers actuellement disponible :
                         \begin{itemize}
-                          \item robustesse du stockage distribué open-source. CephFS fournit une variété de fonctionnalités clés, généralement manquante dans les systèmes de fichiers open-s-k -e squeeze-collective -u flevigneource, tel que l'évolutivité transparente (capacité d'ajouter simplement un disque pour étendre le volume de stockage), la répartition de charge intelligente
-                          \item évolutivité en terme de charge de travail ou de capacité de stockage. CephFS a été créer pour supporter des charges de l'ordre de dizaines de milliers de clients accédant au même fichier ou au même dossier. La capacité de stockage va du gigaoctet au petaoctet\footnote{1 petaoctet = 1024 teraoctet} et au-delà.
+                          \item robustesse du stockage distribué open-source. Ceph fournit une variété de fonctionnalités clés, généralement manquante dans les systèmes de fichiers open-s-k -e squeeze-collective -u flevigneource, tel que l'évolutivité transparente (capacité d'ajouter simplement un disque pour étendre le volume de stockage), la répartition de charge intelligente
+                          \item évolutivité en terme de charge de travail ou de capacité de stockage. Ceph a été créer pour supporter des charges de l'ordre de dizaines de milliers de clients accédant au même fichier ou au même dossier. La capacité de stockage va du gigaoctet au petaoctet\footnote{1 petaoctet = 1024 teraoctet} et au-delà.
                         \end{itemize}
 \newpage
                         
                 \section{Aspect technique}
                         
-                        La partie serveur de CephFS utilise trois types distinct de démons : 
+                        La partie serveur de Ceph utilise trois types distinct de démons : 
                         \begin{itemize}
                         \item moniteur de cluster, qui garde trace des nœuds actifs et défaillants
                           \item serveurs de métadonnées, qui stockent les métadonnées des inoeuds et des répertoires
@@ -977,7 +977,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
                         \end{itemize}
 
                         \subsection{Moniteur de cluster}
-                           Le moniteur gère l'administration centrale, la configuration et l'état du cluster. C'est à partir du moniteur que l'on modifie le cluster : ajout ou suppression de serveurs de données et métadonnées. Les clients ont accès au données gérées par CephFS par l'intermédiaire d'un moniteur. Il garde en mémoire une carte du cluster, ce qu'il lui permet de communiquer aux clients sur quels serveurs de métadonnées et de données se connecter pour modifier, ajouter ou supprimer des fichiers.
+                           Le moniteur gère l'administration centrale, la configuration et l'état du cluster. C'est à partir du moniteur que l'on modifie le cluster : ajout ou suppression de serveurs de données et métadonnées. Les clients ont accès au données gérées par Ceph par l'intermédiaire d'un moniteur. Il garde en mémoire une carte du cluster, ce qu'il lui permet de communiquer aux clients sur quels serveurs de métadonnées et de données se connecter pour modifier, ajouter ou supprimer des fichiers.
 
                         \subsection{Serveurs de métadonnées}
                            Le démon gérant les serveurs de métadonnées agit en tant que cache cohérent et distribué du système de fichiers. Il contient les données concernant l'arborescence des fichiers et leurs métadonnées (nom, taille, emplacement mémoire sur les serveur de données). Avoir plusieurs serveurs de métadonnées a un certain avantage car cela permet d'équilibrer la charge de travail entre les différents serveurs et donc de gérer plus de clients au même moment.
@@ -989,7 +989,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 		        \begin{figure}[H]
 			        \begin{center}
 				        \includegraphics[width=0.61\linewidth]{images/Ceph_architecture2.png}
-				        \caption{Fonctionnement de CephFS}
+				        \caption{Fonctionnement de Ceph}
 			        \end{center}
 		        \end{figure}
 		        \section{Mise en place}
@@ -1176,13 +1176,13 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 \begin{figure}[H]
 \begin{center}
 \includegraphics[bb=0 0 640 480,width=14cm]{images/srv50rb.png}
-\caption{Écriture de gros fichiers avec 50 serveurs}
+\caption{Lecture de gros fichiers avec 50 serveurs}
 \end{center}
 \end{figure} 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[bb=0 0 640 480,width=14cm]{images/srv50rb2.png}
-\caption{Écriture de gros fichiers avec 50 serveurs}
+\caption{Lecture de gros fichiers avec 50 serveurs}
 \end{center}
 \end{figure} 
 			\subsection{Analyse des résultats}
@@ -1194,8 +1194,15 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 				le systèmes de fichier distribué est-il capable de le détecter, et d'éviter d'aller lire le fichier sur un serveur distant ?
 				\item Le cache présent sur les systèmes de fichiers est-il, à lui seul, responsable de tel résultats pour la lecture ?
 				\item Lors des tests d'écriture, tous les clients écrivent les mêmes fichiers, le système de fichier distribué est-il capable de le détecter,
-				et de limiter les transferts des clients vers les serveurs ?
+				et de limiter les transferts des clients vers les serveurs ?\\
 			\end{itemize}
+
+			Nous avons remarqués, après coup, certaines faiblesses de notre benchmark, qui devrait être plus complexe que nous n'avions pensé.
+			Mais si l'on se base sur nos résultats, nous constatons que les performance de GlusterFS sont de loin les meilleurs.\\
+
+			Les performances seuls sont bien sur insuffisantes pour choisir un système de fichiers distribué, il y a plus de paramètres à prendre en comptes,
+			en fonction de l'usage que l'on veut en faire. Préfère-t-on privilégier la sécurité ? (bonne réaction face à la perte d'un ou plusieurs serveurs)
+			Les performances ? La facilité de mise en œuvre ?
 
 	\chapter{Conclusion}
 	% sur les FS
@@ -1255,16 +1262,16 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 						\item Étude sur la mise en place de GlusterFS
 						\item Étude sur la mise en place de NFS
 						\item Réalisation d'un script de déploiement de NFS
-						\item Étude sur la mise en place de CephFS
-						\item Réalisation d'un script de déploiement de CephFS
+						\item Étude sur la mise en place de Ceph
+						\item Réalisation d'un script de déploiement de Ceph
 						\item Rédaction du rapport
 					\end{itemize}
 				\subsection{Maxime Douhéret}
 					\begin{itemize}
 						\item Étude sur la mise en place de GlusterFS
-						\item Étude sur la mise en place de CephFS
-						\item Aide à la réalisation des scripts de déploiement de CephFS et de benchmark
-						\item Rédaction du rapporthttp://ceph.newdream.net/
+						\item Étude sur la mise en place de Ceph
+						\item Aide à la réalisation des scripts de déploiement de Ceph et de benchmark
+						\item Rédaction du rapport
 					\end{itemize}
 				\subsection{Vincent Claudel}
 					\begin{itemize}
@@ -1298,7 +1305,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 				\lstinputlisting[language=Ruby,numbers=left]{../NFS/deploiementNFS.rb}
 			\section{Benchmark}
 				Fichier benchmark.rb :
-				\lstinputlisting[language=Ruby,numbers=left]{../benchmark/benchmark.rb}
+				\lstinputlisting[language=Ruby,numbers=left]{../benchmark/benchcfuse -m 172.16.64.7 /cephmark.rb}
 
 				Fichier writingSmallFiles.sh :
 				\lstinputlisting[language=Bash,numbers=left]{../benchmark/writingSmallFiles.sh}
@@ -1578,7 +1585,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 				\item Ceph : 
 				  \begin{itemize}
 				  \item Site internet et Wiki de Ceph\footnote{\href{http://ceph.newdream.net/}{http://ceph.newdream.net/} \href{http://ceph.newdream.net/wiki/Main\_Page}{http://ceph.newdream.net/wiki/Main\_Page}}
-				  \item Documentations de CephFS\footnote{\href{http://www.ssrc.ucsc.edu/Papers/weil-osdi06.pdf}{http://www.ssrc.ucsc.edu/Papers/weil-osdi06.pdf} \\\href{http://www.usenix.org/publications/login/2010-08/openpdfs/maltzahn.pdf}{http://www.usenix.org/publications/login/2010-08/openpdfs/maltzahn.pdf}}
+				  \item Documentations de Ceph\footnote{\href{http://www.ssrc.ucsc.edu/Papers/weil-osdi06.pdf}{http://www.ssrc.ucsc.edu/Papers/weil-osdi06.pdf}}\footnote{\href{http://www.usenix.org/publications/login/2010-08/openpdfs/maltzahn.pdf}{http://www.usenix.org/publications/login/2010-08/openpdfs/maltzahn.pdf}}
 				  \end{itemize}
 			\end{itemize}
 
