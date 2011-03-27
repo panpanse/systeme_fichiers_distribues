@@ -993,6 +993,16 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 			        \end{center}
 		        \end{figure}
 		        \section{Mise en place}
+		                       Avant toute configuration, il nous faut déterminier les paquets qui nous seront utiles.            Utilisant une image de Debian Squeeze, On recherche dans la liste des paquets disponibles, ceux dont le nom débute par 'ceph'.
+		                       \begin{lstlisting}
+# aptitude search ?name"(^ceph)
+i   ceph                   - distributed storage and file system                                         
+i A ceph-client-tools      - utilities to mount a ceph filesystem with the kernel client                 
+p   ceph-client-tools-dbg  - debugging symbols for ceph-client-tools                                     
+p   ceph-dbg               - debugging symbols for ceph                                                  
+i A ceph-fuse              - FUSE-based client for the Ceph distributed file system                      
+p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
+                           \end{lstlisting}	                       
 		                       Afin de mettre en place Ceph, il faut connaitre le nombre exacte de serveur qui seront utilisés. Dans cet exemple de mise en place, nous prenons 2 serveurs, node0 et node1. node0 sera le serveur principal que l'on appel aussi moniteur. La totalité des configurations, hormis le montage des clients, se font à partir du moniteur. Pour commencer, il faut créer un fichier de configuration ceph.conf qui contiendra une grande partie des données nécessaires au bon fonctionnement des serveurs :
 		           \begin{lstlisting}
 [global]
