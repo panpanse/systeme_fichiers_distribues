@@ -175,10 +175,9 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 
                         \newpage
 		\section{Le Grid'5000}
-		Le Grid'5000 est une infrastructure distribuée de neuf sites sur la France, dédié à la recherche,
-		sur des systèmes distribuées à grande échelle.
+		Le Grid'5000 est une infrastructure distribuée dédié à la recherche sur des systèmes distribuées à grande échelle.
 
-		Les ingénieurs assurant le développement et le support de l'infrastructure jour après jour viennent pour la plupart	de l'INRIA\footnote{Institut National de Recherche en Informatique et en Automatique}.
+		Les ingénieurs assurant le développement et le support de l'infrastructure jour après jour et ils viennent pour la plupart	de l'INRIA\footnote{Institut National de Recherche en Informatique et en Automatique}.
 
 		Le Grid'5000 est répartit sur onze sites, dont neuf en France.
 
@@ -205,11 +204,11 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		\end{description}
                 \newpage
                 
-		Pour travailler sur le Grid'5000, on se connecte en ssh\footnote{Secure Shell : protocole de communication sécurisé} à une machine appelé le \og frontend\fg, il y en a un sur chaque site.
-		A partir de ce frontend, il est possible de déployer des environnements sur des machines du Grid.
+		Pour travailler sur le Grid'5000, on se connecte en ssh\footnote{Secure Shell : protocole de communication sécurisé} à une machine appelé le \og frontend\fg présent sur chaque site.
+		A partir de ce frontend, il est possible de déployer des environnements sur des machines du Grid (cf Partie \ref{grid} page \pageref{grid}.
 		Un certain nombre d'images (OS) sont disponible. L'ensemble de nos tests ont été réalisés avec une Debian Squeeze (6),
 		que nous avons construit à partir d'une Debian Lenny (5), la version 6 n'étant pas disponible.
-		Un système de réservation permet de réserver à une date et heure voulue des nœuds, et, si on le souhaite,
+		Un système de réservation permet de réserver à une date et heure voulue des nœuds, et si on le souhaite,
 		d'exécuter un script.
 
 		\begin{figure}[H]
@@ -1037,8 +1036,8 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
        host = node1
 
 		           \end{lstlisting}           
-                        Ce fichier de configuration permet donc globalement d'indiquer la position des fichiers pid, keyring et le niveau de debug. Il défini les répertoires du moniteur dans lesquels les fichiers seront stockés. \textbf{[mon0]} contient le nom du serveur principal avec son adresse IP et le port utilisé. On spécifie ensuite la position du fichier keyring pour les serveurs de métadonnées \textbf{[mds]} et leur identification. \textbf{[osd]} contient la position de stockage des données, les journaux et le niveau de debug des serveurs de données spécifiés par la suite.\\\\
-                        Etant donné que la configuration ne se fait que sur le moniteur, il est alors nécessaire de copier la clé ssh publique sur le second serveur (node1) afin de rendre possible la copie automatique des fichiers de configuration sans entrer de mot de passe :
+                        Ce fichier de configuration permet donc globalement d'indiquer la position des fichiers pid, keyring et le niveau de debug. Il défini les répertoires du moniteur dans lesquels les fichiers seront stockés. \textbf{[mon0]} contient le nom du serveur principal avec son adresse IP et le port utilisé. On spécifie ensuite la position du fichier keyring pour les serveurs de métadonnées \textbf{[mds]} et leur identification. \textbf{[osd]} contient la position de stockage des données, les journaux et le niveau de debug des serveurs de données spécifiés par la suite. Le nombre de \textbf{[osd]} et de \textbf{[mds]} varieront suivant le nombre de serveurs de données et de métadonnées voulus, en sachant qu'il est impératif de spécifier le rôle de chaque serveur.\\\\
+                        Etant donné que la configuration ne se fait que sur le moniteur, il est alors nécessaire de copier la clé ssh\footnote{Secure Shell : protocole de communication sécurisé} publique sur le second serveur (node1) afin de rendre possible la copie automatique des fichiers de configuration sans entrer de mot de passe :
                         \begin{lstlisting}
  ssh-copy-id -i ~/.ssh/id_rsa.pub root@node1
                         \end{lstlisting}
@@ -1068,6 +1067,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
  mkdir /ceph
  cfuse -m 172.16.64.7 /ceph
                         \end{lstlisting}
+                        Ce procédé est automatisé à l'aide du script DeploiementCeph.rb (cf. Partie \ref{DepCeph} page \pageref{DepCeph}).
 	\chapter{Comparaison}
 	% comparaison des performances
 	% aspects générales, site officiel (doc, tuto), avis personnels
@@ -1237,12 +1237,12 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 	\appendix
 		\chapter{Organisation du travail}
 			\section{Outils utilisés}
-				Afin d'organiser au mieux notre travail, nous avons mise en place un projet sur GitHub
+				Afin d'organiser au mieux notre travail, nous avons mis en place un projet sur GitHub
 				\footnote{GitHub est un service web d'hébergement et de gestion de développement de logiciels (Wikipédia).}.
 				Nous avons utilisé le wiki
 				\footnote{Un wiki est un site Web dont les pages comportent des hyperliens les unes vers les autres
 				et sont modifiables par les visiteurs afin de permettre l'écriture et l'illustration collaboratives des documents numériques qu'il contient. (Wikipédia)}
-				mise à notre disposition afin de mettre en commun nos connaissances et nos découvertes sur notre projet.
+				mis à notre disposition afin de mettre en commun nos connaissances et nos découvertes sur notre projet.
 
 				Nous avons aussi utilisé le dépôt Git\footnote{Git est un logiciel de gestion de versions, écrit par Linus Torvalds.} pour gérer le développement
 				de nos scripts, et notre rapport de projet.
@@ -1279,7 +1279,13 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 						\item Étude sur la mise en place de MooseFS
 						\item Rédaction du rapport
 						\item Réalisation des graphiques en GnuPlot
-					\end{itemize}	
+					\end{itemize}
+		  \section{Tutoriel d'utilisation de Grid'5000}
+		  \label{grid}
+		  
+		  
+		  
+			
 		\chapter{Scripts}
 			\section{GlusterFS}
 				Fichier deploimentGluster.rb :
@@ -1298,6 +1304,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
                                 Fichier client.sh :
                                 \lstinputlisting[language=Ruby,numbers=left]{../mooseFs/client.sh}
 			\section{Ceph}
+			\label{DepCeph}
 				Fichier deploimentCeph.rb :
 				\lstinputlisting[language=Ruby,numbers=left]{../cephFS/deploiementCeph.rb}
 			\section{NFS}
