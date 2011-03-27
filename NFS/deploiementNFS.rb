@@ -5,11 +5,9 @@
 
 # File Name : deploiementNFS.rb
 
-# Purpose :
-
 # Creation Date : 17-03-2011
 
-# Last Modified : lun. 21 mars 2011 12:33:55 CET
+# Last Modified : dim. 27 mars 2011 22:15:59 CEST
 
 # Created By : Helldar
 

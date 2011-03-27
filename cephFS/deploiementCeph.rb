@@ -5,11 +5,9 @@
 
 # File Name : deploiementCeph.rb
 
-# Purpose :
-
 # Creation Date : 11-03-2011
 
-# Last Modified : jeu. 17 mars 2011 14:54:51 CET
+# Last Modified : dim. 27 mars 2011 22:15:42 CEST
 
 # Created By : Helldar
 
