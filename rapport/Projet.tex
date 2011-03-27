@@ -150,7 +150,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 	\chapter{Introduction}
 		\section{Contexte}
 			Étudiants en licence professionnelle ASRALL (Administration de Systèmes, Réseaux, et Applications à base de Logiciels libres),
-			notre formation prévoie une période de x mois à mis temps pour la réalisation d'un projet tuteuré.
+			notre formation prévoie une période de deux mois à mis temps pour la réalisation d'un projet tuteuré.
 
 			Le projet que nous avons choisis consiste à comparer diverses solutions de systèmes de fichiers distribué.
 
@@ -1123,5 +1123,230 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 
 				Fichier meta\_moose.sh :
 				\lstinputlisting[language=Bash,numbers=left]{../metascript/meta_moose.sh}
+
+		\chapter{Résultats relevés}
+
+			\section{NFS}
+
+			Écriture de petits fichiers avec NFS (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				1 serveur & & & & \\
+				\hline
+			\end{tabular}\\\\
+
+			Écriture de gros fichiers avec NFS (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				1 serveur & & & & \\
+				\hline
+			\end{tabular}\\\\
+
+			Lecture de petits fichiers avec NFS (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				 serveur & & & & \\
+				\hline
+			\end{tabular}\\\\
+
+			Lecture de gros fichiers avec NFS (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				1 serveur & & & & \\
+				\hline
+			\end{tabular}
+
+			\newpage
+
+			\section{GlusterFS}
+
+			Écriture de petits fichiers avec GlusterFS (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				5 serveurs & & & & \\
+				\hline
+				20 serveurs & & & & \\
+				\hline
+				50 serveurs & & & & \\
+				\hline
+			\end{tabular}\\\\
+
+			Écriture de gros fichiers avec GlusterFS (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				5 serveurs & & & & \\
+				\hline
+				20 serveurs & & & & \\
+				\hline
+				50 serveurs & & & & \\
+				\hline
+			\end{tabular}\\\\
+
+			Lecture de petits fichiers avec GlusterFS (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				5 serveurs & & & & \\
+				\hline
+				20 serveurs & & & & \\
+				\hline
+				50 serveurs & & & & \\
+				\hline
+			\end{tabular}\\\\
+
+			Lecture de gros fichiers avec GlusterFS (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				5 serveurs & & & & \\
+				\hline
+				20 serveurs & & & & \\
+				\hline
+				50 serveurs & & & & \\
+				\hline
+			\end{tabular}
+
+			\newpage
+
+			\section{MooseFS}
+
+			Écriture de petits fichiers avec MooseFS (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				5 serveurs & & & & \\
+				\hline
+				20 serveurs & & & & \\
+				\hline
+				50 serveurs & & & & \\
+				\hline
+			\end{tabular}\\\\
+
+			Écriture de gros fichiers avec MooseFS (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				5 serveurs & & & & \\
+				\hline
+				20 serveurs & & & & \\
+				\hline
+				50 serveurs & & & & \\
+				\hline
+			\end{tabular}\\\\
+
+			Lecture de petits fichiers avec MooseFS (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				5 serveurs & & & & \\
+				\hline
+				20 serveurs & & & & \\
+				\hline
+				50 serveurs & & & & \\
+				\hline
+			\end{tabular}\\\\
+
+			Lecture de gros fichiers avec MooseFS (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				5 serveurs & & & & \\
+				\hline
+				20 serveurs & & & & \\
+				\hline
+				50 serveurs & & & & \\
+				\hline
+			\end{tabular}
+
+			\newpage
+
+			\section{Ceph}
+
+			Écriture de petits fichiers avec Ceph (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				5 serveurs & & & & \\
+				\hline
+				20 serveurs & & & & \\
+				\hline
+				50 serveurs & & & & \\
+				\hline
+			\end{tabular}\\\\
+
+			Écriture de gros fichiers avec Ceph (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				5 serveurs & & & & \\
+				\hline
+				20 serveurs & & & & \\
+				\hline
+				50 serveurs & & & & \\
+				\hline
+			\end{tabular}\\\\
+
+			Lecture de petits fichiers avec Ceph (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				5 serveurs & & & & \\
+				\hline
+				20 serveurs & & & & \\
+				\hline
+				50 serveurs & & & & \\
+				\hline
+			\end{tabular}\\\\
+
+			Lecture de gros fichiers avec Ceph (débit en Mo/sec) :
+
+			\begin{tabular}{|l|c|c|c|c|}
+				\hline
+				& 1 client & 5 clients & 20 clients & 50 clients \\
+				\hline
+				5 serveurs & & & & \\
+				\hline
+				20 serveurs & & & & \\
+				\hline
+				50 serveurs & & & & \\
+				\hline
+			\end{tabular}
+
 \end{document}
 
