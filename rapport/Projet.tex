@@ -1106,7 +1106,18 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 			\end{description}
 
 			\subsection{Cinq serveurs}
-
+\begin{figure}[H]
+\begin{center}
+\includegraphics[bb=0 0 640 480,width=14cm]{images/srv5rs.png}
+\caption{Lecture de petits fichiers avec 5 serveurs}
+\end{center}
+\end{figure} 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[bb=0 0 640 480,width=14cm]{images/srv5rs2.png}
+\caption{Lecture de petits fichiers avec 5 serveurs}
+\end{center}
+\end{figure} 
 			\subsection{Vingt serveurs}
 
 			\subsection{Cinquante serveurs}
@@ -1158,13 +1169,13 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 \begin{figure}[H]
 \begin{center}
 \includegraphics[bb=0 0 640 480,width=14cm]{images/srv50rs.png}
-\caption{Écriture de gros fichiers avec 50 serveurs}
+\caption{Lecture de petits fichiers avec 50 serveurs}
 \end{center}
 \end{figure} 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[bb=0 0 640 480,width=14cm]{images/srv50rs2.png}
-\caption{Écriture de gros fichiers avec 50 serveurs}
+\caption{Lecture de petits fichiers avec 50 serveurs}
 \end{center}
 \end{figure} 
 		        \begin{figure}[H]
@@ -1211,12 +1222,12 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 
 	Durant ce projet tuteuré nous avons eut la chance de travailler sur une grande structure : le Grid'5000.
 	Après un premier temps de prise en main, nous avons pu commencer à mettre en place des solutions de systèmes de fichiers distribués,
-	à créer des scripts automatisant leurs déploiements, et à un réaliser un benchmark.\\
+	à créer des scripts automatisant leurs déploiements, et de réaliser un benchmark.\\
 
 	Nous avons rencontré un certains nombre de difficultés, (en plus de la mise en place des systèmes de fichiers distribués) propre au Grid'5000 :
 	\begin{itemize}
 		\item Nos test devaient être réalisés sur un même cluster, mais nous n'étions pas seuls à travailler dessus,
-		et on nous ne disposions pas toujours de toutes les machines dont nous avions besoins
+		et on nous ne disposions pas toujours de toutes les machines dont nous avions besoins.
 		\item Nous avons aussi rencontré des erreurs lors de déploiement de machines, indépendant de nous, qui ont \og cassé\fg~ des benchmarks programmés à l'avance.
 		\item Et nous avons aussi commis quelques erreurs humaines :
 		\begin{itemize}
