@@ -257,7 +257,7 @@ v   nfs-server         -
 p   nfs4-acl-tools     - Commandline and GUI ACL utilities for the NFSv4 client
 p   nfswatch           - Program to monitor NFS traffic for the console
 	  \end{lstlisting}
-Dans la liste ci-dessus, on identifie les paquets nfs-common et nfs-kernel-server qui correspond bien aux fonctions souhaité pour le client et le serveur NFS.
+Dans la liste ci-dessus, on identifie les paquets nfs-common et nfs-kernel-server qui correspondent bien aux fonctions souhaitées pour le client et le serveur NFS.
 En exploitant la documentation \href{https://wiki.linux-nfs.org/wiki/index.php/Nfsv4_configuration_fr}{Nfsv4 configuration} et l'exemple donné dans le fichier de configuration, on applique la configuration suivante dans le fichier /etc/exports :
     \begin{lstlisting}
 	    /tmp *.nancy.grid5000.fr(rw,fsid=0,insecure,subtree_check)
@@ -1001,7 +1001,9 @@ p   ceph-client-tools-dbg  - debugging symbols for ceph-client-tools
 p   ceph-dbg               - debugging symbols for ceph                                                  
 i A ceph-fuse              - FUSE-based client for the Ceph distributed file system                      
 p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
-                           \end{lstlisting}	                       
+                           \end{lstlisting}	        
+                           Dans la liste ci-dessus, on identifie les paquets ceph, ceph-client-tools et ceph-fuse qui correspondent bien aux fonctions souhaitées pour le client et le serveur Ceph.
+En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref{Sources}) on peut élaborer une configuration type.\\\\       
 		                       Afin de mettre en place Ceph, il faut connaitre le nombre exacte de serveurs qui seront utilisés. Dans cet exemple de mise en place, nous prenons deux serveurs, node0 et node1. node0 sera le serveur principal, que l'on appel aussi moniteur. La totalité de la configuration, hormis le montage des clients, se fait à partir du moniteur. Pour commencer, il faut créer un fichier de configuration ceph.conf qui contiendra une grande partie des données nécessaires au bon fonctionnement des serveurs :
 		           \begin{lstlisting}
 [global]
@@ -1521,7 +1523,7 @@ p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
 			\end{tabular}
 
 		\chapter{Sources}
-
+     \label{Sources}
 			\begin{itemize}
 				\item Pour l'ensemble de notre travail : Wikipédia Français et Anglais
 				\item NFS :
@@ -1543,10 +1545,10 @@ p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
 					\footnote{\href{http://www.moosefs.org/tl_files/manpageszip/moosefs-step-by-step-tutorial-v.1.1.pdf}
 					{http://www.moosefs.org/tl\_files/manpageszip/moosefs-step-by-step-tutorial-v.1.1.pdf}}
 				\end{itemize}
-				\item Ceph :
+				\item Ceph : 
 				  \begin{itemize}
 				  \item Site internet et Wiki de Ceph\footnote{\href{http://ceph.newdream.net/}{http://ceph.newdream.net/} \href{http://ceph.newdream.net/wiki/Main\_Page}{http://ceph.newdream.net/wiki/Main\_Page}}
-				  \item Documentation de CephFS\footnote{\href{http://www.ssrc.ucsc.edu/Papers/weil-osdi06.pdf}{http://www.ssrc.ucsc.edu/Papers/weil-osdi06.pdf} \\\href{http://www.usenix.org/publications/login/2010-08/openpdfs/maltzahn.pdf}{http://www.usenix.org/publications/login/2010-08/openpdfs/maltzahn.pdf}}
+				  \item Documentations de CephFS\footnote{\href{http://www.ssrc.ucsc.edu/Papers/weil-osdi06.pdf}{http://www.ssrc.ucsc.edu/Papers/weil-osdi06.pdf} \\\href{http://www.usenix.org/publications/login/2010-08/openpdfs/maltzahn.pdf}{http://www.usenix.org/publications/login/2010-08/openpdfs/maltzahn.pdf}}
 				  \end{itemize}
 			\end{itemize}
 
