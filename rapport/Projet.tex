@@ -963,7 +963,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
                         CephFS remplit deux lacunes importantes des systèmes de fichiers actuellement disponible :
                         \begin{itemize}
                           \item robustesse du stockage distribué open-source. CephFS fournit une variété de fonctionnalités clés, généralement manquante dans les systèmes de fichiers open-s-k -e squeeze-collective -u flevigneource, tel que l'évolutivité transparente (capacité d'ajouter simplement un disque pour étendre le volume de stockage), la répartition de charge intelligente
-                          \item évolutivité en terme de charge de travail ou de capacité destockage. CephFS a été créer pour supporter des charges de l'ordre de dizaines de milliers de clients accédant au même fichier ou au même dossier. La capacité de stockage va du gigaoctet au petaoctet\footnote{1 petaoctet = 1024 teraoctet} et au-delà.
+                          \item évolutivité en terme de charge de travail ou de capacité de stockage. CephFS a été créer pour supporter des charges de l'ordre de dizaines de milliers de clients accédant au même fichier ou au même dossier. La capacité de stockage va du gigaoctet au petaoctet\footnote{1 petaoctet = 1024 teraoctet} et au-delà.
                         \end{itemize}
 \newpage
                         
@@ -971,16 +971,16 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
                         
                         La partie serveur de CephFS utilise trois types distinct de démons : 
                         \begin{itemize}
-                        \item moniteur de cluster, qui garde trace des noeuds actifs et défaillants
+                        \item moniteur de cluster, qui garde trace des nœuds actifs et défaillants
                           \item serveurs de métadonnées, qui stockent les métadonnées des inoeuds et des répertoires
                           \item serveurs de données, qui stockent les données.
                         \end{itemize}
 
                         \subsection{Moniteur de cluster}
-                           Le moniteur gère l'administration centrale, la configuration et l'état du cluster. C'est à partir du moniteur que l'on modifié le cluster : ajout ou suppresion de serveurs de données et métadonnées. Les clients ont accès au données gérées par CephFS par l'intermédiaire d'un moniteur. Il garde en mémoire une carte du cluster, ce qu'il lui permet de communiquer aux clients sur quels serveurs de métadonnées et de données se connecter pour modifier, ajouter ou supprimer des fichiers.
+                           Le moniteur gère l'administration centrale, la configuration et l'état du cluster. C'est à partir du moniteur que l'on modifie le cluster : ajout ou suppression de serveurs de données et métadonnées. Les clients ont accès au données gérées par CephFS par l'intermédiaire d'un moniteur. Il garde en mémoire une carte du cluster, ce qu'il lui permet de communiquer aux clients sur quels serveurs de métadonnées et de données se connecter pour modifier, ajouter ou supprimer des fichiers.
 
                         \subsection{Serveurs de métadonnées}
-                           Le démon gérant les serveurs de métadonnées agit en tant que cache cohérent et distribué du système de fichiers. Il contient les données concernant l'arborescence des fichiers et leurs métadonnées (nom, taille, emplacement mémoire sur les serveur de donées). Avoir plusieurs serveurs de métadonnées a un certain avantage car cela permet d'équilibrer la charge de travail entre les différents serveurs et donc de gérer plus de clients au même moment.
+                           Le démon gérant les serveurs de métadonnées agit en tant que cache cohérent et distribué du système de fichiers. Il contient les données concernant l'arborescence des fichiers et leurs métadonnées (nom, taille, emplacement mémoire sur les serveur de données). Avoir plusieurs serveurs de métadonnées a un certain avantage car cela permet d'équilibrer la charge de travail entre les différents serveurs et donc de gérer plus de clients au même moment.
 
                         \subsection{Serveurs de données}
                            Les serveurs de données stockent les fichiers du cluster. Ils sont découpés en morceaux et répliqués plusieurs fois sur des serveurs différents. Cela permet une certaine tolérance vis-à-vis de la perte de serveurs. Si jamais un serveur tombe en panne, les données sont toujours accessible car elles sont présente sur un autre serveur de données.
@@ -993,7 +993,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 			        \end{center}
 		        \end{figure}
 		        \section{Mise en place}
-		                       Avant toute configuration, il nous faut déterminier les paquets qui nous seront utiles.            Utilisant une image de Debian Squeeze, On recherche dans la liste des paquets disponibles, ceux dont le nom débute par 'ceph'.
+		                       Avant toute configuration, il nous faut déterminiez les paquets qui nous seront utiles.Utilisant une image de Debian Squeeze, On recherche dans la liste des paquets disponibles, ceux dont le nom débute par 'ceph'.
 		                       \begin{lstlisting}
 # aptitude search ?name"(^ceph)
 i   ceph                   - distributed storage and file system                                         
@@ -1003,7 +1003,7 @@ p   ceph-dbg               - debugging symbols for ceph
 i A ceph-fuse              - FUSE-based client for the Ceph distributed file system                      
 p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
                            \end{lstlisting}	                       
-		                       Afin de mettre en place Ceph, il faut connaitre le nombre exacte de serveur qui seront utilisés. Dans cet exemple de mise en place, nous prenons 2 serveurs, node0 et node1. node0 sera le serveur principal que l'on appel aussi moniteur. La totalité des configurations, hormis le montage des clients, se font à partir du moniteur. Pour commencer, il faut créer un fichier de configuration ceph.conf qui contiendra une grande partie des données nécessaires au bon fonctionnement des serveurs :
+		                       Afin de mettre en place Ceph, il faut connaitre le nombre exacte de serveurs qui seront utilisés. Dans cet exemple de mise en place, nous prenons deux serveurs, node0 et node1. node0 sera le serveur principal, que l'on appel aussi moniteur. La totalité de la configuration, hormis le montage des clients, se fait à partir du moniteur. Pour commencer, il faut créer un fichier de configuration ceph.conf qui contiendra une grande partie des données nécessaires au bon fonctionnement des serveurs :
 		           \begin{lstlisting}
 [global]
        pid file = /var/run/ceph/$name.pid
