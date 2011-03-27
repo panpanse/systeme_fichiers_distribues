@@ -278,6 +278,7 @@ Ainsi on peut vérifier que les directives données dans le fichier /etc/exports
 Sur le client, nous avons le programme appelé showmount associé à l'option -e.
 
 	  \chapter{Fuse}
+	  \label{Fuse}
     FUSE est un logiciel libre signifiant \og Filesystem in Userspace\fg. Il s'agit d'un module, disponible pour les kernels 2.4 et 2.6, grâce auquel 
     il est possible d'implémenter toutes les fonctionnalités d'un système de fichier dans un espace utilisateur. Ces fonctionnalités incluent :\\
 	\begin{itemize}
@@ -1036,8 +1037,37 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
        host = node1
 
 		           \end{lstlisting}           
-
-
+                        Ce fichier de configuration permet donc globalement d'indiquer la position des fichiers pid, keyring et le niveau de debug. Il défini les répertoires du moniteur dans lesquels les fichiers seront stockés. \textbf{[mon0]} contient le nom du serveur principal avec son adresse IP et le port utilisé. On spécifie ensuite la position du fichier keyring pour les serveurs de métadonnées \textbf{[mds]} et leur identification. \textbf{[osd]} contient la position de stockage des données, les journaux et le niveau de debug des serveurs de données spécifiés par la suite.\\\\
+                        Etant donné que la configuration ne se fait que sur le moniteur, il est alors nécessaire de copier la clé ssh publique sur le second serveur (node1) afin de rendre possible la copie automatique des fichiers de configuration sans entrer de mot de passe :
+                        \begin{lstlisting}
+ ssh-copy-id -i ~/.ssh/id_rsa.pub root@node1
+                        \end{lstlisting}
+                        Il est possible de générer par la suite un fichier keyring, qui n'est pas présent dans tout les exemples de configuration que l'on a pu rencontrer dans les documentations. Ce fichier keyring, permetterait apparament, de déterminer les différents droits (lecture, écriture, exécution) des clients sur les différents serveurs. Il se génère à l'aide des commandes suivantes :
+                        \begin{lstlisting}
+ cauthtool --create-keyring -n client.admin --gen-key keyring.bin
+ cauthtool -n client.admin --cap mds 'allow' --cap osd 'allow *' --cap mon 'allow rwx' keyring.bin
+                        \end{lstlisting}
+                        Pour permettre aux serveurs de fonctionner correctement, il est nécessaire de monter des droits spécifiques sur le répertoire de stockage, qui est ici /tmp :
+                        \begin{lstlisting}
+ mount -o remount,user_xattr /tmp              # sur le moniteur
+ ssh node1 mount -o remount,user_xattr /tmp    # sur le second serveur depuis le moniteur
+                        \end{lstlisting}
+                        Cette option "user\_xattr" permet d'activer le support des attributs étendus sur les fichiers.\\
+                        Puis l'on créé le système de fichier avant de démarrer le service :
+                        \begin{lstlisting}
+ mkcephfs -c /etc/ceph/ceph.conf --allhosts -v -k /etc/ceph/keyring.bin
+                        \end{lstlisting}
+                        Démarrage du service Ceph :
+                        \begin{lstlisting}
+ /etc/init.d/ceph -a start
+                        \end{lstlisting}
+                        L'option "-a", permet de démarrer le service sur tout les serveurs, ici node0 et node1.\\
+                        
+                        Du côté des clients, il suffit de créer un répertoire dans lequel on monte le répertoire partagé par les serveurs à l'aide de fuse (cf. Partie \ref{Fuse} page \pageref{Fuse}):
+                        \begin{lstlisting}
+ mkdir /ceph
+ cfuse -m 172.16.64.7 /ceph
+                        \end{lstlisting}
 	\chapter{Comparaison}
 	% comparaison des performances
 	% aspects générales, site officiel (doc, tuto), avis personnels
@@ -1234,7 +1264,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 						\item Étude sur la mise en place de GlusterFS
 						\item Étude sur la mise en place de CephFS
 						\item Aide à la réalisation des scripts de déploiement de CephFS et de benchmark
-						\item Rédaction du rapport
+						\item Rédaction du rapporthttp://ceph.newdream.net/
 					\end{itemize}
 				\subsection{Vincent Claudel}
 					\begin{itemize}
