@@ -1125,7 +1125,17 @@ p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
 			        \end{center}
 		        \end{figure}
 
+			\subsection{Analyse des résultats}
 
+			Sur les tests que nous avons effectués, nous remarquons des débits très importants, parfois supérieurs au débit du réseau présent sur le cluster.
+			Nous nous sommes donc questionné, afin de trouver pourquoi nous obtenons de tels résultats, et nous avons émis les hypothèses suivantes :
+			\begin{itemize}
+				\item Lors de la lecture de fichiers (petits ou gros), le client lit des fichiers font il possède une copie sur sa machine,
+				le systèmes de fichier distribué est-il capable de le détecter, et d'éviter d'aller lire le fichier sur un serveur distant ?
+				\item Le cache présent sur les systèmes de fichiers est-il, à lui seul, responsable de tel résultats pour la lecture ?
+				\item Lors des tests d'écriture, tous les clients écrivent les mêmes fichiers, le système de fichier distribué est-il capable de le détecter,
+				et de limiter les transferts des clients vers les serveurs ?
+			\end{itemize}
 
 	\chapter{Conclusion}
 	% sur les FS
@@ -1178,6 +1188,7 @@ p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
 						\item Étude sur la mise en place de MooseFS
 						\item Réalisation d'un script de déploiement de MooseFS
 						\item Réalisation d'un script de benchmark pour système de fichiers distribué
+						\item Rédaction du rapport
 					\end{itemize}
 				\subsection{Jean-François Garcia}
 					\begin{itemize}
@@ -1198,7 +1209,7 @@ p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
 						\item Étude sur la mise en place de GlusterFS
 						\item Étude sur la mise en place de MooseFS
 						\item Rédaction du rapport
-						\item Réalisation des graphes en GnuPlot
+						\item Réalisation des graphiques en GnuPlot
 					\end{itemize}	
 		\chapter{Scripts}
 			\section{GlusterFS}
