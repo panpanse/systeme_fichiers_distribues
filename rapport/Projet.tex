@@ -175,6 +175,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 
                         \newpage
 		\section{Le Grid'5000}
+		\label{defgrid}
 		Le Grid'5000 est une infrastructure distribuée dédié à la recherche sur des systèmes distribuées à grande échelle.
 
 		Les ingénieurs assurant le développement et le support de l'infrastructure jour après jour et ils viennent pour la plupart	de l'INRIA\footnote{Institut National de Recherche en Informatique et en Automatique}.
@@ -204,8 +205,8 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		\end{description}
                 \newpage
                 
-		Pour travailler sur le Grid'5000, on se connecte en ssh\footnote{Secure Shell : protocole de communication sécurisé} à une machine appelé le \og frontend\fg présent sur chaque site.
-		A partir de ce frontend, il est possible de déployer des environnements sur des machines du Grid (cf Partie \ref{grid} page \pageref{grid}.
+		Pour travailler sur le Grid'5000, on se connecte en ssh\footnote{Secure Shell : protocole de communication sécurisé} à une machine appelé le \og frontend\fg  présent sur chaque site.
+		A partir de ce frontend, il est possible de déployer des environnements sur des machines du Grid (cf Partie \ref{grid} page \pageref{grid}).
 		Un certain nombre d'images (OS) sont disponible. L'ensemble de nos tests ont été réalisés avec une Debian Squeeze (6),
 		que nous avons construit à partir d'une Debian Lenny (5), la version 6 n'étant pas disponible.
 		Un système de réservation permet de réserver à une date et heure voulue des nœuds, et si on le souhaite,
@@ -1051,7 +1052,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
  mount -o remount,user_xattr /tmp              # sur le moniteur
  ssh node1 mount -o remount,user_xattr /tmp    # sur le second serveur depuis le moniteur
                         \end{lstlisting}
-                        Cette option "user\_xattr" permet d'activer le support des attributs étendus sur les fichiers.\\
+                        Cette option « user\_xattr » permet d'activer le support des attributs étendus sur les fichiers.\\
                         Puis l'on crée le système de fichier avant de démarrer le service :
                         \begin{lstlisting}
  mkcephfs -c /etc/ceph/ceph.conf --allhosts -v -k /etc/ceph/keyring.bin
@@ -1060,7 +1061,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
                         \begin{lstlisting}
  /etc/init.d/ceph -a start
                         \end{lstlisting}
-                        L'option "-a", permet de démarrer le service sur tout les serveurs, ici node0 et node1.\\
+                        L'option « -a », permet de démarrer le service sur tout les serveurs, ici node0 et node1.\\
                         
                         Du côté des clients, il suffit de créer un répertoire dans lequel on monte le répertoire partagé par les serveurs à l'aide de fuse (cf. Partie \ref{Fuse} page \pageref{Fuse}):
                         \begin{lstlisting}
@@ -1089,7 +1090,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 				\item[Lecture de petits fichiers: ] lecture des fichiers du noyau Linux.
 				Pour cela, nous avons compressé le dossier contenant le noyau (impliquant la lecture des fichiers),
 				en redirigeant la sortie vers /dev/nul (afin que les performances du disque ne rentrent pas en jeux).
-				\item[Lecture de gros fichiers :] lecture des fichiers de 1 Go. Opération réalisé en faisant un "cat" des fichier,
+				\item[Lecture de gros fichiers :] lecture des fichiers de 1 Go. Opération réalisé en faisant un « cat » des fichier,
 				et en redirigeant la sortie vers /dev/nul afin de ne pas \og polluer\fg~le terminal.\\
 			\end{description}
 
@@ -1304,12 +1305,57 @@ Lecture de gros fichiers avec 50 serveurs
 						\item Rédaction du rapport
 						\item Réalisation des graphiques en GnuPlot
 					\end{itemize}
-		  \section{Tutoriel d'utilisation de Grid'5000}
+		  \section{Tutoriel d'utilisation du Grid'5000}
 		  \label{grid}
-		  
-		  
-		  
-			
+		  Avant toute tentative de connexion, il est nécessaire de s'inscrire sur le site du Grid'5000\footnote{\href{https://www.grid5000.fr/mediawiki/index.php/Grid5000:Home}{https://www.grid5000.fr/mediawiki/index.php/Grid5000:Home}} par le biais de l'un des administrateurs avec l'intention d'effectuer de vrais recherches. Le Grid ayant été défini, en partie \ref{defgrid} à la page \pageref{defgrid}, nous ne nous attarderons pas sur la description de celui-ci.\\
+		  Ce tutoriel à pour but de montrer le fonctionnement basic\footnote{car il est possible de faire bien plus, le nombre de fonctionnalités disponibles est plutôt important!} de la plateforme.\\
+		  L'accès au Grid ce fait à l'aide du ssh, et se fait en deux étapes : connexion au site, puis à son frontend.
+		  \begin{lstlisting}
+ ssh login@access.site.grid5000.fr
+ # depuis la machine :
+ ssh frontend
+      \end{lstlisting}
+      Le but de cette plateforme, est la possibilité de réserver des machines faisant partie d'un cluster que l'on appelle des nœuds. Un certain nombre de commandes sont disponibles pour connaitre le statut de ces nœuds, leurs durée d'utilisation, ou encore de permettre leur réservation :
+		  \begin{lstlisting}
+ oarsub -I            # reservation d'une machine pour une heure par defaut
+ oarsub -I -l nodes=n # reservation de n machines pour une heure
+ oarsub -I -t deploy -l nodes=1,walltime=n # reservation de n machines pour n heures pour un déploiement
+      \end{lstlisting}
+      La commande « oarsub » nous renvoie un numéro de réservation appelé « JOB\_ID » et le nom des nœuds réservés est stockés dans la variable « OAR\_NODEFILE ».
+      Dans le cadre du projet, il a fallu réserver des machines à l'avance dans le but d'effectuer des mesures de façon automatiques durant la nuit pour éviter de monopoliser la totalité des machines d'un sites en journée. Heureusement, la commande oarsub peut effectuer cette tâche en lui spécifiant le script à exécuter avec un passage de paramètre :
+      \begin{lstlisting}
+ oarsub -r '2010-03-24 19:30:00' -l nodes=55,walltime=6:30:00 ~/Ceph/DeploiementCeph.rb 5
+      \end{lstlisting}
+		  Il est possible à l'aide de différentes commandes, de connaitre des informations parfois vitales sur son environnement de travail :
+		  \begin{lstlisting}
+ # Sur l'environnement :
+ env
+ # Sur les noeud (les coeurs) (necessite d'avoir fait une reservation):
+ cat $OAR_NODEFILE
+ # Sur un job particulier (sur le frontend):
+ oarstat -f -j OAR_JOB_ID
+ # Sur le statut d'un job :
+ oarstat -s -j OAR_JOB_ID
+ # Sur les reservations d'un utilisateur :
+ oarstat -u login
+      \end{lstlisting}
+      Suite à la réservation d'un nœud, il est possible (et même vivement conseillé) de déployer une image (OS) sur celui-ci, dans le but d'effectuer des recherches. Cette image peut être fournie par le Grid'5000 ou être une image personnalisé. Ici, ce sera une image personnalisé.
+      \begin{lstlisting}
+ kadeploy3 -f $OAR_NODEFILE -a mylenny-x64-base.env -k
+      \end{lstlisting}
+      L'option « -f » permet de spécifier les nœeuds sur lesquels on veut déployer l'image.\\
+      L'option « -a » spécifie l'image à utiliser.\\
+      et l'option « -k » envoie la clef plublic ssh à la machine déployée.\\
+      La commande « kadeploy3 » renvoie le statut du déployement en cours, puis si celui-ci c'est déroulé correctement, le nom des machines déployées. A la suite de se déploiement, il est possible de se connecter au nœud via la commande ssh :
+      \begin{lstlisting}
+ ssh user@node.site.grid5000.fr
+      \end{lstlisting}
+      Dans le cas où les recherches sont terminées avant fin de la réservation, il est possible de supprimer le JOB réservé à partir du frontend :
+      \begin{lstlisting}
+ oardel $OAR_JOB_ID
+      \end{lstlisting}
+      Attention! Dans ce cas, c'est la totalité de la réservation qui est supprimer, donc les nœuds déployés sur ce JOB.
+      
 		\chapter{Scripts}
 			\section{GlusterFS}
 				Fichier deploimentGluster.rb :
