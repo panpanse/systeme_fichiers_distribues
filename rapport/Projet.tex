@@ -1042,7 +1042,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
                         \begin{lstlisting}
  ssh-copy-id -i ~/.ssh/id_rsa.pub root@node1
                         \end{lstlisting}
-                        Il est possible de générer par la suite un fichier keyring, qui n'est pas présent dans tout les exemples de configuration que l'on a pu rencontrer dans les documentations. Ce fichier keyring, permetterait apparament, de déterminer les différents droits (lecture, écriture, exécution) des clients sur les différents serveurs. Il se génère à l'aide des commandes suivantes :
+                        Il est possible de générer par la suite un fichier keyring, qui n'est pas présent dans tout les exemples de configuration que l'on a pu rencontrer dans les documentations. Ce fichier keyring, permettrait apparemment, de déterminer les différents droits (lecture, écriture, exécution) des clients sur les différents serveurs. Il se génère à l'aide des commandes suivantes :
                         \begin{lstlisting}
  cauthtool --create-keyring -n client.admin --gen-key keyring.bin
  cauthtool -n client.admin --cap mds 'allow' --cap osd 'allow *' --cap mon 'allow rwx' keyring.bin
@@ -1053,7 +1053,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
  ssh node1 mount -o remount,user_xattr /tmp    # sur le second serveur depuis le moniteur
                         \end{lstlisting}
                         Cette option "user\_xattr" permet d'activer le support des attributs étendus sur les fichiers.\\
-                        Puis l'on créé le système de fichier avant de démarrer le service :
+                        Puis l'on crée le système de fichier avant de démarrer le service :
                         \begin{lstlisting}
  mkcephfs -c /etc/ceph/ceph.conf --allhosts -v -k /etc/ceph/keyring.bin
                         \end{lstlisting}
@@ -1074,7 +1074,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 		\section{Test de performances}
 			Afin de ne pas avoir de différence de matériel lors nos test, ceux-ci ont tous été réalisés sur un même cluster du Grid'5000 : Graphene.\\
 
-			Ce cluster est composé de 144 noeuds, avec pour caractéristique :
+			Ce cluster est composé de 144 nœuds, avec pour caractéristique :
 			\begin{itemize}
 				\item 1 CPU Intel de quatre cœurs cadencé à 2.53 GHz
 				\item 16 Go de RAM
@@ -1083,10 +1083,10 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 
 			Nous avons développé un benchmark mesurant les performances (débit) de quatre type d'opérations sur le système de fichier distribué :
 			\begin{description}
-				\item[Écriture de petits fichiers :] écriture des sources du noyau linux (décompressé).
+				\item[Écriture de petits fichiers :] écriture des sources du noyau Linux (décompressé).
 				\item[Écriture de gros fichiers :] écriture de trois fichiers de 1 Go
 				\footnote{Fichier créé avec la commande : dd if=/dev/urandom of=/lieu/voulu bs=1G count=1}. Les trois fichiers sont différents.
-				\item[Lecture de petits fichiers: ] lecture des fichiers du noyau linux.
+				\item[Lecture de petits fichiers: ] lecture des fichiers du noyau Linux.
 				Pour cela, nous avons compressé le dossier contenant le noyau (impliquant la lecture des fichiers),
 				en redirigeant la sortie vers /dev/nul (afin que les performances du disque ne rentrent pas en jeux).
 				\item[Lecture de gros fichiers :] lecture des fichiers de 1 Go. Opération réalisé en faisant un "cat" des fichier,
@@ -1305,7 +1305,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 				\lstinputlisting[language=Ruby,numbers=left]{../NFS/deploiementNFS.rb}
 			\section{Benchmark}
 				Fichier benchmark.rb :
-				\lstinputlisting[language=Ruby,numbers=left]{../benchmark/benchcfuse -m 172.16.64.7 /cephmark.rb}
+				\lstinputlisting[language=Ruby,numbers=left]{../benchmark/benchmark.rb}
 
 				Fichier writingSmallFiles.sh :
 				\lstinputlisting[language=Bash,numbers=left]{../benchmark/writingSmallFiles.sh}
