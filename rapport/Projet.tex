@@ -1330,8 +1330,8 @@ p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
 					\end{itemize}
 		  \section{Tutoriel d'utilisation du Grid'5000}
 		  \label{grid}
-		  Avant toute tentative de connexion, il est nécessaire de s'inscrire sur le site du Grid'5000\footnote{\href{https://www.grid5000.fr/mediawiki/index.php/Grid5000:Home}{https://www.grid5000.fr/mediawiki/index.php/Grid5000:Home}} par le biais de l'un des administrateurs avec l'intention d'effectuer de vrais recherches. Le Grid ayant été défini, en partie \ref{defgrid} à la page \pageref{defgrid}, nous ne nous attarderons pas sur la description de celui-ci.\\
-		  Ce tutoriel à pour but de montrer le fonctionnement basic\footnote{Car il est possible de faire bien plus, le nombre de fonctionnalités disponibles est plutôt important!} de la plateforme.\\
+		  Avant toute tentative de connexion, il est nécessaire de s'inscrire sur le site du Grid'5000\footnote{\href{https://www.grid5000.fr/mediawiki/index.php/Grid5000:Home}{https://www.grid5000.fr/mediawiki/index.php/Grid5000:Home}} par le biais de l'un des administrateurs avec l'intention d'effectuer de vraies recherches. Le Grid ayant été présenté, en partie \ref{defgrid} à la page \pageref{defgrid}, nous ne nous attarderons pas sur la description de celui-ci.\\
+		  Ce tutoriel à pour but de montrer le fonctionnement basique\footnote{Car il est possible de faire bien plus, le nombre de fonctionnalités disponibles est plutôt important!} de la plateforme.\\
 		  L'accès au Grid ce fait à l'aide de SSH, et se fait en deux étapes : connexion au site, puis à son frontend.
 		  \begin{lstlisting}
  ssh login@access.site.grid5000.fr
@@ -1344,10 +1344,10 @@ p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
  oarsub -I -l nodes=n # reservation de n machines pour une heure
  oarsub -I -t deploy -l nodes=1,walltime=n # reservation de n machines pour n heures pour un déploiement
       \end{lstlisting}
-      La commande « oarsub » nous renvoie un numéro de réservation appelé « JOB\_ID » et le nom des nœuds réservés est stockés dans la variable « OAR\_NODEFILE ».
-      Dans le cadre du projet, il a fallu réserver des machines à l'avance dans le but d'effectuer des mesures de façon automatiques durant la nuit pour éviter de monopoliser la totalité des machines d'un sites en journée. Heureusement, la commande oarsub peut effectuer cette tâche en lui spécifiant le script à exécuter avec un passage de paramètre :
+      La commande « oarsub » nous renvoie un numéro de réservation appelé « JOB\_ID » et le nom des nœuds réservés est stockés dans la variable « OAR\_FILE\_NODES ».
+      Dans le cadre du projet, il a fallu réserver des machines à l'avance dans le but d'effectuer des mesures de façon automatique durant la nuit pour éviter de monopoliser la totalité des machines d'un sites en journée. Heureusement, la commande oarsub peut effectuer cette tâche en lui spécifiant le script à exécuter avec un passage de paramètre :
       \begin{lstlisting}
- oarsub -r '2010-03-24 19:30:00' -l nodes=55,walltime=6:30:00 ~/Ceph/DeploiementCeph.rb 5
+ oarsub -r '2010-03-24 19:30:00' -l nodes=55,walltime=6:30:00 "~/Ceph/DeploiementCeph.rb 5"
       \end{lstlisting}
 		  Il est possible à l'aide de différentes commandes, de connaitre des informations parfois vitales sur son environnement de travail :
 		  \begin{lstlisting}
@@ -1356,15 +1356,15 @@ p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
  # Sur les noeud (les coeurs) (necessite d'avoir fait une reservation):
  cat $OAR_NODEFILE
  # Sur un job particulier (sur le frontend):
- oarstat -f -j OAR_JOB_ID
+ oarstat -f -j OAR\_JOB\_ID
  # Sur le statut d'un job :
- oarstat -s -j OAR_JOB_ID
+ oarstat -s -j OAR\_JOB\_ID
  # Sur les reservations d'un utilisateur :
  oarstat -u login
       \end{lstlisting}
       Suite à la réservation d'un nœud, il est possible (et même vivement conseillé) de déployer une image (OS) sur celui-ci, dans le but d'effectuer des recherches. Cette image peut être fournie par le Grid'5000 ou être une image personnalisé. Ici, ce sera une image personnalisé.
       \begin{lstlisting}
- kadeploy3 -f $OAR_NODEFILE -a mylenny-x64-base.env -k
+ kadeploy3 -f $OAR\_NODEFILE -a mylenny-x64-base.env -k
       \end{lstlisting}
       L'option « -f » permet de spécifier les nœuds sur lesquels on veut déployer l'image.\\
       L'option « -a » spécifie l'image à utiliser.\\
