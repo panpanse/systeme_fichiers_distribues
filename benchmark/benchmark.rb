@@ -17,22 +17,22 @@ $clientsOfBench = "#{ARGV[0]}"
 #listOfClients = "/home/flevigne/glusterFs/listOfClients"
 listOfClients = "#{ARGV[2]}"
 
-# chemin ou écrire les données du benchmark
+# chemin ou ecrire les donnees du benchmark
 #whereToWrite = "/media/glusterfs"
 whereToWrite = "#{ARGV[3]}"
 
-# chemin du fichier contenant les résultats
+# chemin du fichier contenant les resultats
 $outputRes = "#{ARGV[1]}"
 
 # le client doit avoir dans /home/flevigne :
-# - linux-2.6.37.tar.bz2 : noyau linux compressé
+# - linux-2.6.37.tar.bz2 : noyau linux compresse
 # - bigFile : un fichier de 3 Go
 
 # fichier contenant la liste des clients participant au benchmark
 `touch clientOfBench`
 `head -#{$clientsOfBench} #{listOfClients} > clientOfBench`
 
-# si le fichier $outputRes n'existe pas, on le crée.
+# si le fichier $outputRes n'existe pas, on le cree.
 if !File.exist?($outputRes)
 	`touch #{$outputRes}`
 end
@@ -49,7 +49,7 @@ puts "Lancement du benchmarck sur #{$numberOfClients} clients."
 # parametres :
 # - name : nom du travail (str)
 # - work : chemin du script de travail (str)
-# - whereToWrite : chemin ou écrire les données du benchmark (str)
+# - whereToWrite : chemin ou ecrire les donnees du benchmark (str)
 # - size : taille (en Mo) du/des fichier(s) a ecrire/lire (float)
 def startBench(name, work, whereToWrite, size)
 	puts "bench : #{name} en cours..."
@@ -74,15 +74,15 @@ def startBench(name, work, whereToWrite, size)
 	1.upto($numberOfClients) do
 		pid = Process.wait
 		workFinished += 1
-		puts "Machine(s) ayant terminé leur travail : #{workFinished}"
+		puts "Machine(s) ayant termine leur travail : #{workFinished}"
 	end
 
 	endOfBench = Time.now
 	duration = endOfBench - startOfBench 
 
-	puts "Toute les machines ont terminé leur travail."
+	puts "Toute les machines ont termine leur travail."
 
-	puts " --> Le benchmark \"#{name}\" a duré #{duration} secondes. (debit : #{totalSize / duration} Mo/s)"
+	puts " --> Le benchmark \"#{name}\" a dure #{duration} secondes. (debit : #{totalSize / duration} Mo/s)"
 
 	`echo "#{name} : #{duration} sec : #{totalSize / duration} Mo/s" >> #{$outputRes}`
 end
@@ -94,7 +94,7 @@ startBench("ecriture de gros fichiers", "writingBigFiles.sh", whereToWrite, 3076
 startBench("lecture de petits fichiers", "readingSmallFiles.sh", whereToWrite, 479)
 startBench("lecture de gros fichiers", "readingBigFile.sh", whereToWrite, 3076)
 
-# nettoyage du système de fichier distribue (necessaire pour enchainer les benchmark)
+# nettoyage du systeme de fichier distribue (necessaire pour enchainer les benchmark)
 puts "Nettoyage de l'espace de travail..."
 oneClient = `head -1 clientOfBench`.strip
 `ssh root@#{oneClient} rm -r #{whereToWrite}/*`

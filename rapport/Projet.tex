@@ -1334,8 +1334,8 @@ Lecture de gros fichiers avec 5 serveurs
 		  \section{Tutoriel d'utilisation du Grid'5000}
 		  \label{grid}
 		  Avant toute tentative de connexion, il est nécessaire de s'inscrire sur le site du Grid'5000\footnote{\href{https://www.grid5000.fr/mediawiki/index.php/Grid5000:Home}{https://www.grid5000.fr/mediawiki/index.php/Grid5000:Home}} par le biais de l'un des administrateurs avec l'intention d'effectuer de vrais recherches. Le Grid ayant été défini, en partie \ref{defgrid} à la page \pageref{defgrid}, nous ne nous attarderons pas sur la description de celui-ci.\\
-		  Ce tutoriel à pour but de montrer le fonctionnement basic\footnote{car il est possible de faire bien plus, le nombre de fonctionnalités disponibles est plutôt important!} de la plateforme.\\
-		  L'accès au Grid ce fait à l'aide du ssh, et se fait en deux étapes : connexion au site, puis à son frontend.
+		  Ce tutoriel à pour but de montrer le fonctionnement basic\footnote{Car il est possible de faire bien plus, le nombre de fonctionnalités disponibles est plutôt important!} de la plateforme.\\
+		  L'accès au Grid ce fait à l'aide de SSH, et se fait en deux étapes : connexion au site, puis à son frontend.
 		  \begin{lstlisting}
  ssh login@access.site.grid5000.fr
  # depuis la machine :
@@ -1369,18 +1369,18 @@ Lecture de gros fichiers avec 5 serveurs
       \begin{lstlisting}
  kadeploy3 -f $OAR_NODEFILE -a mylenny-x64-base.env -k
       \end{lstlisting}
-      L'option « -f » permet de spécifier les nœeuds sur lesquels on veut déployer l'image.\\
+      L'option « -f » permet de spécifier les nœuds sur lesquels on veut déployer l'image.\\
       L'option « -a » spécifie l'image à utiliser.\\
-      et l'option « -k » envoie la clef plublic ssh à la machine déployée.\\
-      La commande « kadeploy3 » renvoie le statut du déployement en cours, puis si celui-ci c'est déroulé correctement, le nom des machines déployées. A la suite de se déploiement, il est possible de se connecter au nœud via la commande ssh :
+      et l'option « -k » envoie la clef plublic SSH à la machine déployée.\\
+      La commande « kadeploy3 » renvoie le statut du déployement en cours, puis si celui-ci c'est déroulé correctement, le nom des machines déployées. A la suite de se déploiement, il est possible de se connecter au nœud via la commande SSH :
       \begin{lstlisting}
  ssh user@node.site.grid5000.fr
       \end{lstlisting}
-      Dans le cas où les recherches sont terminées avant fin de la réservation, il est possible de supprimer le JOB réservé à partir du frontend :
+      Dans le cas où les recherches sont terminées avant la fin de la réservation, il est possible de supprimer le JOB réservé à partir du frontend :
       \begin{lstlisting}
  oardel $OAR_JOB_ID
       \end{lstlisting}
-      Attention! Dans ce cas, c'est la totalité de la réservation qui est supprimer, donc les nœuds déployés sur ce JOB.
+      Attention! Dans ce cas, c'est la totalité de la réservation qui est supprimée, donc les nœuds déployés sur ce JOB.
       
 		\chapter{Scripts}
 			\section{GlusterFS}

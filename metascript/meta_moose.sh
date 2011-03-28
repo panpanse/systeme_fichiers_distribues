@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# la réservation doit être faite à la main :
+# la reservation doit etre faite a la main :
 # oarsub -I -t deploy -l nodes=10,walltime=2 
 # oarsub -I -t deploy -l nodes=10,walltime=2 -p "cluster='graphene'"
 

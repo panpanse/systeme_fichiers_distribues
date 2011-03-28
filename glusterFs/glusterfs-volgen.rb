@@ -15,7 +15,7 @@ File.open("listOfServers", 'r') do |file|
 	end 
 end
 
-# génération des fichiers de conf
+# generation des fichiers de conf
 `#{volgen}`
 
 # envoie des fichier de conf aux serveurs

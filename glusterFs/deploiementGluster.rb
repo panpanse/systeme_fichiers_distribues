@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # encoding: utf-8
 
-# réservation des noeuds (a lancer manuellement)
+# reservation des noeuds (a lancer manuellement)
 # oarsub -I -t deploy -l nodes=8,walltime=2 
 # oarsub -I -t deploy -l nodes=8,walltime=2 -p "cluster='graphene'"
 
@@ -14,15 +14,15 @@ end
 # doit concorder avec la commande oarsub
 numberOfServers = "#{ARGV[0]}".to_i
 
-infiniband = 1 # 1 : activé, 0 : non activé (ne change rien pour l'instant)
+infiniband = 1 # 1 : active, 0 : non active (ne change rien pour l'instant)
 
-# création d'un fichier contenant la liste des noeuds réservés
+# creation d'un fichier contenant la liste des noeuds reserves
 `touch listOfNodes`
 File.open("listOfNodes", 'w') do |file|
 	file << `cat $OAR_FILE_NODES | sort -u`
 end
 
-# création de deux fichiers contenant la liste des serveurs, et des clients
+# creation de deux fichiers contenant la liste des serveurs, et des clients
 `touch listOfClients listOfServers`
 serverWrited = 0
 File.open("listOfNodes", 'r') do |node|
@@ -40,12 +40,12 @@ File.open("listOfNodes", 'r') do |node|
 	end
 end
 
-# déploiement des machines
-puts "Machines en cours de déploiement..."
+# deploiement des machines
+puts "Machines en cours de deploiement..."
 `kadeploy3 -k -e squeeze-collective -u flevigne -f listOfNodes` # image collective
 
 
-# Création d'un répertoire dans /tmp/sharedspace sur les serveurs
+# Creation d'un repertoire dans /tmp/sharedspace sur les serveurs
 File.open("listOfServers", 'r') do |file|
 	while line = file.gets
 		machine = line.split.join("\n")
@@ -53,7 +53,7 @@ File.open("listOfServers", 'r') do |file|
 	end 
 end
 
-# Création d'un répertoire dans /media/glusterfs sur les clients
+# Creation d'un repertoire dans /media/glusterfs sur les clients
 File.open("listOfClients", 'r') do |file|
 	while line = file.gets
 		machine = line.split.join("\n")
@@ -63,15 +63,15 @@ end
 
 masterServer = `head -n 1 listOfServers`.split.join("\n")
 
-# génération des fichiers de conf, et envoie des fichiers de conf aux machines (serveurs et clients)
+# generation des fichiers de conf, et envoie des fichiers de conf aux machines (serveurs et clients)
 puts "Configuration des serveurs et des clients..."
 `scp listOfServers root@#{masterServer}:`
 `scp listOfClients root@#{masterServer}:`
 `scp glusterfs-volgen.rb root@#{masterServer}:`
 `ssh root@#{masterServer} ./glusterfs-volgen.rb`
 
-# démarrage des serveurs
-puts "Démarrage des serveurs..."
+# demarrage des serveurs
+puts "Demarrage des serveurs..."
 File.open("listOfServers", 'r') do |file|
 	while line = file.gets
 		machine = line.split.join("\n")
@@ -79,8 +79,8 @@ File.open("listOfServers", 'r') do |file|
 	end
 end
 
-# montage du répertoire par les clients
-puts "Montage du répertoire par les clients..."
+# montage du repertoire par les clients
+puts "Montage du repertoire par les clients..."
 File.open("listOfClients", 'r') do |file|
 	while line = file.gets
 		machine = line.split.join("\n")
@@ -88,8 +88,8 @@ File.open("listOfClients", 'r') do |file|
 	end
 end
 
-# résumé des machines
-puts "GlusterFS opérationnel"
+# resume des machines
+puts "GlusterFS operationnel"
 puts "\nMachines clients :"
 puts `cat listOfClients`
 
