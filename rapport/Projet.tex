@@ -1246,7 +1246,7 @@ p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
 			\end{itemize}
 
 			Nous avons remarqués, après coup, certaines faiblesses de notre benchmark, qui devrait être plus complexe que nous n'avions pensé.
-			Mais si l'on se base sur nos résultats, nous constatons que les performance en écriture de GlusterFS sont de loin les meilleurs.\\
+			Mais si l'on se base sur nos résultats, nous constatons que les performance de GlusterFS et de MooseFS sont de loin les meilleurs. MooseFS s'est sort très bien dans certains cas, avec un nombre plus réduit de serveurs. Ceph est plutôt destiné aux clusters de très grandes tailles (plusieurs milliers de serveurs).\\
 
 			Les performances seuls sont bien sur insuffisantes pour choisir un système de fichiers distribué, il y a plus de paramètres à prendre en comptes, en fonction de l'usage que l'on veut en faire. 
 			Préfère-t-on privilégier la sécurité ? (bonne réaction face à la perte d'un ou plusieurs serveurs)
