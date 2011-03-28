@@ -34,7 +34,7 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 }
 
 \title[Système de fichiers distribué]{Système de fichiers distribué : comparaison de GlusterFS, MooseFS et Ceph avec déploiement sur la grille de calcul Grid’5000.}
-\author{\it JF. Garcia, F. Lévigne,\\M. Douheret, V. Claudel}
+\author{\it JF. Garcia, F. Lévigne, \\M. Douheret, V. Claudel}
 \date{\today}
 \begin{document}
 
@@ -77,12 +77,25 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 	\begin{frame}
 		\frametitle{Le Grid'5000}
 		\begin{itemize}
-			\item Infrastructure distribué dédié à la recherche
+			\item Infrastructure distribué dédiée à la recherche
 			\item 11 sites, dont 9 en France
 			\begin{figure}
 				\includegraphics[width=0.3\linewidth]{../images/Site_map.png}
 				\caption{Les sites français du Grid'5000}
 			\end{figure}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Travailler sur le Grid'5000}
+		\begin{itemize}
+			\item Connexion au \og frontend\fg~ par SSH
+			\item Réservation de nœuds, pour un certain temps
+			\item Déploiement d'image (OS)
+
+			\begin{block}{Astuce :}
+				Possibilité d'effectuer une réservation à l'avance, suivit par l'exécution d'un script
+			\end{block}
 		\end{itemize}
 	\end{frame}
 
