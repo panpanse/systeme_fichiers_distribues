@@ -1,6 +1,6 @@
 #!/usr/bin/ruby -w
 
-# réservation des noeuds (a lancer manuellement)
+# reservation des noeuds (a lancer manuellement)
 # oarsub -I -t deploy -l nodes=9,walltime=2 
 # oarsub -I -t deploy -l nodes=9,walltime=2 -p "cluster='graphene'"
 
@@ -16,14 +16,14 @@ numberOfServers = "#{ARGV[0]}".to_i # 3 serveurs minimum
 
 # MooseFS et infinibande ?
 
-# création d'un fichier contenant la liste des noeuds réservés
+# creation d'un fichier contenant la liste des noeuds reserves
 `touch listOfNodes`
 `cat $OAR_File_NODES`
 File.open("listOfNodes", 'w') do |file|
 	file << `cat $OAR_FILE_NODES | sort -u`
 end
 
-# création de deux fichiers contenant la liste des serveurs, et des clients
+# creation de deux fichiers contenant la liste des serveurs, et des clients
 `touch listOfClients listOfServers`
 serverWrited = 0
 File.open("listOfNodes", 'r') do |node|
@@ -41,8 +41,8 @@ File.open("listOfNodes", 'r') do |node|
 	end
 end
 
-# déploiement des machines
-puts "Machines en cours de déploiement..."
+# deploiement des machines
+puts "Machines en cours de deploiement..."
 `kadeploy3 -e squeeze-collective -u flevigne -f listOfNodes` # image collective
 
 masterServer = `head -1 listOfServers`.strip # 1ere ligne du fichier

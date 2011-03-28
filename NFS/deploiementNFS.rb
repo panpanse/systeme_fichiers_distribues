@@ -15,8 +15,8 @@
 
 `cat $OAR_FILE_NODES | sort -u > listOfNodes`
 
-# Déploiement des machines
-#puts "Machines en cour de déploiement...\n"
+# Deploiement des machines
+#puts "Machines en cour de deploiement...\n"
 #`kadeploy3 -k -e squeeze-collective -u flevigne -f listOfNodes # image collective`
 
 serveur = `head -1 listOfNodes`.strip
