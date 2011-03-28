@@ -949,14 +949,14 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				\end{center}
 			\end{figure}
 
-                        Ceph est un système de fichiers distribué sous Licence LGPL, créé initialement par Sage Weill en 2007 pendant ses étude à l'université de Californie à Santa Cruz. Le but principal de Ceph est d'être compatible POSIX et d'être complètement distribué sans un seul point de défaillance. Les données sont répliqué de façon transparente ce qui fait de Ceph un système tolérant aux pannes. Mais Ceph est encore en phase de développement et il est fortement conseillé de ne pas l'utiliser en production.\\
+                        Ceph est un système de fichiers distribué sous Licence LGPL, créé initialement par Sage Weill en 2007 pendant ses études à l'université de Californie à Santa Cruz. Le but principal de Ceph est d'être compatible POSIX et d'être complètement distribué sans un seul point de défaillance. Les données sont répliquées de façon transparente ce qui fait de Ceph un système tolérant aux pannes. Mais Ceph est encore en phase de développement et il est fortement conseillé de ne pas l'utiliser en production.\\
 
                         Tout comme avec MooseFS les données sont découpées, réparties sur les différents serveurs et répliquées sur x nœuds. Cette répartition permet à Ceph d'avoir une grande tolérance vis-à-vis de la perte de nœuds stockant les données. De plus Ceph permet de rajouter ou d'enlever des serveurs de données pendant le fonctionnement de Ceph sans être obligé de couper le service.\\
 
                         Ceph remplit deux lacunes importantes des systèmes de fichiers actuellement disponible :
                         \begin{itemize}
-                          \item robustesse du stockage distribué open-source. Ceph fournit une variété de fonctionnalités clés, généralement manquante dans les systèmes de fichiers open-s-k -e squeeze-collective -u flevigneource, tel que l'évolutivité transparente (capacité d'ajouter simplement un disque pour étendre le volume de stockage), la répartition de charge intelligente
-                          \item évolutivité en terme de charge de travail ou de capacité de stockage. Ceph a été créer pour supporter des charges de l'ordre de dizaines de milliers de clients accédant au même fichier ou au même dossier. La capacité de stockage va du gigaoctet au petaoctet\footnote{1 petaoctet = 1024 teraoctet} et au-delà.
+                          \item robustesse du stockage distribué open-source. Ceph fournit une variété de fonctionnalités clés, généralement manquante dans les systèmes de fichiers open source, tel que l'évolutivité transparente (capacité d'ajouter simplement un disque pour étendre le volume de stockage), la répartition de charge intelligente
+                          \item évolutivité en terme de charge de travail ou de capacité de stockage. Ceph a été créé pour supporter des charges de l'ordre de dizaines de milliers de clients accédant au même fichier ou au même dossier. La capacité de stockage va du gigaoctet au petaoctet\footnote{1 petaoctet = 1024 teraoctet} et au-delà.
                         \end{itemize}
 \newpage
                         
@@ -964,7 +964,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
                         
                         La partie serveur de Ceph utilise trois types distinct de démons : 
                         \begin{itemize}
-                        \item moniteur de cluster, qui garde trace des nœuds actifs et défaillants
+                          \item moniteur de cluster, qui garde trace des nœuds actifs et défaillants
                           \item serveurs de métadonnées, qui stockent les métadonnées des inoeuds et des répertoires
                           \item serveurs de données, qui stockent les données.
                         \end{itemize}
@@ -978,13 +978,14 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
                         \subsection{Serveurs de données}
                            Les serveurs de données stockent les fichiers du cluster. Ils sont découpés en morceaux et répliqués plusieurs fois sur des serveurs différents. Cela permet une certaine tolérance vis-à-vis de la perte de serveurs. Si jamais un serveur tombe en panne, les données sont toujours accessible car elles sont présente sur un autre serveur de données.
 
-
 		        \begin{figure}[H]
 			        \begin{center}
 				        \includegraphics[width=0.61\linewidth]{images/Ceph_architecture2.png}
 				        \caption{Fonctionnement de Ceph}
 			        \end{center}
 		        \end{figure}
+
+
 		        \section{Mise en place}
 		                       Avant toute configuration, il nous faut déterminiez les paquets qui nous seront utiles.Utilisant une image de Debian Squeeze, On recherche dans la liste des paquets disponibles, ceux dont le nom débute par 'ceph'.
 		                       \begin{lstlisting}
@@ -995,9 +996,9 @@ p   ceph-client-tools-dbg  - debugging symbols for ceph-client-tools
 p   ceph-dbg               - debugging symbols for ceph                                                  
 i A ceph-fuse              - FUSE-based client for the Ceph distributed file system                      
 p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
-                           \end{lstlisting}	        
-                           Dans la liste ci-dessus, on identifie les paquets ceph, ceph-client-tools et ceph-fuse qui correspondent bien aux fonctions souhaitées pour le client et le serveur Ceph.
-En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref{Sources}) on peut élaborer une configuration type.\\\\       
+                                       \end{lstlisting}	        
+                                       Dans la liste ci-dessus, on identifie les paquets ceph, ceph-client-tools et ceph-fuse qui correspondent bien aux fonctions souhaitées pour le client et le serveur Ceph.
+                                       En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref{Sources}) on peut élaborer une configuration type.\\\\       
 		                       Afin de mettre en place Ceph, il faut connaitre le nombre exacte de serveurs qui seront utilisés. Dans cet exemple de mise en place, nous prenons deux serveurs, node0 et node1. node0 sera le serveur principal, que l'on appel aussi moniteur. La totalité de la configuration, hormis le montage des clients, se fait à partir du moniteur. Pour commencer, il faut créer un fichier de configuration ceph.conf qui contiendra une grande partie des données nécessaires au bon fonctionnement des serveurs :
 		           \begin{lstlisting}
 [global]
@@ -1033,17 +1034,17 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
                         Ce fichier de configuration permet donc globalement d'indiquer la position des fichiers pid, keyring et le niveau de debug. Il défini les répertoires du moniteur dans lesquels les fichiers seront stockés. \textbf{[mon0]} contient le nom du serveur principal avec son adresse IP et le port utilisé. On spécifie ensuite la position du fichier keyring pour les serveurs de métadonnées \textbf{[mds]} et leur identification. \textbf{[osd]} contient la position de stockage des données, les journaux et le niveau de debug des serveurs de données spécifiés par la suite. Le nombre de \textbf{[osd]} et de \textbf{[mds]} varieront suivant le nombre de serveurs de données et de métadonnées voulus, en sachant qu'il est impératif de spécifier le rôle de chaque serveur.\\\\
                         Etant donné que la configuration ne se fait que sur le moniteur, il est alors nécessaire de copier la clé ssh\footnote{Secure Shell : protocole de communication sécurisé} publique sur le second serveur (node1) afin de rendre possible la copie automatique des fichiers de configuration sans entrer de mot de passe :
                         \begin{lstlisting}
- ssh-copy-id -i ~/.ssh/id_rsa.pub root@node1
+ ssh-copy-id -i ~/.ssh/id\_rsa.pub root@node1
                         \end{lstlisting}
-                        Il est possible de générer par la suite un fichier keyring, qui n'est pas présent dans tout les exemples de configuration que l'on a pu rencontrer dans les documentations. Ce fichier keyring, permettrait apparemment, de déterminer les différents droits (lecture, écriture, exécution) des clients sur les différents serveurs. Il se génère à l'aide des commandes suivantes :
+                        Il est possible de générer par la suite un fichier keyring, qui n'est pas présent dans tout les exemples de configuration que l'on a pu rencontrer dans les documentations. Ce fichier keyring permet de déterminer les différents droits (lecture, écriture, exécution) des clients sur les différents serveurs quand la fonction d'authentification de CephFS est utilisé. Il se génère à l'aide des commandes suivantes :
                         \begin{lstlisting}
  cauthtool --create-keyring -n client.admin --gen-key keyring.bin
  cauthtool -n client.admin --cap mds 'allow' --cap osd 'allow *' --cap mon 'allow rwx' keyring.bin
                         \end{lstlisting}
                         Pour permettre aux serveurs de fonctionner correctement, il est nécessaire de monter des droits spécifiques sur le répertoire de stockage, qui est ici /tmp :
                         \begin{lstlisting}
- mount -o remount,user_xattr /tmp              # sur le moniteur
- ssh node1 mount -o remount,user_xattr /tmp    # sur le second serveur depuis le moniteur
+ mount -o remount,user\_xattr /tmp              # sur le moniteur
+ ssh node1 mount -o remount,user\_xattr /tmp    # sur le second serveur depuis le moniteur
                         \end{lstlisting}
                         Cette option « user\_xattr » permet d'activer le support des attributs étendus sur les fichiers.\\
                         Puis l'on crée le système de fichier avant de démarrer le service :
