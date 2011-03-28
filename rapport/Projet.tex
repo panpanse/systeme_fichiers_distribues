@@ -726,7 +726,7 @@ Remarque: le contenu sera vide tant que les serveurs de données ne seront pas d
 				% avec options différentes suivant les serveurs, clients (cf tuto site officiel)
 \newpage
 \textbf{Installation du Serveur de Backup Metalogger.}\\\\
-Le principe de ce serveur est la de récupérer tous les événements du système de fichier et peut permettre, si le maître est vraiment mal en point (perte de ses metadada, ou de son historique), de lui faire rejouer les logs pour que le volume reste cohérent.\\
+Le principe de ce serveur est de récupérer tous les événements du système de fichier et peut permettre, si le maître est vraiment mal en point (perte de ses métadonnées, ou de son historique), de lui faire recupérer les données pour que le volume reste cohérent.\\
 Cette solution repose sur le protocole Carp \og Common Address Redundancy Protocol\fg, permet d'admettre à un groupe d'hôtes sur le même segment réseau (ici mfsmaster et mfsmetalogger) de partager même adresse IP (un maître et un esclave). 
 La méthodologie d'installation est similaire au master serveur.\\
 Voici les commandes à suivre :\\
