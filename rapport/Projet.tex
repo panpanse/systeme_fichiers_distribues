@@ -158,7 +158,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 			% Très fortement inspiré de Wikipédia (citer sources en fin de rapport)
 			% système de fichier distribué basé sur un fs "normal" ?
 			Un système de fichiers (file system en anglais) est une façon de stocker des informations et de les organiser dans des fichiers,
-			sur des périphérique comme un disque dur, un CD-ROM, une clé USB, etc.
+			sur des périphériques comme un disque dur, un CD-ROM, une clé USB, etc.
 			Il existe de nombreux systèmes de fichiers (certains ayant des avantages sur d'autres),
 			dont entre autre l'ext (Extented FS), le NTFS (New Technology FileSystem), ZFS (Zettabyte FS), FAT (File Allocation Table).
 			
@@ -168,19 +168,19 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 			et interagit avec le système de fichier via un protocole adéquat.
 
 			Un système de fichier distribué est donc utilisé par plusieurs machines en même temps
-			(les machines peuvent ainsi avoir accès a des fichiers distants, l'espace de noms est mis en commun).
-			Un tel système permet donc de partager des données entre plusieurs client,
+			(les machines peuvent ainsi avoir accès à des fichiers distants, l'espace de noms est mis en commun).
+			Un tel système permet donc de partager des données entre plusieurs clients,
 			et pour certains de répartir la charge entre plusieurs machines, et de gérer la sécurité des données
-			(par réplication)
+			(par réplication).
 
                         \newpage
 		\section{Le Grid'5000}
 		\label{defgrid}
 		Le Grid'5000 est une infrastructure distribuée dédié à la recherche sur des systèmes distribuées à grande échelle.
 
-		Les ingénieurs assurant le développement et le support de l'infrastructure jour après jour et ils viennent pour la plupart	de l'INRIA\footnote{Institut National de Recherche en Informatique et en Automatique}.
+		Des ingénieurs assurent le développement et le support de l'infrastructure jour après jour, venant pour la plupart	de l'INRIA\footnote{Institut National de Recherche en Informatique et en Automatique}.
 
-		Le Grid'5000 est répartit sur onze sites, dont neuf en France.
+		Le Grid'5000 est réparti sur onze sites, dont neuf en France.
 
 		\begin{figure}[H]
 			\begin{center}
@@ -207,7 +207,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
                 
 		Pour travailler sur le Grid'5000, on se connecte en ssh\footnote{Secure Shell : protocole de communication sécurisé} à une machine appelé le \og frontend\fg  présent sur chaque site.
 		A partir de ce frontend, il est possible de déployer des environnements sur des machines du Grid (cf Partie \ref{grid} page \pageref{grid}).
-		Un certain nombre d'images (OS) sont disponible. L'ensemble de nos tests ont été réalisés avec une Debian Squeeze (6),
+		Un certain nombre d'images (OS) sont disponibles. L'ensemble de nos tests ont été réalisés avec une Debian Squeeze (6),
 		que nous avons construit à partir d'une Debian Lenny (5), la version 6 n'étant pas disponible.
 		Un système de réservation permet de réserver à une date et heure voulue des nœuds, et si on le souhaite,
 		d'exécuter un script.
@@ -238,13 +238,13 @@ NFS (Network File System, système de fichiers en réseau en français) est un s
     NFSv1 et v2 définies dans la RFC 1094 prévues pour fonctionner sur UDP.\\
     NFSv3 définie dans la RFC 1813 prenant en charge le TCP.\\
     NFSv4 définie dans la RFC 3010 puis réviser dans la RFC 3530. L'ensemble du protocole est repensé, et les codes sont réécrits.
-    Cette version intègre une meilleur gestion de la sécurité, de la montée en charge, et un systèmes de maintenances simplifiés.
-    NFSv4 supporte les protocoles de transports TCP (par défaut) et RDMA, ce qui augmente la fiabilité. Nous utiliserons donc cette version NFS dans l'ensemble de nos test.\\\\
+    Cette version intègre une meilleur gestion de la sécurité, de la montée en charge, et un système de maintenance simplifié.
+    NFSv4 supporte les protocoles de transports TCP (par défaut) et RDMA, ce qui augmente la fiabilité. Nous utiliserons donc cette version NFS dans l'ensemble de nos tests.\\\\
 Au delà des évolutions entre les versions 3 et 4 du protocole, c'est la cohérence du système de nommage qui distingue la version 4 du système de fichiers réseau. Il s'agit de garantir qu'un objet (fichier ou répertoire) est représenté de la même manière sur un serveur et sur ses clients.
 \newpage
 
     \section{Mise en place}
-Le rôle du serveur NFS est de mettre à disposition sur le réseau une partie de son arborescence locale de système de fichiers. On parle d'\og exportation\fg.\\
+Le rôle du serveur NFS est de mettre à disposition sur le réseau une partie de son arborescence locale. On parle d'\og exportation\fg.\\
 Il existe plusieurs implémentations libres de serveur NFS. On se limite ici à l'utilisation du logiciel lié au noyau Linux.\\
 Dans cette configuration nous traitons de l'installation d'un serveur NFS en version 4 dont le but est d'exporter le contenu d'un répertoire /tmp vers les clients.
 Utilisant une image de Debian Squeeze, On recherche dans la liste des paquets disponibles, ceux dont le nom débute par 'nfs'.
@@ -264,7 +264,7 @@ En exploitant la documentation \href{https://wiki.linux-nfs.org/wiki/index.php/N
 	  \end{lstlisting}
 Pour les besoins de ces travaux pratiques, les fonctions de sécurité Kerberos ne sont pas utilisées. On utilise l'appartenance au domaine nancy.grid5000.fr comme critère de contrôle d'accès ; ce qui correspond à un niveau de sécurité faible, puisque toutes les machines déployées sur la plateforme de Nancy peuvent accéder au répertoire.\\
 	  \textbf{rw }: autorise les requêtes en lecture et écriture;\\
-	  \textbf{fsid=0} : (fsid=root ou fsid=0) cette option est propre à NFSv4. Elle permet de définir le point de partage racine. Ce qui permet de monter des partages en fonction d'une racine virtuelle.\\
+	  \textbf{fsid=0} : (fsid=root ou fsid=0) cette option est propre à NFSv4. Elle définie le point de partage racine. Ce qui permet de monter des partages en fonction d'une racine virtuelle.\\
 	  \textbf{insecure} : l'option insecure permet l'accès aux clients dont l'implémentation NFS n'utilisent pas un port réservé.\\
 	  \textbf{subtree\_check} : permet de limiter l'accès exclusivement au répertoire partager.\\
 	  
@@ -289,9 +289,7 @@ Sur le client, nous avons le programme appelé showmount associé à l'option -e
    \end{itemize}
 
     Pour pouvoir monter un système de fichier, il faut être administrateur à moins que les informations de montage aient été renseignées sur le fichier /etc/fstab.\\
-    FUSE permet à un utilisateur de monter lui-même un système de fichier. Pour profiter de FUSE, il faut des programmes qui exploitent sa bibliothèque
-    et  ces programmes sont nombreux.\\
-    http://fuse.sourceforge.net\\\\
+    FUSE permet à un utilisateur de monter lui-même un système de fichier. Pour profiter de FUSE, il faut des programmes qui exploitent sa bibliothèque et ces programmes sont nombreux \footnote{http://fuse.sourceforge.net}.\\\\
     L'installation de FUSE est réalisé avec la commande suivante:\\
     \begin{lstlisting}
 	  apt-get install fuse-utils libfuse2
@@ -318,7 +316,7 @@ GlusterFS est un système de fichiers distribués libre (GPLv3), à la fois trè
 GlusterFS est composé de deux éléments logiciels : un serveur et un client.\\
 GlusterFS supporte plusieurs protocoles de communication tels que TCP/IP, InfiniBand RDMA.\\
 
-Les serveurs de stockage gèrent la réplication des données stockées dans le volume distribué, permettant une reprise rapide du service en cas d'indisponibilité de l'un des n\oe uds. \\
+Les serveurs de stockage gèrent la réplication des données stockées dans le volume distribué, permettant une reprise rapide du service en cas d'indisponibilité de l'un des nœuds. \\
 Les clients reposent sur Fuse pour monter localement l'espace de stockage fusionné, donc facilement administrable.\\
 Le nombre de serveur et le nombre de clients ne sont pas limité.\\\\
 Le fonctionnement de GlusterFS est très modulaire et peut être configuré pour :\\
@@ -364,7 +362,7 @@ Mettre a jour la librairie libglusterfs0 a partir de sid :
 aptitude install libglusterfs0/sid
 	  \end{lstlisting}
 Nous passons à la configuration du volume distribué. Nous créons un volume qui sera la concaténation des deux volumes offerts par nos deux serveurs.\\
-Le montage du volume sera réalisé dans /sharespace, créons ce répertoire maintenant\\
+Le montage du volume sera réalisé dans /sharespace. Création de ce répertoire :\\
 \begin{lstlisting}
 mkdir -p /sharespace
 	  \end{lstlisting}
@@ -389,7 +387,7 @@ En cas d'infrastructure équipé de l'InfiniBand (bus à haut débit), nous auri
 apt-get install libibverbs1 librdmacm1
 glusterfs-volgen --name mystore -t ib-verbs 172.16.65.92:/sharespace 172.16.65.91:/sharespace
 	  \end{lstlisting}
-La commande glusterfs-volgen génère les fichiers de configuration pour les serveurs et le client. Chaque fichier porte l'IP de la machine concerné dans son nom, nous allons les exporter dans leur répertoire d'exploitation et les renommer pour les qu'il soient pris en compte.
+La commande glusterfs-volgen génère les fichiers de configuration pour les serveurs et le client. Chaque fichier porte l'IP de la machine concerné dans son nom, nous allons les exporter dans leur répertoire d'exploitation et les renommer pour qu'ils soient pris en compte.
 \begin{lstlisting}
 cp 172.16.65.91-mystore-export.vol /etc/glusterfs/glusterfsd.vol
 cp mystore-tcp.vol /etc/glusterfs/glusterfs.vol
@@ -399,7 +397,7 @@ scp 172.16.65.92-mystore-export.vol 172.16.65.92:/etc/glusterfs/glusterfsd.vol
 scp mystore-tcp.vol 172.16.65.92:/etc/glusterfs/glusterfs.vol
 	  \end{lstlisting}
 Une copie du fichier de transport ou fichier de configuration client doit être stocké par au moins un serveur.\\
-A ce moment, nous sommes êtes prêt à mettre en marche les services de GlusterFS sur chaque serveur :
+A ce moment, nous sommes prêt à mettre en marche les services de GlusterFS sur chaque serveur :
 \begin{lstlisting}
 /etc/init.d/glusterfs-server start
 	  \end{lstlisting}
@@ -436,12 +434,12 @@ Filesystem            Size  Used Avail Use% Mounted on
 /etc/glusterfs/glusterfs.vol
                       9.4G  831M  8.1G  10% /mnt/monglusterfsvolume
 	  \end{lstlisting}
-ou encore
+ou encore :
 \begin{lstlisting}
 df -h | grep 172.16.65.91
 172.16.65.91 5.6G 2.1G 3.3G 39% /mnt/monglusterfsvolume
 	  \end{lstlisting}
-A des fins de test, concevons un fichier de 10 Mo
+A des fins de test, concevons un fichier de 10 Mo :
 \begin{lstlisting}
 dd if=/dev/urandom of=test bs=10M count=1
 1+0 enregistrements lus
@@ -453,8 +451,10 @@ Copions le fichier test sur le FS distribué :
 cp test /mnt/monglusterfsvolume
 	  \end{lstlisting}
 Examinons le contenu des répertoires /mnt/monglusterfsvolume et /sharespace des deux serveurs.\\
+\begin{lstlisting}
 ls -lh /mnt/monglusterfsvolume\\
 ls -lh /sharespace\\
+\end{lstlisting}
 On constate l'absence du fichier test sur l'un des nœuds, ce qui est totalement cohérent puisque la configuration par défaut de GlusterFS est la mise en œuvre de la concaténation des volumes physiques et sans duplication ou réplication des données.\\
 Nous utilisons donc l'espace des deux volumes sur les serveurs, qui est vu comme un seul par les clients.
 Vous trouverez ci-dessous des informations complémentaires sur les possibilités des fichiers de configuration même si nous n'y toucherons pas pour notre travail.\\
@@ -499,8 +499,7 @@ Il est toujours primordial de bien définir le niveau de log :
 glusterfsd -f server1.vol -L DEBUG -l server1.log
 glusterfsd -f server2.vol -L DEBUG -l server2.log
 	  \end{lstlisting}
-L'option \og -f\fg~ pointe vers le fichier de configuration, \og -L\fg~  indique le niveau de journalisation souhaité et \og -l\fg~ donne le nom du fichier de journaux par
-instance de \og GlusterFS\fg.\\\\
+L'option \og -f\fg~ pointe vers le fichier de configuration, \og -L\fg~  indique le niveau de journalisation souhaité et \og -l\fg~ donne le nom du fichier de journaux par instance de \og GlusterFS\fg.\\\\
 \newpage
 Listing du fichier /etc/glusterfs/client.vol.
 \begin{lstlisting}172.16.65.91
@@ -572,7 +571,7 @@ option aggregate-size 131072 # unite en bytes
 subvolumes iot
 end-volume
 
-### Ajout de la directive readahead pour la structure de donnees
+### Ajout de la directive readhead pour la structure de donnees
 volume readahead
  type performance/read-ahead
  option page-size 65536   # unit in bytes
@@ -586,11 +585,11 @@ Le tableau suivant répertorie les options de volume ainsi que sa description et
   \hline
   Option & Description & Valeur par défaut \\
   \hline
-  performance.cache-refresh-timeout & Les données mises en cache pour un fichier sera conservé x secondes, après quoi revalidation des données est effectuée. & 1 sec \\
+  performance.cache-refresh-timeout & Les données mises en cache pour un fichier sera conservé x secondes, après quoi une revalidation des données est effectuée. & 1 sec \\
   \hline
   performance.cache-size & Taille du cache de lecture. & 32 MB \\
   \hline
-  performance.write-behind-window-size & taille du per-file écrire dérriere le buffer & 1 MB \\
+  performance.write-behind-window-size & taille du per-file écrire derriere le buffer & 1 MB \\
   \hline
   network.frame-timeout & Le délai après lequel l'opération doit être déclaré comme mort, si le serveur ne répond pas à une opération particulière. & 1800 (30 mn) \\
   \hline
