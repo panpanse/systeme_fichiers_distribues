@@ -725,10 +725,10 @@ Remarque: le contenu sera vide tant que les serveurs de données ne seront pas d
 				% avec options différentes suivant les serveurs, clients (cf tuto site officiel)
 \newpage
 \textbf{Installation du Serveur de Backup Metalogger.}\\\\
-Le principe de ce serveur est de récupérer tous les événements du système de fichier et peut permettre, si le maître est vraiment mal en point (perte de ses métadonnées, ou de son historique), de lui faire recupérer les données pour que le volume reste cohérent.\\
-Cette solution repose sur le protocole Carp \og Common Address Redundancy Protocol\fg, permet d'admettre à un groupe d'hôtes sur le même segment réseau (ici mfsmaster et mfsmetalogger) de partager même adresse IP (un maître et un esclave). 
-La méthodologie d'installation est similaire au master serveur.\\
-Voici les commandes à suivre :\\
+Le principe de ce serveur est de récupérer tous les événements du système de fichiers et peut permettre, si le maître est vraiment mal en point (perte de ses métadonnées, ou de son historique), de lui faire récupérer ses données pour que le volume reste cohérent.\\
+Cette solution repose sur le protocole Carp \og Common Address Redundancy Protocol\fg, et permet d'admettre à un groupe d'hôtes sur la même partie du réseau (ici mfsmaster et mfsmetalogger) de partager une même adresse IP (un maître et un esclave). 
+La méthodologie d'installation est similaire au serveur maître.\\
+Voila les commandes à suivre :\\
   \begin{lstlisting}
 groupadd mfs
 useradd -g mfs mfs
@@ -743,13 +743,13 @@ make;make install
 cd /etc
 cp mfsmetalogger.cfg.dist mfsmetalogger.cfg
 	  \end{lstlisting}
-Déclarer le serveur master auprès de votre fichier /etc/hosts: 192.168.1.1  mfsmaster\\
-Le démarrage automatique n'est pas configuré. Commande de lancement :
+Déclaration du serveur master auprès de notre fichier /etc/hosts: 192.168.1.1  mfsmaster\\
+Le démarrage automatique n'est pas configuré. Voila la commande de lancement :
   \begin{lstlisting}
 /usr/sbin/mfsmetalogger start
 	  \end{lstlisting}
 \textbf{Installation d'un Serveur de Données Chunk servers.}\\\\
-Procédure d'installation toujours similaire:\\
+La procédure d'installation toujours similaire:\\
 Désactivation du service mfsmaster\\
   \begin{lstlisting}
 groupadd mfs
@@ -760,26 +760,26 @@ cd mfs-1.6.20-2
 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var/lib --with-default-user=mfs --with-default-group=mfs --disable-mfsmaster
 make;make install
 	  \end{lstlisting}
-Préparation des fichiers de configurations:\\
+Préparation des fichiers de configurations :\\
   \begin{lstlisting}
 cd /etc/
 cp mfschunkserver.cfg.dist mfschunkserver.cfg
 cp mfshdd.cfg.dist mfshdd.cfg
 	  \end{lstlisting}
-Les directives du fichier mfshdd.cfg signalent les emplacements des unités de disque dur que l'on souhaite employer.\\\\
+Les directives du fichier mfshdd.cfg indique les dossiers dans lesquels seront stockés les données.\\\\
 Exemple de mise en œuvre pour deux emplacements :\\
 Ajoutons les deux lignes suivantes dans le fichier mfshdd.cfg.\\
 /mnt/mfschunks1\\
 /mnt/mfschunks2\\
-Positionnons les droits d'écriture nécessaire pour la création des dossiers de .lock :\\
+Positionnons les droits d'écritures nécessaires pour la création des dossiers de verrouillage : .lock :\\
   \begin{lstlisting}
 mkdir /mnt/mfschunks1
 mkdir /mnt/mfschunks2
 chown -R mfs:mfs /mnt/mfschunks1
 chown -R mfs:mfs /mnt/mfschunks2
 	  \end{lstlisting}
-Si nous ne souhaitons pas utiliser la totalité de l'espace libre de vos disques, nous pouvons utiliser une autre méthode permettant de contrôler le volume disque.\\
-Création et formatage d'un volume de deux gigas et d'un formatage en ext3.\\
+Si nous ne souhaitons pas utiliser la totalité de l'espace libre de nos disques, nous pouvons utiliser une autre méthode permettant de contrôler le volume utilisé du disque.\\
+Création d'un volume de deux Go en ext3.\\
   \begin{lstlisting}
 dd if=/dev/zero of=disk1 bs=1024 count=1 seek=$((2*1024*1024-1))
 dd if=/dev/zero of=disk2 bs=1024 count=1 seek=$((2*1024*1024-1))
@@ -796,14 +796,14 @@ chown -R mfs:mfs /mnt/hd1
 chown -R mfs:mfs /mnt/hd2
 	  \end{lstlisting}
 Nous informons le fichier /etc/hosts de la présence du master serveur : 192.168.1.1 mfsmaster\\
-Il est prêt à être démarrer:
+Il est maintenant prêt à être démarré :
   \begin{lstlisting}
 /usr/sbin/mfschunkserver start
 	  \end{lstlisting}
 \textbf{Installation d'un Poste Client.}\\\\
 Afin de monter le système de fichiers basé sur Fuse, la version du paquet doit être égal ou supérieur à 2.7.2\\
 \href{http://sourceforge.net/projects/fuse/}{http://sourceforge.net/projects/fuse/} \\
-Compilation de Fuse et chargement du module du noyau linux.\\
+Si le paquet n'est pas disponible dans la bonne version dans les dépôts, on peut le compiler :\\
   \begin{lstlisting}
 cd /usr/src
 tar -zxvf fuse-2.8.5.tar.gz
@@ -819,8 +819,8 @@ cd mfs-1.6.20-2
 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var/lib --with-default-user=mfs --with-default-group=mfs --disable-mfsmaster --disable-mfschunkserver
 make;make install
 	  \end{lstlisting}
-Nous annonçons le master serveur au fichier /etc/hosts : 192.168.1.1   mfsmaster\\
-Supposons que nous souhaitons monter le système dans le dossier /mnt/mfs notre machine de cliente.\\
+Nous annonçons le serveur maître au fichier /etc/hosts : 192.168.1.1   mfsmaster\\
+Supposons que nous souhaitons monter le système dans le dossier /mnt/mfs sur notre machine cliente.\\
   \begin{lstlisting}
 mkdir -p /mnt/mfs
 chown -R mfs:mfs /mnt/mfs
@@ -919,7 +919,7 @@ mfscheckfile /mnt/mfs/folder2/mfs-1.6.20-2.tar.gz
 /mnt/mfs/folder2/mfs-1.6.20-2.tar.gz:
 2 copies: 1 chunks
 	  \end{lstlisting}
-Le résumé du contenu de l'arbre entier du file systeme peut être appelé avec la commande mfsdirinfo :
+Le résumé du contenu de l'arbre entier du système de fichiers peut être appelé avec la commande mfsdirinfo :
 \begin{lstlisting}
 mfsdirinfo /mnt/mfs/folder1/:
 inodes: 15
@@ -937,8 +937,8 @@ umount /mnt/mfs)
 /usr/sbin/mfsmetalogger stop
 /usr/sbin/mfsmaster stop
 	  \end{lstlisting}
-Discussion générale.\\
-Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par le biais d'un buffer (cache d'écriture). En conséquence, l'exécution de la requête d'écriture elle-même transfère seulement les données au buffer (cache), l'écriture réelle n'ayant donc pas lieu. Conséquence, la confirmation de la requête d'écriture ne signifie pas que les données ont été correctement écrites sur un disque.\\ Elle est seulement invoquer et l'aboutissement passe par la commande fsync qui provoque le déchargement de toutes les données gardées en cache pour obtenir écrite physique sur le disque. Problématique en cas d'erreur avant la finalisation de cette phase, c'est un retour d'erreur de la commande fsync, voir la perte des données. 
+%Discussion générale.\\
+Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par le biais d'un buffer (cache d'écriture). En conséquence, l'exécution de la requête d'écriture elle-même transfère seulement les données au buffer (cache), l'écriture réelle n'ayant donc pas lieu. En conséquence, la confirmation de la requête d'écriture ne signifie pas que les données ont été correctement écrites sur un disque.\\ Elle est seulement invoquer et l'aboutissement passe par la commande fsync qui provoque le déchargement de toutes les données gardées en cache pour obtenir l'écriture physique sur le disque. Cela est problématique en cas d'erreur avant la finalisation de cette phase, un retour d'erreur de la commande fsync peut avoir lieu, voir une perte des données. 
 
 	\chapter{Ceph}
 		\section{Présentation}
@@ -949,14 +949,14 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
 				\end{center}
 			\end{figure}
 
-                        Ceph est un système de fichiers distribué sous Licence LGPL, créé initialement par Sage Weill en 2007 pendant ses étude à l'université de Californie à Santa Cruz. Le but principal de Ceph est d'être compatible POSIX et d'être complètement distribué sans un seul point de défaillance. Les données sont répliqué de façon transparente ce qui fait de Ceph un système tolérant aux pannes. Mais Ceph est encore en phase de développement et il est fortement conseillé de ne pas l'utiliser en production.\\
+                        Ceph est un système de fichiers distribué sous Licence LGPL, créé initialement par Sage Weill en 2007 pendant ses études à l'université de Californie à Santa Cruz. Le but principal de Ceph est d'être compatible POSIX et d'être complètement distribué sans un seul point de défaillance. Les données sont répliquées de façon transparente ce qui fait de Ceph un système tolérant aux pannes. Mais Ceph est encore en phase de développement et il est fortement conseillé de ne pas l'utiliser en production.\\
 
                         Tout comme avec MooseFS les données sont découpées, réparties sur les différents serveurs et répliquées sur x nœuds. Cette répartition permet à Ceph d'avoir une grande tolérance vis-à-vis de la perte de nœuds stockant les données. De plus Ceph permet de rajouter ou d'enlever des serveurs de données pendant le fonctionnement de Ceph sans être obligé de couper le service.\\
 
                         Ceph remplit deux lacunes importantes des systèmes de fichiers actuellement disponible :
                         \begin{itemize}
-                          \item robustesse du stockage distribué open-source. Ceph fournit une variété de fonctionnalités clés, généralement manquante dans les systèmes de fichiers open-s-k -e squeeze-collective -u flevigneource, tel que l'évolutivité transparente (capacité d'ajouter simplement un disque pour étendre le volume de stockage), la répartition de charge intelligente
-                          \item évolutivité en terme de charge de travail ou de capacité de stockage. Ceph a été créer pour supporter des charges de l'ordre de dizaines de milliers de clients accédant au même fichier ou au même dossier. La capacité de stockage va du gigaoctet au petaoctet\footnote{1 petaoctet = 1024 teraoctet} et au-delà.
+                          \item robustesse du stockage distribué open-source. Ceph fournit une variété de fonctionnalités clés, généralement manquante dans les systèmes de fichiers open source, tel que l'évolutivité transparente (capacité d'ajouter simplement un disque pour étendre le volume de stockage), la répartition de charge intelligente
+                          \item évolutivité en terme de charge de travail ou de capacité de stockage. Ceph a été créé pour supporter des charges de l'ordre de dizaines de milliers de clients accédant au même fichier ou au même dossier. La capacité de stockage va du gigaoctet au petaoctet\footnote{1 petaoctet = 1024 teraoctet} et au-delà.
                         \end{itemize}
 \newpage
                         
@@ -964,7 +964,7 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
                         
                         La partie serveur de Ceph utilise trois types distinct de démons : 
                         \begin{itemize}
-                        \item moniteur de cluster, qui garde trace des nœuds actifs et défaillants
+                          \item moniteur de cluster, qui garde trace des nœuds actifs et défaillants
                           \item serveurs de métadonnées, qui stockent les métadonnées des inoeuds et des répertoires
                           \item serveurs de données, qui stockent les données.
                         \end{itemize}
@@ -978,13 +978,14 @@ Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par
                         \subsection{Serveurs de données}
                            Les serveurs de données stockent les fichiers du cluster. Ils sont découpés en morceaux et répliqués plusieurs fois sur des serveurs différents. Cela permet une certaine tolérance vis-à-vis de la perte de serveurs. Si jamais un serveur tombe en panne, les données sont toujours accessible car elles sont présente sur un autre serveur de données.
 
-
 		        \begin{figure}[H]
 			        \begin{center}
 				        \includegraphics[width=0.61\linewidth]{images/Ceph_architecture2.png}
 				        \caption{Fonctionnement de Ceph}
 			        \end{center}
 		        \end{figure}
+
+
 		        \section{Mise en place}
 		                       Avant toute configuration, il nous faut déterminiez les paquets qui nous seront utiles.Utilisant une image de Debian Squeeze, On recherche dans la liste des paquets disponibles, ceux dont le nom débute par 'ceph'.
 		                       \begin{lstlisting}
@@ -995,9 +996,9 @@ p   ceph-client-tools-dbg  - debugging symbols for ceph-client-tools
 p   ceph-dbg               - debugging symbols for ceph                                                  
 i A ceph-fuse              - FUSE-based client for the Ceph distributed file system                      
 p   ceph-fuse-dbg          - debugging symbols for ceph-fuse
-                           \end{lstlisting}	        
-                           Dans la liste ci-dessus, on identifie les paquets ceph, ceph-client-tools et ceph-fuse qui correspondent bien aux fonctions souhaitées pour le client et le serveur Ceph.
-En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref{Sources}) on peut élaborer une configuration type.\\\\       
+                                       \end{lstlisting}	        
+                                       Dans la liste ci-dessus, on identifie les paquets ceph, ceph-client-tools et ceph-fuse qui correspondent bien aux fonctions souhaitées pour le client et le serveur Ceph.
+                                       En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref{Sources}) on peut élaborer une configuration type.\\\\       
 		                       Afin de mettre en place Ceph, il faut connaitre le nombre exacte de serveurs qui seront utilisés. Dans cet exemple de mise en place, nous prenons deux serveurs, node0 et node1. node0 sera le serveur principal, que l'on appel aussi moniteur. La totalité de la configuration, hormis le montage des clients, se fait à partir du moniteur. Pour commencer, il faut créer un fichier de configuration ceph.conf qui contiendra une grande partie des données nécessaires au bon fonctionnement des serveurs :
 		           \begin{lstlisting}
 [global]
@@ -1033,17 +1034,17 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
                         Ce fichier de configuration permet donc globalement d'indiquer la position des fichiers pid, keyring et le niveau de debug. Il défini les répertoires du moniteur dans lesquels les fichiers seront stockés. \textbf{[mon0]} contient le nom du serveur principal avec son adresse IP et le port utilisé. On spécifie ensuite la position du fichier keyring pour les serveurs de métadonnées \textbf{[mds]} et leur identification. \textbf{[osd]} contient la position de stockage des données, les journaux et le niveau de debug des serveurs de données spécifiés par la suite. Le nombre de \textbf{[osd]} et de \textbf{[mds]} varieront suivant le nombre de serveurs de données et de métadonnées voulus, en sachant qu'il est impératif de spécifier le rôle de chaque serveur.\\\\
                         Etant donné que la configuration ne se fait que sur le moniteur, il est alors nécessaire de copier la clé ssh\footnote{Secure Shell : protocole de communication sécurisé} publique sur le second serveur (node1) afin de rendre possible la copie automatique des fichiers de configuration sans entrer de mot de passe :
                         \begin{lstlisting}
- ssh-copy-id -i ~/.ssh/id_rsa.pub root@node1
+ ssh-copy-id -i ~/.ssh/id\_rsa.pub root@node1
                         \end{lstlisting}
-                        Il est possible de générer par la suite un fichier keyring, qui n'est pas présent dans tout les exemples de configuration que l'on a pu rencontrer dans les documentations. Ce fichier keyring, permettrait apparemment, de déterminer les différents droits (lecture, écriture, exécution) des clients sur les différents serveurs. Il se génère à l'aide des commandes suivantes :
+                        Il est possible de générer par la suite un fichier keyring, qui n'est pas présent dans tout les exemples de configuration que l'on a pu rencontrer dans les documentations. Ce fichier keyring permet de déterminer les différents droits (lecture, écriture, exécution) des clients sur les différents serveurs quand la fonction d'authentification de CephFS est utilisé. Il se génère à l'aide des commandes suivantes :
                         \begin{lstlisting}
  cauthtool --create-keyring -n client.admin --gen-key keyring.bin
  cauthtool -n client.admin --cap mds 'allow' --cap osd 'allow *' --cap mon 'allow rwx' keyring.bin
                         \end{lstlisting}
                         Pour permettre aux serveurs de fonctionner correctement, il est nécessaire de monter des droits spécifiques sur le répertoire de stockage, qui est ici /tmp :
                         \begin{lstlisting}
- mount -o remount,user_xattr /tmp              # sur le moniteur
- ssh node1 mount -o remount,user_xattr /tmp    # sur le second serveur depuis le moniteur
+ mount -o remount,user\_xattr /tmp              # sur le moniteur
+ ssh node1 mount -o remount,user\_xattr /tmp    # sur le second serveur depuis le moniteur
                         \end{lstlisting}
                         Cette option « user\_xattr » permet d'activer le support des attributs étendus sur les fichiers.\\
                         Puis l'on crée le système de fichier avant de démarrer le service :
@@ -1066,9 +1067,9 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 	% comparaison des performances
 	% aspects générales, site officiel (doc, tuto), avis personnels
 		\section{Test de performances}
-			Afin de ne pas avoir de différence de matériel lors nos test, ceux-ci ont tous été réalisés sur un même cluster du Grid'5000 : Graphene.\\
+			Afin de ne pas avoir de différence de matériel lors nos tests, ceux-ci ont tous été réalisés sur un même cluster du Grid'5000 : Graphene.\\
 
-			Ce cluster est composé de 144 nœuds, avec pour caractéristique :
+			Ce cluster est composé de 144 nœuds, avec pour caractéristiques :
 			\begin{itemize}
 				\item 1 CPU Intel de quatre cœurs cadencé à 2.53 GHz
 				\item 16 Go de RAM
@@ -1083,7 +1084,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 				\item[Lecture de petits fichiers: ] lecture des fichiers du noyau Linux.
 				Pour cela, nous avons compressé le dossier contenant le noyau (impliquant la lecture des fichiers),
 				en redirigeant la sortie vers /dev/nul (afin que les performances du disque ne rentrent pas en jeux).
-				\item[Lecture de gros fichiers :] lecture des fichiers de 1 Go. Opération réalisé en faisant un « cat » des fichier,
+				\item[Lecture de gros fichiers :] lecture des fichiers de 1 Go. Opération réalisé en faisant un « cat » des fichiers,
 				et en redirigeant la sortie vers /dev/nul afin de ne pas \og polluer\fg~le terminal.\\
 			\end{description}
 
@@ -1237,18 +1238,17 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 			Sur les tests que nous avons effectués, nous remarquons des débits très importants, parfois supérieurs au débit du réseau présent sur le cluster.
 			Nous nous sommes donc questionné, afin de trouver pourquoi nous obtenons de tels résultats, et nous avons émis les hypothèses suivantes :
 			\begin{itemize}
-				\item Lors de la lecture de fichiers (petits ou gros), le client lit des fichiers font il possède une copie sur sa machine,
-				le systèmes de fichier distribué est-il capable de le détecter, et d'éviter d'aller lire le fichier sur un serveur distant ?
+				\item Lors de la lecture de fichiers (petits ou gros), le client lit des fichiers dont il possède une copie sur sa machine.
+				Le systèmes de fichier distribué est-il capable de le détecter et d'éviter d'aller lire le fichier sur un serveur distant ?
 				\item Le cache présent sur les systèmes de fichiers est-il, à lui seul, responsable de tel résultats pour la lecture ?
-				\item Lors des tests d'écriture, tous les clients écrivent les mêmes fichiers, le système de fichier distribué est-il capable de le détecter,
-				et de limiter les transferts des clients vers les serveurs ?\\
+				\item Lors des tests d'écriture, tous les clients écrivent les mêmes fichiers, le système de fichier distribué est-il capable de le détecter, et de limiter les transferts des clients vers les serveurs ?\\
 			\end{itemize}
 
 			Nous avons remarqués, après coup, certaines faiblesses de notre benchmark, qui devrait être plus complexe que nous n'avions pensé.
 			Mais si l'on se base sur nos résultats, nous constatons que les performance en écriture de GlusterFS sont de loin les meilleurs.\\
 
-			Les performances seuls sont bien sur insuffisantes pour choisir un système de fichiers distribué, il y a plus de paramètres à prendre en comptes,
-			en fonction de l'usage que l'on veut en faire. Préfère-t-on privilégier la sécurité ? (bonne réaction face à la perte d'un ou plusieurs serveurs)
+			Les performances seuls sont bien sur insuffisantes pour choisir un système de fichiers distribué, il y a plus de paramètres à prendre en comptes, en fonction de l'usage que l'on veut en faire. 
+			Préfère-t-on privilégier la sécurité ? (bonne réaction face à la perte d'un ou plusieurs serveurs)
 			Les performances ? La facilité de mise en œuvre ?
 
 	\chapter{Conclusion}
@@ -1263,7 +1263,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 	Nous avons rencontré un certains nombre de difficultés, (en plus de la mise en place des systèmes de fichiers distribués) propre au Grid'5000 :
 	\begin{itemize}
 		\item Nos test devaient être réalisés sur un même cluster, mais nous n'étions pas seuls à travailler dessus,
-		et on nous ne disposions pas toujours de toutes les machines dont nous avions besoins.
+		et nous ne disposions pas toujours de toutes les machines dont nous avions besoins.
 		\item Nous avons aussi rencontré des erreurs lors de déploiement de machines, indépendant de nous, qui ont \og cassé\fg~ des benchmarks programmés à l'avance.
 		\item Et nous avons aussi commis quelques erreurs humaines :
 		\begin{itemize}
@@ -1272,11 +1272,9 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 		\end{itemize}
 	\end{itemize}
 
-	A cause de ces divers problèmes, nous n'avons pas obtenus tous les résultats que nous avions prévus d'avoir, ce qui ne permet pas une comparaison aussi approfondi
-	que nous avions souhaité.\\
+	A cause de ces divers problèmes, nous n'avons pas obtenus tous les résultats que nous avions prévus d'avoir, ce qui ne permet pas une comparaison aussi approfondi que nous avions souhaité.\\
 
-	Le script de benchmark s'est aussi montré, après coup, imparfait, du fait que les clients lisent un fichier distant, dont ils ont une copie sur leurs machines,
-	ce qui a pu fausser nos résultats.\\
+	Le script de benchmark s'est aussi montré, après coup, imparfait, du fait que les clients lisent un fichier distant, dont ils ont une copie sur leurs machines, ce qui a pu fausser nos résultats.\\
 
 	Malgré ces problèmes, nous avons quand même pu effectuer une comparaison de différents systèmes de fichiers distribués.
 	Ce travail nous a offert une bonne expérience pratique, d'un sujet technique, avant notre départ en stage.
@@ -1291,8 +1289,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 				et sont modifiables par les visiteurs afin de permettre l'écriture et l'illustration collaboratives des documents numériques qu'il contient. (Wikipédia)}
 				mis à notre disposition afin de mettre en commun nos connaissances et nos découvertes sur notre projet.
 
-				Nous avons aussi utilisé le dépôt Git\footnote{Git est un logiciel de gestion de versions, écrit par Linus Torvalds.} pour gérer le développement
-				de nos scripts, et notre rapport de projet.
+				Nous avons aussi utilisé le dépôt Git\footnote{Git est un logiciel de gestion de versions, écrit par Linus Torvalds.} pour gérer le développement de nos scripts, et notre rapport de projet.
 \newpage
 			\section{Répartition des taches}
 				\subsection{Florent Lévigne}
