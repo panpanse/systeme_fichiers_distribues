@@ -205,7 +205,7 @@ Tuteur : Maître de Conférences : Lucas Nussbaum\\
 		\end{description}
                 \newpage
                 
-		Pour travailler sur le Grid'5000, on se connecte en ssh\footnote{Secure Shell : protocole de communication sécurisé} à une machine appelé le \og frontend\fg  présent sur chaque site.
+		Pour travailler sur le Grid'5000, on se connecte en SSH\footnote{Secure Shell : protocole de communication sécurisé} à une machine appelé le \og frontend\fg  présent sur chaque site.
 		A partir de ce frontend, il est possible de déployer des environnements sur des machines du Grid (cf Partie \ref{grid} page \pageref{grid}).
 		Un certain nombre d'images (OS) sont disponible. L'ensemble de nos tests ont été réalisés avec une Debian Squeeze (6),
 		que nous avons construit à partir d'une Debian Lenny (5), la version 6 n'étant pas disponible.
@@ -630,7 +630,7 @@ Le tableau suivant répertorie les options de volume ainsi que sa description et
 			MooseFS permet de déployer assez facilement un espace de stockage réseau, répartit sur plusieurs serveurs. 
 			Les fichiers sont découpés en morceaux (appelés chunks) puis répartis sur les différents chunkservers (nœuds de stockage) :
 			selon le paramétrage voulu pour ces fichiers, ou pour le répertoire dans lequel ils se trouvent,
-			chaque chunk sera répliqué sur x noeuds (différents).
+			chaque chunk sera répliqué sur x nœuds (différents).
 
 			Cette répartition permet de gérer la disponibilité des données, lors des montées en charge ou lors d’incident technique
 			sur un serveur. L'atout principal de MooseFS, au-delà du fait qu'il s’agisse d’un logiciel libre,
@@ -944,7 +944,7 @@ umount /mnt/mfs)
 /usr/sbin/mfsmetalogger stop
 /usr/sbin/mfsmaster stop
 	  \end{lstlisting}
-Discution général.\\
+Discussion générale.\\
 Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par le biais d'un buffer (cache d'écriture). En conséquence, l'exécution de la requête d'écriture elle-même transfère seulement les données au buffer (cache), l'écriture réelle n'ayant donc pas lieu. Conséquence, la confirmation de la requête d'écriture ne signifie pas que les données ont été correctement écrites sur un disque.\\ Elle est seulement invoquer et l'aboutissement passe par la commande fsync qui provoque le déchargement de toutes les données gardées en cache pour obtenir écrite physique sur le disque. Problématique en cas d'erreur avant la finalisation de cette phase, c'est un retour d'erreur de la commande fsync, voir la perte des données. 
 
 	\chapter{Ceph}
@@ -1107,55 +1107,58 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 			\end{description}
 
 			\subsection{Cinq serveurs}
-\begin{figure}[H]
-\begin{center}
-\includegraphics[bb=0 0 640 480,width=14cm]{images/srv5rs.png}
-\caption{Lecture de petits fichiers avec 5 serveurs}
-\end{center}
-\end{figure} 
+
+			Les tests réalisés avec NFS ont bien sur été effectués sur un seul serveur.
+
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[bb=0 0 640 480,width=14cm]{images/srv5rs.png}
+%\caption{Lecture de petits fichiers avec 5 serveurs}
+%\end{center}
+%\end{figure} 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[bb=0 0 640 480,width=14cm]{images/srv5rs2.png}
 \caption{Lecture de petits fichiers avec 5 serveurs}
 \end{center}
 \end{figure} 
-Lecture de gros fichiers avec 5 serveurs
-\begin{figure}[H]
-\begin{center}
-\includegraphics[bb=0 0 640 480,width=14cm]{images/srv5rb.png}
-\caption{Lecture de gros fichiers avec 5 serveurs}
-\end{center}
-\end{figure} 
+%Lecture de gros fichiers avec 5 serveurs
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[bb=0 0 640 480,width=14cm]{images/srv5rb.png}
+%\caption{Lecture de gros fichiers avec 5 serveurs}
+%\end{center}
+%\end{figure} 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[bb=0 0 640 480,width=14cm]{images/srv5rb2.png}
 \caption{Lecture de gros fichiers avec 5 serveurs}
 \end{center}
 \end{figure} 
-Écriture de petits fichiers avec 5 serveurs
-\begin{figure}[H]
-\begin{center}
-\includegraphics[bb=0 0 640 480,width=14cm]{images/srv5ws.png}
-\caption{Lecture de petits fichiers avec 5 serveurs}
-\end{center}
-\end{figure} 
+%Écriture de petits fichiers avec 5 serveurs
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[bb=0 0 640 480,width=14cm]{images/srv5ws.png}
+%\caption{Lecture de petits fichiers avec 5 serveurs}
+%\end{center}
+%\end{figure} 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[bb=0 0 640 480,width=14cm]{images/srv5ws2.png}
-\caption{Lecture de petits fichiers avec 5 serveurs}
+\caption{Écriture de petits fichiers avec 5 serveurs}
 \end{center}
 \end{figure} 
-Écriture de gros fichiers avec 5 serveurs
-\begin{figure}[H]
-\begin{center}
-\includegraphics[bb=0 0 640 480,width=14cm]{images/srv5wb.png}
-\caption{Lecture de petits fichiers avec 5 serveurs}
-\end{center}
-\end{figure} 
+%Écriture de gros fichiers avec 5 serveurs
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[bb=0 0 640 480,width=14cm]{images/srv5wb.png}
+%\caption{Lecture de petits fichiers avec 5 serveurs}
+%\end{center}
+%\end{figure} 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[bb=0 0 640 480,width=14cm]{images/srv5wb2.png}
-\caption{Lecture de petits fichiers avec 5 serveurs}
+\caption{Écriture de gros fichiers avec 5 serveurs}
 \end{center}
 \end{figure} 
 			\subsection{Vingt serveurs}
@@ -1164,72 +1167,72 @@ Lecture de gros fichiers avec 5 serveurs
 
 			% a remplacer par des graphs Gnu Plot
 
-		        \begin{figure}[H]
-			        \begin{center}
-				        \includegraphics[width=1\linewidth]{graph/calc/50WS.png}
-				        \caption{Écriture de petits fichiers avec 50 serveurs}
-			        \end{center}
-		        \end{figure}
-\begin{figure}[H]
-\begin{center}
-\includegraphics[bb=0 0 640 480,width=14cm]{images/srv50ws.png}
-\caption{Écriture de petits fichiers avec 50 serveurs}
-\end{center}
-\end{figure} 
+		        %\begin{figure}[H]
+			    %    \begin{center}
+				%        \includegraphics[width=1\linewidth]{graph/calc/50WS.png}
+				%        \caption{Écriture de petits fichiers avec 50 serveurs}
+			    %    \end{center}
+		        %\end{figure}
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[bb=0 0 640 480,width=14cm]{images/srv50ws.png}
+%\caption{Écriture de petits fichiers avec 50 serveurs}
+%\end{center}
+%\end{figure} 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[bb=0 0 640 480,width=14cm]{images/srv50ws2.png}
 \caption{Écriture de petits fichiers avec 50 serveurs}
 \end{center}
 \end{figure} 
-		        \begin{figure}[H]
-			        \begin{center}
-				        \includegraphics[width=1\linewidth]{graph/calc/50WB.png}
-				        \caption{Écriture de gros fichiers avec 50 serveurs}
-			        \end{center}
-		        \end{figure}
-\begin{figure}[H]
-\begin{center}
-\includegraphics[bb=0 0 640 480,width=14cm]{images/srv50wb.png}
-\caption{Écriture de gros fichiers avec 50 serveurs}
-\end{center}
-\end{figure} 
+		        %\begin{figure}[H]
+			    %    \begin{center}
+				%        \includegraphics[width=1\linewidth]{graph/calc/50WB.png}
+				%        \caption{Écriture de gros fichiers avec 50 serveurs}
+			    %    \end{center}
+		        %\end{figure}
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[bb=0 0 640 480,width=14cm]{images/srv50wb.png}
+%\caption{Écriture de gros fichiers avec 50 serveurs}
+%\end{center}
+%\end{figure} 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[bb=0 0 640 480,width=14cm]{images/srv50wb2.png}
 \caption{Écriture de gros fichiers avec 50 serveurs}
 \end{center}
 \end{figure} 
-		        \begin{figure}[H]
-			        \begin{center}
-				        \includegraphics[width=1\linewidth]{graph/calc/50RS.png}
-				        \caption{Lecture de petits fichiers avec 50 serveurs}
-			        \end{center}
-		        \end{figure}
-\begin{figure}[H]
-\begin{center}
-\includegraphics[bb=0 0 640 480,width=14cm]{images/srv50rs.png}
-\caption{Lecture de petits fichiers avec 50 serveurs}
-\end{center}
-\end{figure} 
+		        %\begin{figure}[H]
+			    %    \begin{center}
+				%        \includegraphics[width=1\linewidth]{graph/calc/50RS.png}
+				%        \caption{Lecture de petits fichiers avec 50 serveurs}
+			    %    \end{center}
+		        %\end{figure}
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[bb=0 0 640 480,width=14cm]{images/srv50rs.png}
+%\caption{Lecture de petits fichiers avec 50 serveurs}
+%\end{center}
+%\end{figure} 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[bb=0 0 640 480,width=14cm]{images/srv50rs2.png}
 \caption{Lecture de petits fichiers avec 50 serveurs}
 \end{center}
 \end{figure} 
-		        \begin{figure}[H]
-			        \begin{center}
-				        \includegraphics[width=1\linewidth]{graph/calc/50RB.png}
-				        \caption{Lecture de gros fichiers avec 50 serveurs}
-			        \end{center}
-		        \end{figure}
-\begin{figure}[H]
-\begin{center}
-\includegraphics[bb=0 0 640 480,width=14cm]{images/srv50rb.png}
-\caption{Lecture de gros fichiers avec 50 serveurs}
-\end{center}
-\end{figure} 
+		        %\begin{figure}[H]
+			    %    \begin{center}
+				%        \includegraphics[width=1\linewidth]{graph/calc/50RB.png}
+				%        \caption{Lecture de gros fichiers avec 50 serveurs}
+			    %    \end{center}
+		        %\end{figure}
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[bb=0 0 640 480,width=14cm]{images/srv50rb.png}
+%\caption{Lecture de gros fichiers avec 50 serveurs}
+%\end{center}
+%\end{figure} 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[bb=0 0 640 480,width=14cm]{images/srv50rb2.png}
