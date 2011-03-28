@@ -1,0 +1,92 @@
+\documentclass[blue]{beamer}
+\usetheme{Warsaw}
+\setbeamertemplate{navigation
+symbols}{\insertframenumber/\inserttotalframenumber}
+\usepackage[francais]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{geometry}
+\usepackage{graphicx}
+
+\definecolor{rltgrey}{rgb}{0.9,0.9,0.9}
+\definecolor{rltblue}{rgb}{0.5,0.7,0.9}
+%\addtobeamertemplate{footline}{\insertframenumber/\inserttotalframenumber}
+\lstset{
+language=SQL,                   % choose the language of the code
+basicstyle=\ttfamily,           % the size of the fonts that are used for the code
+numbers=left,              % where to put the line-numbers numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=0,                   % the step between two line-numbers. If it's1each line will be numbered 
+numbersep=5pt,                  % how far the line-numbers are from the code
+backgroundcolor=\color{rltblue},% choose the background color.
+showspaces=false,               % show spaces adding particular underscores 
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,                   % adds a frame around the code
+tabsize=1,                      % sets default tabsize to 2 spaces
+captionpos=r,                   % sets the caption-position to bottom
+breaklines=true,                % sets automatic line breaking
+breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+title=\lstname,                 % show the filename of files included with \lstinputlisting;also try caption instead of title
+escapeinside={\%*}{*)},         % if you want to add a comment within your code
+morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINCT,GROUP,IN,LIKE,NUMBER,ROLLBACK,SUBSTR,sum,VARCHAR2}        
+}
+
+\title[Système de fichiers distribué]{Système de fichiers distribué : comparaison de GlusterFS, MooseFS et Ceph avec déploiement sur la grille de calcul Grid’5000.}
+\author{\it JF. Garcia, F. Lévigne,\\M. Douheret, V. Claudel}
+\date{\today}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}
+\titlepage
+%\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Table des Matières}
+\tableofcontents[hideothersubsection]
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+\begin{frame}
+
+\end{frame}
+
+\section{NFS}
+\begin{frame}
+
+\end{frame}
+
+\section{GlusterFS}
+\begin{frame}
+
+\end{frame}
+
+\section{MooseFS}
+\begin{frame}
+
+\end{frame}
+
+\section{Ceph}
+\begin{frame}
+
+\end{frame}
+
+\section{Comparaison}
+\begin{frame}
+
+\end{frame}
+
+\section{Conclusion}
+\begin{frame}
+
+\end{frame}
+
+\section{Organisation du travail}
+\begin{frame}
+
+\end{frame}
+
+\end{document}
