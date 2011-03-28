@@ -725,10 +725,10 @@ Remarque: le contenu sera vide tant que les serveurs de données ne seront pas d
 				% avec options différentes suivant les serveurs, clients (cf tuto site officiel)
 \newpage
 \textbf{Installation du Serveur de Backup Metalogger.}\\\\
-Le principe de ce serveur est de récupérer tous les événements du système de fichier et peut permettre, si le maître est vraiment mal en point (perte de ses métadonnées, ou de son historique), de lui faire recupérer les données pour que le volume reste cohérent.\\
-Cette solution repose sur le protocole Carp \og Common Address Redundancy Protocol\fg, permet d'admettre à un groupe d'hôtes sur le même segment réseau (ici mfsmaster et mfsmetalogger) de partager même adresse IP (un maître et un esclave). 
-La méthodologie d'installation est similaire au master serveur.\\
-Voici les commandes à suivre :\\
+Le principe de ce serveur est de récupérer tous les événements du système de fichiers et peut permettre, si le maître est vraiment mal en point (perte de ses métadonnées, ou de son historique), de lui faire récupérer ses données pour que le volume reste cohérent.\\
+Cette solution repose sur le protocole Carp \og Common Address Redundancy Protocol\fg, et permet d'admettre à un groupe d'hôtes sur la même partie du réseau (ici mfsmaster et mfsmetalogger) de partager une même adresse IP (un maître et un esclave). 
+La méthodologie d'installation est similaire au serveur maître.\\
+Voila les commandes à suivre :\\
   \begin{lstlisting}
 groupadd mfs
 useradd -g mfs mfs
@@ -743,13 +743,13 @@ make;make install
 cd /etc
 cp mfsmetalogger.cfg.dist mfsmetalogger.cfg
 	  \end{lstlisting}
-Déclarer le serveur master auprès de votre fichier /etc/hosts: 192.168.1.1  mfsmaster\\
-Le démarrage automatique n'est pas configuré. Commande de lancement :
+Déclaration du serveur master auprès de notre fichier /etc/hosts: 192.168.1.1  mfsmaster\\
+Le démarrage automatique n'est pas configuré. Voila la commande de lancement :
   \begin{lstlisting}
 /usr/sbin/mfsmetalogger start
 	  \end{lstlisting}
 \textbf{Installation d'un Serveur de Données Chunk servers.}\\\\
-Procédure d'installation toujours similaire:\\
+La procédure d'installation toujours similaire:\\
 Désactivation du service mfsmaster\\
   \begin{lstlisting}
 groupadd mfs
@@ -760,26 +760,26 @@ cd mfs-1.6.20-2
 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var/lib --with-default-user=mfs --with-default-group=mfs --disable-mfsmaster
 make;make install
 	  \end{lstlisting}
-Préparation des fichiers de configurations:\\
+Préparation des fichiers de configurations :\\
   \begin{lstlisting}
 cd /etc/
 cp mfschunkserver.cfg.dist mfschunkserver.cfg
 cp mfshdd.cfg.dist mfshdd.cfg
 	  \end{lstlisting}
-Les directives du fichier mfshdd.cfg signalent les emplacements des unités de disque dur que l'on souhaite employer.\\\\
+Les directives du fichier mfshdd.cfg indique les dossiers dans lesquels seront stockés les données.\\\\
 Exemple de mise en œuvre pour deux emplacements :\\
 Ajoutons les deux lignes suivantes dans le fichier mfshdd.cfg.\\
 /mnt/mfschunks1\\
 /mnt/mfschunks2\\
-Positionnons les droits d'écriture nécessaire pour la création des dossiers de .lock :\\
+Positionnons les droits d'écritures nécessaires pour la création des dossiers de verrouillage : .lock :\\
   \begin{lstlisting}
 mkdir /mnt/mfschunks1
 mkdir /mnt/mfschunks2
 chown -R mfs:mfs /mnt/mfschunks1
 chown -R mfs:mfs /mnt/mfschunks2
 	  \end{lstlisting}
-Si nous ne souhaitons pas utiliser la totalité de l'espace libre de vos disques, nous pouvons utiliser une autre méthode permettant de contrôler le volume disque.\\
-Création et formatage d'un volume de deux gigas et d'un formatage en ext3.\\
+Si nous ne souhaitons pas utiliser la totalité de l'espace libre de nos disques, nous pouvons utiliser une autre méthode permettant de contrôler le volume utilisé du disque.\\
+Création d'un volume de deux Go en ext3.\\
   \begin{lstlisting}
 dd if=/dev/zero of=disk1 bs=1024 count=1 seek=$((2*1024*1024-1))
 dd if=/dev/zero of=disk2 bs=1024 count=1 seek=$((2*1024*1024-1))
@@ -796,14 +796,14 @@ chown -R mfs:mfs /mnt/hd1
 chown -R mfs:mfs /mnt/hd2
 	  \end{lstlisting}
 Nous informons le fichier /etc/hosts de la présence du master serveur : 192.168.1.1 mfsmaster\\
-Il est prêt à être démarrer:
+Il est maintenant prêt à être démarré :
   \begin{lstlisting}
 /usr/sbin/mfschunkserver start
 	  \end{lstlisting}
 \textbf{Installation d'un Poste Client.}\\\\
 Afin de monter le système de fichiers basé sur Fuse, la version du paquet doit être égal ou supérieur à 2.7.2\\
 \href{http://sourceforge.net/projects/fuse/}{http://sourceforge.net/projects/fuse/} \\
-Compilation de Fuse et chargement du module du noyau linux.\\
+Si le paquet n'est pas disponible dans la bonne version dans les dépôts, on peut le compiler :\\
   \begin{lstlisting}
 cd /usr/src
 tar -zxvf fuse-2.8.5.tar.gz
@@ -819,8 +819,8 @@ cd mfs-1.6.20-2
 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var/lib --with-default-user=mfs --with-default-group=mfs --disable-mfsmaster --disable-mfschunkserver
 make;make install
 	  \end{lstlisting}
-Nous annonçons le master serveur au fichier /etc/hosts : 192.168.1.1   mfsmaster\\
-Supposons que nous souhaitons monter le système dans le dossier /mnt/mfs notre machine de cliente.\\
+Nous annonçons le serveur maître au fichier /etc/hosts : 192.168.1.1   mfsmaster\\
+Supposons que nous souhaitons monter le système dans le dossier /mnt/mfs sur notre machine cliente.\\
   \begin{lstlisting}
 mkdir -p /mnt/mfs
 chown -R mfs:mfs /mnt/mfs
@@ -919,7 +919,7 @@ mfscheckfile /mnt/mfs/folder2/mfs-1.6.20-2.tar.gz
 /mnt/mfs/folder2/mfs-1.6.20-2.tar.gz:
 2 copies: 1 chunks
 	  \end{lstlisting}
-Le résumé du contenu de l'arbre entier du file systeme peut être appelé avec la commande mfsdirinfo :
+Le résumé du contenu de l'arbre entier du système de fichiers peut être appelé avec la commande mfsdirinfo :
 \begin{lstlisting}
 mfsdirinfo /mnt/mfs/folder1/:
 inodes: 15
@@ -937,8 +937,8 @@ umount /mnt/mfs)
 /usr/sbin/mfsmetalogger stop
 /usr/sbin/mfsmaster stop
 	  \end{lstlisting}
-Discussion générale.\\
-Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par le biais d'un buffer (cache d'écriture). En conséquence, l'exécution de la requête d'écriture elle-même transfère seulement les données au buffer (cache), l'écriture réelle n'ayant donc pas lieu. Conséquence, la confirmation de la requête d'écriture ne signifie pas que les données ont été correctement écrites sur un disque.\\ Elle est seulement invoquer et l'aboutissement passe par la commande fsync qui provoque le déchargement de toutes les données gardées en cache pour obtenir écrite physique sur le disque. Problématique en cas d'erreur avant la finalisation de cette phase, c'est un retour d'erreur de la commande fsync, voir la perte des données. 
+%Discussion générale.\\
+Dans tous les systèmes de fichiers contemporains, les fichiers sont écrits par le biais d'un buffer (cache d'écriture). En conséquence, l'exécution de la requête d'écriture elle-même transfère seulement les données au buffer (cache), l'écriture réelle n'ayant donc pas lieu. En conséquence, la confirmation de la requête d'écriture ne signifie pas que les données ont été correctement écrites sur un disque.\\ Elle est seulement invoquer et l'aboutissement passe par la commande fsync qui provoque le déchargement de toutes les données gardées en cache pour obtenir l'écriture physique sur le disque. Cela est problématique en cas d'erreur avant la finalisation de cette phase, un retour d'erreur de la commande fsync peut avoir lieu, voir une perte des données. 
 
 	\chapter{Ceph}
 		\section{Présentation}
