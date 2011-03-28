@@ -1066,9 +1066,9 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 	% comparaison des performances
 	% aspects générales, site officiel (doc, tuto), avis personnels
 		\section{Test de performances}
-			Afin de ne pas avoir de différence de matériel lors nos test, ceux-ci ont tous été réalisés sur un même cluster du Grid'5000 : Graphene.\\
+			Afin de ne pas avoir de différence de matériel lors nos tests, ceux-ci ont tous été réalisés sur un même cluster du Grid'5000 : Graphene.\\
 
-			Ce cluster est composé de 144 nœuds, avec pour caractéristique :
+			Ce cluster est composé de 144 nœuds, avec pour caractéristiques :
 			\begin{itemize}
 				\item 1 CPU Intel de quatre cœurs cadencé à 2.53 GHz
 				\item 16 Go de RAM
@@ -1083,7 +1083,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 				\item[Lecture de petits fichiers: ] lecture des fichiers du noyau Linux.
 				Pour cela, nous avons compressé le dossier contenant le noyau (impliquant la lecture des fichiers),
 				en redirigeant la sortie vers /dev/nul (afin que les performances du disque ne rentrent pas en jeux).
-				\item[Lecture de gros fichiers :] lecture des fichiers de 1 Go. Opération réalisé en faisant un « cat » des fichier,
+				\item[Lecture de gros fichiers :] lecture des fichiers de 1 Go. Opération réalisé en faisant un « cat » des fichiers,
 				et en redirigeant la sortie vers /dev/nul afin de ne pas \og polluer\fg~le terminal.\\
 			\end{description}
 
@@ -1237,18 +1237,17 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 			Sur les tests que nous avons effectués, nous remarquons des débits très importants, parfois supérieurs au débit du réseau présent sur le cluster.
 			Nous nous sommes donc questionné, afin de trouver pourquoi nous obtenons de tels résultats, et nous avons émis les hypothèses suivantes :
 			\begin{itemize}
-				\item Lors de la lecture de fichiers (petits ou gros), le client lit des fichiers font il possède une copie sur sa machine,
-				le systèmes de fichier distribué est-il capable de le détecter, et d'éviter d'aller lire le fichier sur un serveur distant ?
+				\item Lors de la lecture de fichiers (petits ou gros), le client lit des fichiers dont il possède une copie sur sa machine.
+				Le systèmes de fichier distribué est-il capable de le détecter et d'éviter d'aller lire le fichier sur un serveur distant ?
 				\item Le cache présent sur les systèmes de fichiers est-il, à lui seul, responsable de tel résultats pour la lecture ?
-				\item Lors des tests d'écriture, tous les clients écrivent les mêmes fichiers, le système de fichier distribué est-il capable de le détecter,
-				et de limiter les transferts des clients vers les serveurs ?\\
+				\item Lors des tests d'écriture, tous les clients écrivent les mêmes fichiers, le système de fichier distribué est-il capable de le détecter, et de limiter les transferts des clients vers les serveurs ?\\
 			\end{itemize}
 
 			Nous avons remarqués, après coup, certaines faiblesses de notre benchmark, qui devrait être plus complexe que nous n'avions pensé.
 			Mais si l'on se base sur nos résultats, nous constatons que les performance en écriture de GlusterFS sont de loin les meilleurs.\\
 
-			Les performances seuls sont bien sur insuffisantes pour choisir un système de fichiers distribué, il y a plus de paramètres à prendre en comptes,
-			en fonction de l'usage que l'on veut en faire. Préfère-t-on privilégier la sécurité ? (bonne réaction face à la perte d'un ou plusieurs serveurs)
+			Les performances seuls sont bien sur insuffisantes pour choisir un système de fichiers distribué, il y a plus de paramètres à prendre en comptes, en fonction de l'usage que l'on veut en faire. 
+			Préfère-t-on privilégier la sécurité ? (bonne réaction face à la perte d'un ou plusieurs serveurs)
 			Les performances ? La facilité de mise en œuvre ?
 
 	\chapter{Conclusion}
@@ -1263,7 +1262,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 	Nous avons rencontré un certains nombre de difficultés, (en plus de la mise en place des systèmes de fichiers distribués) propre au Grid'5000 :
 	\begin{itemize}
 		\item Nos test devaient être réalisés sur un même cluster, mais nous n'étions pas seuls à travailler dessus,
-		et on nous ne disposions pas toujours de toutes les machines dont nous avions besoins.
+		et nous ne disposions pas toujours de toutes les machines dont nous avions besoins.
 		\item Nous avons aussi rencontré des erreurs lors de déploiement de machines, indépendant de nous, qui ont \og cassé\fg~ des benchmarks programmés à l'avance.
 		\item Et nous avons aussi commis quelques erreurs humaines :
 		\begin{itemize}
@@ -1272,11 +1271,9 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 		\end{itemize}
 	\end{itemize}
 
-	A cause de ces divers problèmes, nous n'avons pas obtenus tous les résultats que nous avions prévus d'avoir, ce qui ne permet pas une comparaison aussi approfondi
-	que nous avions souhaité.\\
+	A cause de ces divers problèmes, nous n'avons pas obtenus tous les résultats que nous avions prévus d'avoir, ce qui ne permet pas une comparaison aussi approfondi que nous avions souhaité.\\
 
-	Le script de benchmark s'est aussi montré, après coup, imparfait, du fait que les clients lisent un fichier distant, dont ils ont une copie sur leurs machines,
-	ce qui a pu fausser nos résultats.\\
+	Le script de benchmark s'est aussi montré, après coup, imparfait, du fait que les clients lisent un fichier distant, dont ils ont une copie sur leurs machines, ce qui a pu fausser nos résultats.\\
 
 	Malgré ces problèmes, nous avons quand même pu effectuer une comparaison de différents systèmes de fichiers distribués.
 	Ce travail nous a offert une bonne expérience pratique, d'un sujet technique, avant notre départ en stage.
@@ -1291,8 +1288,7 @@ En exploitant les documentations de Ceph (cf. Partie \ref{Sources} page \pageref
 				et sont modifiables par les visiteurs afin de permettre l'écriture et l'illustration collaboratives des documents numériques qu'il contient. (Wikipédia)}
 				mis à notre disposition afin de mettre en commun nos connaissances et nos découvertes sur notre projet.
 
-				Nous avons aussi utilisé le dépôt Git\footnote{Git est un logiciel de gestion de versions, écrit par Linus Torvalds.} pour gérer le développement
-				de nos scripts, et notre rapport de projet.
+				Nous avons aussi utilisé le dépôt Git\footnote{Git est un logiciel de gestion de versions, écrit par Linus Torvalds.} pour gérer le développement de nos scripts, et notre rapport de projet.
 \newpage
 			\section{Répartition des taches}
 				\subsection{Florent Lévigne}
