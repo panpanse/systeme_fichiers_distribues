@@ -269,6 +269,35 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 			\end{itemize}
 		\end{frame}
 
+	\subsection{Graphiques}
+		\begin{frame}
+			\begin{figure}
+				\includegraphics[width=0.75\linewidth]{../images/srv50ws2.png}
+				\caption{Écriture de petits fichiers avec 50 serveurs}
+			\end{figure}
+		\end{frame}
+
+		\begin{frame}
+			\begin{figure}
+				\includegraphics[width=0.75\linewidth]{../images/srv50wb2.png}
+				\caption{Écriture de gros fichiers avec 50 serveurs}
+			\end{figure}
+		\end{frame}
+
+		\begin{frame}
+			\begin{figure}
+				\includegraphics[width=0.75\linewidth]{../images/srv50rs2.png}
+				\caption{Lecture de petits fichiers avec 50 serveurs}
+			\end{figure}
+		\end{frame}
+
+		\begin{frame}
+			\begin{figure}
+				\includegraphics[width=0.75\linewidth]{../images/srv50rb2.png}
+				\caption{Lecture de gros fichiers avec 50 serveurs}
+			\end{figure}
+		\end{frame}
+
 	\subsection{Tableau comparatif}
 		\begin{frame}
 		\frametitle{Tableau comparatif}
@@ -278,11 +307,13 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 				\hline
 				Facilité de mise en place & ++ & + & +\\
 				\hline
-				Fiabilité & + & ++ & -\\
+				Fiabilité & ++ & ++ & -\\
 				\hline
-				Évolutivité & + & ++  & ?\\
+				Sécurité, disponibilité des données & + & ++ & ++ \\
 				\hline
-				Économe en taille disque & ++ & - & - ?\\
+				Évolutivité & + & ++  & ++\\
+				\hline
+				Économe en taille disque & ++ & - & - \\
 				\hline
 			\end{tabular}
 		\end{frame}
