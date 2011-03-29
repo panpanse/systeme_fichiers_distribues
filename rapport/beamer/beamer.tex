@@ -220,12 +220,11 @@ MooseFS (Moose File System) est un système de fichiers répartis à tolérance 
 \frametitle{Architecture}
 MooseFS est constitué de trois types de serveurs :
 \begin{itemize}
-			\item Le Master Serveur : unique sur l'infrastructure, ce serveur gère la répartition des fichiers, leur accès et l'espace de nommage.
-			\item Le Metalogger Serveur : ce serveur récupère régulièrement les métadonnées du master serveur (sauvegarde). capable de basculer en master serveur grâce à l'implémentation du protocole Carp.
-			\item Le Chunck Serveur : leurs nombres max doivent être défini en fonction de la capacité master serveur et de la topologie du réseau, ils stockent les données et les répliques.
+			\item Le Master Serveur
+			\item Le Metalogger Serveur
+			\item Le Chunck Serveur
 		\end{itemize}
 \end{frame}
-
 \subsection{Fonctionnalités}
 \begin{frame}
 \frametitle{Fonctionnalités}
