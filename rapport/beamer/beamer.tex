@@ -189,7 +189,7 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 				\item Utilisation d'InfiniBand
 				\item Script de déploiement : automatisation totale
 			\end{itemize}
-		\end{frame}
+	\end{frame}
 
 
 \section{MooseFS}
@@ -203,20 +203,73 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
                 \frametitle{Présentation de Ceph}
 		\begin{itemize}
 			\item Licence LGPL
-			\item créer par Sage Weill en 2007
-			\item destiné au très grands clusters
-			\item but principal : 
+			\item Créé par Sage Weill en 2007
+			\item Destiné aux très grands clusters
+			\item But principal : 
                               \begin{itemize}
                                       \item compatible POSIX
-                                      \item complétement distribué sans point de défaillance
+                                      \item complètement distribué sans point de défaillance
                               \end{itemize}
 		\end{itemize}
-\end{frame}
+        \end{frame}
+
+        \subsection{Caractéristique}        
+        \begin{frame}
+                \frametitle{Caractéristique}
+                \begin{itemize}
+                        \item Caractéristiques de Ceph :
+                        \begin{itemize}
+                                \item robustesse
+                                \item évolutivité transparente
+                        \end{itemize}
+                \end{itemize}
+        \end{frame}
+
+        \subsection{Fonctionnement}
+        \begin{frame}
+                \frametitle{Fonctionnement}
+                \begin{itemize}
+                        \item Trois types distincts de démons :
+                        \begin{itemize}
+                                \item moniteur de cluster
+                                \item serveurs de métadonnées
+                                \item serveurs de données
+                        \end{itemize}
+                \end{itemize}
+        \end{frame}
+
+        \begin{frame}
+                \frametitle{Moniteur}
+                \begin{itemize}
+                        \item Configuration
+                        \item Etat du cluster
+                        \item Gestion des clients
+                \end{itemize}
+        \end{frame}
+
+        \begin{frame}
+                \frametitle{Serveurs de métadonnées}
+                \begin{itemize}
+                        \item Configuration
+                        \item Etat du cluster
+                        \item Gestion des clients
+                \end{itemize}
+        \end{frame}
 
 \section{Comparaison}
-\begin{frame}
-
-\end{frame}
+	\subsection{Tableau comparatif}
+		\begin{frame}
+		\frametitle{Tableau comparatif}
+			\begin{tabular}{|l|c|c|c|}
+				\hline
+				& \bf{GlusterFS} & \bf{MooseFS} & \bf{Ceph}\\
+				\hline
+				Facilité de mise en place & ++ & + & +\\
+				\hline
+				Fiabilité & + & ++ & -\\
+				\hline
+			\end{tabular}
+		\end{frame}
 
 \section{Conclusion}
 \begin{frame}
