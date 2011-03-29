@@ -177,8 +177,8 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 			\begin{itemize}
 				\item A partir du serveur maitre :
 				\begin{itemize}
-					\item Génération des fichiers de configurations (commande prévue)
-					\item Envoie de fichiers aux serveurs, et aux clients
+					\item génération des fichiers de configurations (commande prévue)
+					\item envoie de fichiers aux serveurs, et aux clients
 				\end{itemize}
 				\item Démarrage des serveurs
 				\item Montage du volume par les clients
@@ -276,23 +276,24 @@ Processus d'écriture sur une infrastructure MooseFS
         \begin{frame}
                 \frametitle{Caractéristiques}
                 \begin{itemize}
-                        \item robustesse
-                        \item évolutivité transparente
-                        \item déconseillé en production
+                        \item Robustesse
+                        \item Évolutivité transparente
+                        \item Déconseillé en production
                 \end{itemize}
         \end{frame}
 
         \subsection{Fonctionnement}
         \begin{frame}
                 \frametitle{Fonctionnement}
-                \begin{itemize}
-                        \item Trois types distincts de démons :
+                %\begin{itemize}
+                 %       \item Trois types distincts de démons :
+                        Trois types distincts de démons :
                         \begin{itemize}
-                                \item moniteur de cluster
-                                \item serveurs de métadonnées
-                                \item serveurs de données
+                                \item Moniteur de cluster
+                                \item Serveurs de métadonnées
+                                \item Serveurs de données
                         \end{itemize}
-                \end{itemize}
+                %\end{itemize}
         \end{frame}
 
         \begin{frame}
@@ -332,7 +333,7 @@ Processus d'écriture sur une infrastructure MooseFS
                \frametitle{Difficultés rencontrées}
                 \begin{itemize}
                         \item Documentation minimaliste
-                        \item fichier authentification
+                        \item Fichier authentification
                 \end{itemize}
         \end{frame}
 
@@ -340,7 +341,7 @@ Processus d'écriture sur une infrastructure MooseFS
 	\subsection{Benchmark}
 		\begin{frame}
 		\frametitle{Benchmark}
-			Actions simultanées sur plusieurs clients
+			Actions simultanées sur plusieurs clients :
 			\begin{itemize}
 				\item Écriture de petits fichiers
 				\item Écriture de gros fichiers
@@ -406,7 +407,7 @@ Processus d'écriture sur une infrastructure MooseFS
 			\item Prise en main du Grid'5000
 			\item Partage du cluster
 			\item Erreurs ponctuelles lors de déploiements
-			\item Script de déploiement : automatisation totale
+			\item Scripts de déploiements, benchmark : automatisation totale
 		\end{itemize}
 	\end{frame}
 
