@@ -102,10 +102,46 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 
 
 \section{NFS}
+  \subsection{Présentation de NFS}
 \begin{frame}
-
+  \frametitle{Présentation de NFS}
+  \begin{itemize}
+    \item Network File System
+    \item Développé par Sun Microsystem
+    \item Partager des données par le réseau
+    \item Méthode standard de partage entre machines Unix
+  \end{itemize}
 \end{frame}
 
+\subsection{Aspect technique}
+\begin{frame}
+  \frametitle{Aspect technique}
+  \begin{itemize}
+    \item NFS et le protocole non connecté UDP
+    \item Depuis la version 3, possibilité d'utiliser TCP
+    \item NFSv1 et v2 définies dans la RFC 1094
+    \item NFSv3 définie dans la RFC 1813
+    \item NFSv4 définie dans la RFC 3010 et dans la RFC 3530 :
+    \begin{itemize}
+      \item meilleur gestion de la sécurité
+      \item meilleur gestion de la montée en charge
+      \item système de maintenance simplifié
+      \item support des protocoles TCP (par défaut) et RDMA
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\subsection{Mise en place}
+	\begin{frame}
+		\frametitle{Mise en place}
+		\begin{itemize}
+			\item Licence GPLv3
+			\item Capacité pouvant atteindre plusieurs petabytes (1000 To)
+			\item Structure simple, deux éléments logiciels : serveur et client
+			\item Supporte plusieurs protocoles de communications (TCP/IP, InfiniBand)
+		\end{itemize}
+	\end{frame}
+	
 \section{GlusterFS}
 	\subsection{Présentation de GlusterFS}
 	\begin{frame}
