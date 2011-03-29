@@ -105,7 +105,7 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
   \frametitle{Présentation de NFS}
   \begin{itemize}
     \item Network File System
-    \item Développé par Sun Microsystem
+    \item Développé par Sun Microsystem en 1984
     \item Partager des données par le réseau
     \item Méthode standard de partage entre machines Unix
   \end{itemize}
@@ -137,7 +137,7 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 			\item Montage du partage sur les clients à l'aide de « mount »
 		\end{itemize}
 		\begin{block}{Pour NFSv4 :}
-			Des options supplémentaires sont à définir dans /etc/exports et le type de protocole doit être spécifier lors du montage sur les clients.
+			Des options supplémentaires sont à définir dans /etc/exports et le type de protocole doit être spécifié lors du montage sur les clients.
 		\end{block}
 	\end{frame}
 	
@@ -145,6 +145,11 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 	\subsection{Présentation de GlusterFS}
 	\begin{frame}
 		\frametitle{Présentation de GlusterFS}
+		\begin{figure}
+			\includegraphics[width=0.4\linewidth]{../images/glusterfs.png}
+			%\caption{Lecture de petits fichiers avec 50 serveurs}
+		\end{figure}
+
 		\begin{itemize}
 			\item Licence GPLv3
 			\item Se base sur FUSE (Filesystem in UserSpacE)
@@ -194,7 +199,59 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 
 \section{MooseFS}
 \begin{frame}
+\begin{figure}
+				\includegraphics[width=0.3\linewidth]{../images/moosefs.png}
+				\caption{Présentation de MooseFS}
+			\end{figure}
+\end{frame}
+\subsection{Présentation de MooseFS}
+\begin{frame}
+		\frametitle{Présentation de MooseFS}
+MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne, développé par Gemius SA.
+		\begin{itemize}
+			\item Licence GPLv3.
+			\item Disponible pour Linux, FreeBSD, OpenSolaris et MacOS X.
+			\item Respect de la norme Posix et l’utilisation de Fuse en espace client.
+			\item Sa simplicité d’administration, de mise en œuvre et d'utilisation.
+			\item Poubelle par défaut.
+			\item scalable 
+		\end{itemize}
+	\end{frame}
+	
+\subsection{Architecture}
+\begin{frame}
+\frametitle{Architecture}
+MooseFS est constitué de trois types de serveurs :
+\begin{itemize}
+			\item Le Master Serveur : unique sur l'infrastructure, ce serveur gère la répartition des fichiers, leur accès et l'espace de nommage.
+			\item Le Metalogger Serveur : ce serveur récupère régulièrement les métadonnées du master serveur (sauvegarde). capable de basculer en master serveur grâce à l'implémentation du protocole Carp.
+			\item Le Chunck Serveur : leurs nombres max doivent être défini en fonction de la capacité master serveur et de la topologie du réseau, ils stockent les données et les répliques.
+		\end{itemize}
+\end{frame}
 
+\subsection{Fonctionnalités}
+\begin{frame}
+\frametitle{Fonctionnalités}
+\begin{itemize}
+\item Tolérance aux pannes : Une commande unique « mfssetgoal » côté client pour régler le nombre de répliquas et à chaud.(impossibilité de mise en place de tolérance à base de raid 4,5,6 ou tout autre).
+\item Le système est réparti : les fichiers supérieurs à 64Mo sont découpés en paquets de 64Mo (chunks) et distribués sur les différents serveurs de données.
+\item Répartition de charge : le master serveur essaie d'utiliser les ressources de stockage de manière égale. Ex: si le volume est plein à 60\%, l'algorithme implémenté tâchera de répartir chaque espace de stockage de chaque serveur chunk à 60\%.
+\item Sécurité : authentification - autorisation possible type Nfs.
+\end{itemize}
+\end{frame}
+
+\subsection{Processus de lecture}
+\begin{frame}
+\includegraphics[width=0.6\linewidth]{../images/masterread.png}
+\\
+Processus de lecture sur une infrastructure MooseFS
+\end{frame}
+
+\subsection{Processus d'écriture}
+\begin{frame}
+\includegraphics[width=0.6\linewidth]{../images/mastersrvwrite.png}
+\\
+Processus d'écriture sur une infrastructure MooseFS
 \end{frame}
 
 \section{Ceph}
@@ -284,6 +341,35 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 			\end{itemize}
 		\end{frame}
 
+	\subsection{Graphiques}
+		\begin{frame}
+			\begin{figure}
+				\includegraphics[width=0.75\linewidth]{../images/srv50ws2.png}
+				\caption{Écriture de petits fichiers avec 50 serveurs}
+			\end{figure}
+		\end{frame}
+
+		\begin{frame}
+			\begin{figure}
+				\includegraphics[width=0.75\linewidth]{../images/srv50wb2.png}
+				\caption{Écriture de gros fichiers avec 50 serveurs}
+			\end{figure}
+		\end{frame}
+
+		\begin{frame}
+			\begin{figure}
+				\includegraphics[width=0.75\linewidth]{../images/srv50rs2.png}
+				\caption{Lecture de petits fichiers avec 50 serveurs}
+			\end{figure}
+		\end{frame}
+
+		\begin{frame}
+			\begin{figure}
+				\includegraphics[width=0.75\linewidth]{../images/srv50rb2.png}
+				\caption{Lecture de gros fichiers avec 50 serveurs}
+			\end{figure}
+		\end{frame}
+
 	\subsection{Tableau comparatif}
 		\begin{frame}
 		\frametitle{Tableau comparatif}
@@ -293,18 +379,26 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 				\hline
 				Facilité de mise en place & ++ & + & +\\
 				\hline
-				Fiabilité & + & ++ & -\\
+				Fiabilité & ++ & ++ & -\\
 				\hline
-				Évolutivité & + & ++  & ?\\
+				Sécurité, disponibilité des données & + & ++ & ++ \\
 				\hline
-				Économe en taille disque & ++ & - & - ?\\
+				Évolutivité & + & ++  & ++\\
+				\hline
+				Économe en taille disque & ++ & - & - \\
 				\hline
 			\end{tabular}
 		\end{frame}
 
 \section{Conclusion}
-\begin{frame}
-
-\end{frame}
+	\subsection{Difficultés rencontré}
+	\begin{frame}
+	\frametitle{Difficultés rencontrées}
+		\begin{itemize}
+			\item Prise en main du Grid'5000
+			\item Partage du cluster de travail
+			\item Erreurs ponctuelles lors de déploiements
+		\end{itemize}
+	\end{frame}
 
 \end{document}
