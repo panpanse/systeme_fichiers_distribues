@@ -199,7 +199,50 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 
 \section{MooseFS}
 \begin{frame}
-
+\begin{figure}
+				\includegraphics[width=0.3\linewidth]{../images/moosefs.png}
+				\caption{Présentation de MooseFS}
+			\end{figure}
+\end{frame}
+\begin{frame}
+		\frametitle{Présentation de MooseFS}
+MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne, développé par Gemius SA.
+		\begin{itemize}
+			\item Licence GPLv3.
+			\item Disponible pour Linux, FreeBSD, OpenSolaris et MacOS X.
+			\item Respect de la norme Posix et l’utilisation de Fuse en espace client.
+			\item Sa simplicité d’administration, de mise en œuvre et d'utilisation.
+			\item Poubelle par défaut.
+			\item scalable 
+		\end{itemize}
+	\end{frame}
+\begin{frame}
+\frametitle{Architecture}
+MooseFS est constitué de trois types de serveurs :
+\begin{itemize}
+			\item Le Master Serveur : unique sur l'infrastructure, ce serveur gère la répartition des fichiers, leur accès et l'espace de nommage.
+			\item Le Metalogger Serveur : ce serveur récupère régulièrement les métadonnées du master serveur (sauvegarde). capable de basculer en master serveur grâce à l'implémentation du protocole Carp.
+			\item Le Chunck Serveur : leurs nombres max doivent être défini en fonction de la capacité master serveur et de la topologie du réseau, ils stockent les données et les répliques.
+		\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Fonctionnalités}
+\begin{itemize}
+\item Tolérance aux pannes : Une commande unique « mfssetgoal » côté client pour régler le nombre de répliquas et à chaud.(impossibilité de mise en place de tolérance à base de raid 4,5,6 ou tout autre).
+\item Le système est réparti : les fichiers supérieurs à 64Mo sont découpés en paquets de 64Mo (chunks) et distribués sur les différents serveurs de données.
+\item Répartition de charge : le master serveur essaie d'utiliser les ressources de stockage de manière égale. Ex: si le volume est plein à 60\%, l'algorithme implémenté tâchera de répartir chaque espace de stockage de chaque serveur chunk à 60\%.
+\item Sécurité : authentification - autorisation possible type Nfs.
+\end{itemize}
+\end{frame}
+\begin{frame}
+\includegraphics[width=0.6\linewidth]{../images/masterread.png}
+\\
+Processus de lecture sur une infrastructure MooseFS
+\end{frame}
+\begin{frame}
+\includegraphics[width=0.6\linewidth]{../images/mastersrvwrite.png}
+\\
+Processus d'écriture sur une infrastructure MooseFS
 \end{frame}
 
 \section{Ceph}
