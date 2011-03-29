@@ -228,10 +228,10 @@ MooseFS est constitué de trois types de serveurs :
 \begin{frame}
 \frametitle{Fonctionnalités}
 \begin{itemize}
-\item Tolérance aux pannes : Une commande unique « mfssetgoal » côté client pour régler le nombre de répliquas et à chaud.(impossibilité de mise en place de tolérance à base de raid 4,5,6 ou tout autre).
-\item Le système est réparti : les fichiers supérieurs à 64Mo sont découpés en paquets de 64Mo (chunks) et distribués sur les différents serveurs de données.
-\item Répartition de charge : le master serveur essaie d'utiliser les ressources de stockage de manière égale. Ex: si le volume est plein à 60\%, l'algorithme implémenté tâchera de répartir chaque espace de stockage de chaque serveur chunk à 60\%.
-\item Sécurité : authentification - autorisation possible type Nfs.
+\item Tolérance aux pannes 
+\item Le système est réparti
+\item Répartition de charge
+\item Sécurité
 \end{itemize}
 \end{frame}
 \begin{frame}
