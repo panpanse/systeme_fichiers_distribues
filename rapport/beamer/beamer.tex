@@ -105,7 +105,7 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
   \frametitle{Présentation de NFS}
   \begin{itemize}
     \item Network File System
-    \item Développé par Sun Microsystem
+    \item Développé par Sun Microsystem en 1984
     \item Partager des données par le réseau
     \item Méthode standard de partage entre machines Unix
   \end{itemize}
@@ -204,6 +204,7 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 				\caption{Présentation de MooseFS}
 			\end{figure}
 \end{frame}
+\subsection{Présentation de MooseFS}
 \begin{frame}
 		\frametitle{Présentation de MooseFS}
 MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne, développé par Gemius SA.
@@ -216,6 +217,8 @@ MooseFS (Moose File System) est un système de fichiers répartis à tolérance 
 			\item scalable 
 		\end{itemize}
 	\end{frame}
+	
+\subsection{Architecture}
 \begin{frame}
 \frametitle{Architecture}
 MooseFS est constitué de trois types de serveurs :
@@ -225,6 +228,8 @@ MooseFS est constitué de trois types de serveurs :
 			\item Le Chunck Serveur : leurs nombres max doivent être défini en fonction de la capacité master serveur et de la topologie du réseau, ils stockent les données et les répliques.
 		\end{itemize}
 \end{frame}
+
+\subsection{Fonctionnalités}
 \begin{frame}
 \frametitle{Fonctionnalités}
 \begin{itemize}
@@ -234,11 +239,15 @@ MooseFS est constitué de trois types de serveurs :
 \item Sécurité
 \end{itemize}
 \end{frame}
+
+\subsection{Processus de lecture}
 \begin{frame}
 \includegraphics[width=0.6\linewidth]{../images/masterread.png}
 \\
 Processus de lecture sur une infrastructure MooseFS
 \end{frame}
+
+\subsection{Processus d'écriture}
 \begin{frame}
 \includegraphics[width=0.6\linewidth]{../images/mastersrvwrite.png}
 \\
@@ -249,6 +258,9 @@ Processus d'écriture sur une infrastructure MooseFS
         \subsection{Présentation}
         \begin{frame}
                 \frametitle{Présentation de Ceph}
+                \begin{center}
+		       \includegraphics[width=0.30\linewidth]{../images/cephfs.jpg}
+		\end{center}
 		\begin{itemize}
 			\item Licence LGPL
 			\item Créé par Sage Weill en 2007
@@ -263,13 +275,11 @@ Processus d'écriture sur une infrastructure MooseFS
 
         \subsection{Caractéristique}        
         \begin{frame}
-                \frametitle{Caractéristique}
+                \frametitle{Caractéristiques}
                 \begin{itemize}
-                        \item Caractéristiques de Ceph :
-                        \begin{itemize}
-                                \item robustesse
-                                \item évolutivité transparente
-                        \end{itemize}
+                        \item robustesse
+                        \item évolutivité transparente
+                        \item déconseillé en production
                 \end{itemize}
         \end{frame}
 
@@ -298,10 +308,24 @@ Processus d'écriture sur une infrastructure MooseFS
         \begin{frame}
                 \frametitle{Serveurs de métadonnées}
                 \begin{itemize}
-                        \item Configuration
-                        \item État du cluster
-                        \item Gestion des clients
+                        \item Cache cohérent et distribué
+                        \item Plusieurs serveurs = équilibrage de charge
                 \end{itemize}
+        \end{frame}
+
+        \begin{frame}
+                \frametitle{Serveurs de données}
+                \begin{itemize}
+                        \item Découpage des données
+                        \item Réplication = tolérance aux pannes
+                \end{itemize}
+        \end{frame}
+
+        \begin{frame}
+                \frametitle{Echanges de données}
+                \begin{center}
+	                \includegraphics[width=0.75\linewidth]{../images/Ceph_architecture2.png}
+		\end{center}
         \end{frame}
 
 \section{Comparaison}
@@ -367,8 +391,14 @@ Processus d'écriture sur une infrastructure MooseFS
 		\end{frame}
 
 \section{Conclusion}
-\begin{frame}
-
-\end{frame}
+	\subsection{Difficultés rencontré}
+	\begin{frame}
+	\frametitle{Difficultés rencontrées}
+		\begin{itemize}
+			\item Prise en main du Grid'5000
+			\item Partage du cluster de travail
+			\item Erreurs ponctuelles lors de déploiements
+		\end{itemize}
+	\end{frame}
 
 \end{document}
