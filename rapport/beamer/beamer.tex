@@ -204,6 +204,7 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 				\caption{Présentation de MooseFS}
 			\end{figure}
 \end{frame}
+\subsection{Présentation de MooseFS}
 \begin{frame}
 		\frametitle{Présentation de MooseFS}
 MooseFS (Moose File System) est un système de fichiers répartis à tolérance de panne, développé par Gemius SA.
@@ -216,6 +217,8 @@ MooseFS (Moose File System) est un système de fichiers répartis à tolérance 
 			\item scalable 
 		\end{itemize}
 	\end{frame}
+	
+\subsection{Architecture}
 \begin{frame}
 \frametitle{Architecture}
 MooseFS est constitué de trois types de serveurs :
@@ -225,6 +228,8 @@ MooseFS est constitué de trois types de serveurs :
 			\item Le Chunck Serveur : leurs nombres max doivent être défini en fonction de la capacité master serveur et de la topologie du réseau, ils stockent les données et les répliques.
 		\end{itemize}
 \end{frame}
+
+\subsection{Fonctionnalités}
 \begin{frame}
 \frametitle{Fonctionnalités}
 \begin{itemize}
@@ -234,11 +239,15 @@ MooseFS est constitué de trois types de serveurs :
 \item Sécurité : authentification - autorisation possible type Nfs.
 \end{itemize}
 \end{frame}
+
+\subsection{Processus de lecture}
 \begin{frame}
 \includegraphics[width=0.6\linewidth]{../images/masterread.png}
 \\
 Processus de lecture sur une infrastructure MooseFS
 \end{frame}
+
+\subsection{Processus d'écriture}
 \begin{frame}
 \includegraphics[width=0.6\linewidth]{../images/mastersrvwrite.png}
 \\
