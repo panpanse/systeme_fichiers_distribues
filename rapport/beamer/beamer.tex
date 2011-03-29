@@ -92,11 +92,11 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 			\item Connexion au \og frontend\fg~ par SSH
 			\item Réservation de nœuds, pour un certain temps
 			\item Déploiement d'image (OS)
-
-			\begin{block}{Astuce :}
-				Possibilité d'effectuer une réservation à l'avance, suivit par l'exécution d'un script
-			\end{block}
 		\end{itemize}
+
+		\begin{block}{Astuce :}
+			Possibilité d'effectuer une réservation à l'avance, suivit par l'exécution d'un script
+		\end{block}
 	\end{frame}
 
 \section{NFS}
@@ -116,17 +116,34 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 			\item Supporte plusieurs protocoles de communications (TCP/IP, InfiniBand)
 		\end{itemize}
 	\end{frame}
-
-	\subsection{Présentation de GlusterFS}
+	
+	\subsection{Mise en place}
 	\begin{frame}
 		\frametitle{Mise en place}
 		\begin{itemize}
-			\item
-			\item
-			\item
-			\item
+			\item Un serveur maitre : paquet glusterfs-server
+			\item x serveurs \og normaux\fg
+			\item x clients : glusterfs-client
 		\end{itemize}
+
+		\begin{block}{Note :}
+			Les serveurs doivent avoir un répertoire dédié au partage
+		\end{block}
 	\end{frame}
+
+	\begin{frame}
+		\frametitle{Mise en place (2)}
+			\begin{itemize}
+				\item A partir du serveur maitre :
+				\begin{itemize}
+					\item Génération des fichiers de configurations (commande prévue)
+					\item Envoie de fichiers aux serveurs, et aux clients
+				\end{itemize}
+				\item Démarrage des serveurs
+				\item Montage du volume par les clients
+			\end{itemize}
+	\end{frame}
+
 
 \section{MooseFS}
 \begin{frame}
