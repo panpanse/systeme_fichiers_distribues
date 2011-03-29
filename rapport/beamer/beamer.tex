@@ -92,14 +92,12 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 			\item Connexion au \og frontend\fg~ par SSH
 			\item Réservation de nœuds, pour un certain temps
 			\item Déploiement d'image (OS)
-
-			\begin{block}{Astuce :}
-				Possibilité d'effectuer une réservation à l'avance, suivit par l'exécution d'un script
-			\end{block}
 		\end{itemize}
+
+		\begin{block}{Astuce :}
+			Possibilité d'effectuer une réservation à l'avance, suivit par l'exécution d'un script
+		\end{block}
 	\end{frame}
-
-
 
 \section{NFS}
   \subsection{Présentation de NFS}
@@ -148,12 +146,49 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 		\frametitle{Présentation de GlusterFS}
 		\begin{itemize}
 			\item Licence GPLv3
+			\item Se base sur FUSE (Filesystem in UserSpacE)
 			\item Capacité pouvant atteindre plusieurs petabytes (1000 To)
 			\item Structure simple, deux éléments logiciels : serveur et client
 			\item Supporte plusieurs protocoles de communications (TCP/IP, InfiniBand)
 		\end{itemize}
 	\end{frame}
+	
+	\subsection{Mise en place}
+	\begin{frame}
+		\frametitle{Mise en place}
+		\begin{itemize}
+			\item Un serveur maitre : paquet glusterfs-server
+			\item x serveurs \og normaux\fg
+			\item x clients : glusterfs-client
+		\end{itemize}
 
+		\begin{block}{Note :}
+			Les serveurs doivent avoir un répertoire dédié au partage
+		\end{block}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Mise en place (2)}
+			\begin{itemize}
+				\item A partir du serveur maitre :
+				\begin{itemize}
+					\item Génération des fichiers de configurations (commande prévue)
+					\item Envoie de fichiers aux serveurs, et aux clients
+				\end{itemize}
+				\item Démarrage des serveurs
+				\item Montage du volume par les clients
+			\end{itemize}
+	\end{frame}
+
+	\subsection{Difficultés rencontrées}
+	\begin{frame}
+		\frametitle{Difficultés rencontrées}
+			\begin{itemize}
+				\item Droit d'écriture des clients
+				\item Utilisation d'InfiniBand
+				\item Script de déploiement : automatisation totale
+			\end{itemize}
+		\end{frame}
 
 
 \section{MooseFS}
@@ -162,8 +197,19 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 \end{frame}
 
 \section{Ceph}
-\begin{frame}
-
+        \subsection{Présentation}
+        \begin{frame}
+                \frametitle{Présentation de Ceph}
+		\begin{itemize}
+			\item Licence LGPL
+			\item créer par Sage Weill en 2007
+			\item destiné au très grands clusters
+			\item but principal : 
+                              \begin{itemize}
+                                      \item compatible POSIX
+                                      \item complétement distribué sans point de défaillance
+                              \end{itemize}
+		\end{itemize}
 \end{frame}
 
 \section{Comparaison}
