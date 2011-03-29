@@ -62,13 +62,13 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 	\subsection{Présentation du sujet}
 	\begin{frame}
 		\frametitle{Présentation du sujet}
-		Comparaison de systèmes de fichiers distribué :
+		Comparaison de systèmes de fichiers distribués :
 		\begin{itemize}
 			\item Système de fichier (FS) : façon de stocker, organiser des informations dans un fichier
 			\item Système de fichiers distribué :
 			\begin{itemize}
-				\item Éclaté sur plusieurs serveurs % éclaté ? Un meilleur mot ?
-				\item Disponible depuis plusieurs clients
+				\item éclaté sur plusieurs serveurs % éclaté ? Un meilleur mot ?
+				\item disponible depuis plusieurs clients
 			\end{itemize}
 		\end{itemize}
 	\end{frame}
@@ -137,7 +137,7 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 			\item Montage du partage sur les clients à l'aide de « mount »
 		\end{itemize}
 		\begin{block}{Pour NFSv4 :}
-			Des options suplémentaires sont à définir dans /etc/exports et le type de protocole doit être spécifier lors du montage sur les clients.
+			Des options supplémentaires sont à définir dans /etc/exports et le type de protocole doit être spécifier lors du montage sur les clients.
 		\end{block}
 	\end{frame}
 	
@@ -242,7 +242,7 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
                 \frametitle{Moniteur}
                 \begin{itemize}
                         \item Configuration
-                        \item Etat du cluster
+                        \item État du cluster
                         \item Gestion des clients
                 \end{itemize}
         \end{frame}
@@ -251,7 +251,7 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
                 \frametitle{Serveurs de métadonnées}
                 \begin{itemize}
                         \item Configuration
-                        \item Etat du cluster
+                        \item État du cluster
                         \item Gestion des clients
                 \end{itemize}
         \end{frame}
@@ -267,6 +267,10 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 				Facilité de mise en place & ++ & + & +\\
 				\hline
 				Fiabilité & + & ++ & -\\
+				\hline
+				Évolutivité & + & ++  & ?\\
+				\hline
+				Économe en taille disque & ++ & - & - ?\\
 				\hline
 			\end{tabular}
 		\end{frame}
