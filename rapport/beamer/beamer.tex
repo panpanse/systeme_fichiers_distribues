@@ -117,9 +117,8 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
   \begin{itemize}
     \item NFS et le protocole non connecté UDP
     \item Depuis la version 3, possibilité d'utiliser TCP
-    \item NFSv1 et v2 définies dans la RFC 1094
-    \item NFSv3 définie dans la RFC 1813
-    \item NFSv4 définie dans la RFC 3010 et dans la RFC 3530 :
+    \item Versions NFS définies dans différentes RFC
+    \item Ensemble du protocole repensé pour NFSv4 :
     \begin{itemize}
       \item meilleur gestion de la sécurité
       \item meilleur gestion de la montée en charge
@@ -133,11 +132,13 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 	\begin{frame}
 		\frametitle{Mise en place}
 		\begin{itemize}
-			\item Licence GPLv3
-			\item Capacité pouvant atteindre plusieurs petabytes (1000 To)
-			\item Structure simple, deux éléments logiciels : serveur et client
-			\item Supporte plusieurs protocoles de communications (TCP/IP, InfiniBand)
+			\item Installation des paquets nfs-common et nfs-kernel-server
+			\item Implémentation d'un fichier exports dans /etc
+			\item Montage du partage sur les clients à l'aide de « mount »
 		\end{itemize}
+		\begin{block}{Pour NFSv4 :}
+			Des options suplémentaires sont à définir dans /etc/exports et le type de protocole doit être spécifier lors du montage sur les clients.
+		\end{block}
 	\end{frame}
 	
 \section{GlusterFS}
