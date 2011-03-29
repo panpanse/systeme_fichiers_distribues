@@ -201,6 +201,9 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
         \subsection{Présentation}
         \begin{frame}
                 \frametitle{Présentation de Ceph}
+                \begin{center}
+		       \includegraphics[width=0.30\linewidth]{../images/cephfs.jpg}
+		\end{center}
 		\begin{itemize}
 			\item Licence LGPL
 			\item Créé par Sage Weill en 2007
@@ -215,13 +218,11 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
 
         \subsection{Caractéristique}        
         \begin{frame}
-                \frametitle{Caractéristique}
+                \frametitle{Caractéristiques}
                 \begin{itemize}
-                        \item Caractéristiques de Ceph :
-                        \begin{itemize}
-                                \item robustesse
-                                \item évolutivité transparente
-                        \end{itemize}
+                        \item robustesse
+                        \item évolutivité transparente
+                        \item déconseillé en production
                 \end{itemize}
         \end{frame}
 
@@ -250,10 +251,24 @@ morekeywords={AND,ASC,avg,CHECK,COMMIT,SAVEPOINT,count,DECODE,BEGIN,DESC,DISTINC
         \begin{frame}
                 \frametitle{Serveurs de métadonnées}
                 \begin{itemize}
-                        \item Configuration
-                        \item État du cluster
-                        \item Gestion des clients
+                        \item Cache cohérent et distribué
+                        \item Plusieurs serveurs = équilibrage de charge
                 \end{itemize}
+        \end{frame}
+
+        \begin{frame}
+                \frametitle{Serveurs de données}
+                \begin{itemize}
+                        \item Découpage des données
+                        \item Réplication = tolérance aux pannes
+                \end{itemize}
+        \end{frame}
+
+        \begin{frame}
+                \frametitle{Echanges de données}
+                \begin{center}
+	                \includegraphics[width=0.75\linewidth]{../images/Ceph_architecture2.png}
+		\end{center}
         \end{frame}
 
 \section{Comparaison}
